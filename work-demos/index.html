@@ -321,6 +321,22 @@ code{background:var(--green-tint);color:var(--ink);border-radius:0}
 .title{margin:0;font:400 clamp(4rem,13vw,8.5rem)/.85 var(--font-slab);color:var(--ink);text-shadow:-.035em 0 rgba(69,243,255,.8),.035em 0 rgba(255,63,164,.8),0 0 .3em rgba(69,243,255,.25)}
 .hero .lede{max-width:46rem;margin:2rem 0 1rem;font-size:1.0625rem}
 @media (max-width:40rem){.boot{font-size:1.15rem}}
+/* Title animation, same as the name on the home page: the lines type in, the title glitches on, the cursor keeps blinking */
+.hero .boot{min-height:3.75em}
+.title .nw{white-space:nowrap}
+.title .cursor{display:inline-block;width:.42em;height:.6em;margin-left:.06em;background:var(--amber);box-shadow:0 0 .25em rgba(255,181,71,.6);animation:blink 1.05s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero .title,.hero .lede,.hero .contact,.hero .small{transition:opacity .35s ease}
+.booting .hero .title,.booting .hero .lede,.booting .hero .contact,.booting .hero .small{opacity:0}
+.glitch .title{animation:glitch .6s steps(2) 1}
+@keyframes glitch{
+  0%{clip-path:inset(0 0 0 0);text-shadow:-.09em 0 var(--cyan),.09em 0 var(--magenta)}
+  20%{clip-path:inset(12% 0 52% 0);transform:translateX(-.03em) skewX(-8deg)}
+  40%{clip-path:inset(48% 0 10% 0);transform:translateX(.04em)}
+  60%{clip-path:inset(26% 0 30% 0);transform:translateX(-.015em) skewX(5deg)}
+  80%{clip-path:inset(0 0 0 0);transform:none;text-shadow:-.05em 0 var(--cyan),.05em 0 var(--magenta)}
+  100%{clip-path:inset(0 0 0 0);transform:none}
+}
 
 /* Section heads */
 .drawer-head h2{color:var(--ink)}
@@ -382,6 +398,17 @@ ol.jobs{border-left-color:var(--line-strong)}
 .tcard p{line-height:1.45}
 .foot{border-top-color:var(--line)}
 </style>
+<script>
+  (function () {
+    var root = document.documentElement;
+    try {
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('demosBooted')) {
+        root.classList.add('booting');
+        setTimeout(function () { root.classList.remove('booting'); }, 4000);
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <a class="skip" href="#aliases">Skip to the demos</a>
@@ -410,12 +437,46 @@ ol.jobs{border-left-color:var(--line-strong)}
 <pre class="boot" aria-hidden="true">drew@concord:~$ cd work-demos
 drew@concord:~/work-demos$ ls
 21 tickets  1 tool  0 real data</pre>
-    <h1 class="title">Work demos</h1>
+    <h1 class="title">Work <span class="nw">demos<span class="cursor" aria-hidden="true"></span></span></h1>
     <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people's plates. Most recently I was a software developer at WT Cox Information Services, a subscription agency where libraries, hospitals, schools, and companies order their journals, magazines, and newspapers. CoxNet2 is the Java system behind it, and I shipped work across order entry, accounting, customer service, and marketing, including a Mailgun integration. Before that I was a software engineer at TIAA, automating reporting on Splunk's REST APIs and shipping through GitLab CI/CD and OpenShift.</p>
     <p class="contact"><a href="../">Home</a><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/BandoDrewMando" target="_blank" rel="noopener">Github</a></p>
     <p class="small muted">Every screen below is rebuilt from scratch with invented customers, emails, IDs, and amounts. Code samples are short rewrites for illustration.</p>
   </div>
 </header>
+<script>
+// Terminal intro, same as the home page: types the lines in, then the title glitches on.
+// Plays once per visit, skips on any key, click, or scroll, and never runs with reduced motion.
+(function () {
+  var root = document.documentElement;
+  var boot = document.querySelector('.hero .boot');
+  if (!boot || !root.classList.contains('booting')) return;
+  var lines = boot.textContent.split('\n');
+  var done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    boot.textContent = lines.join('\n');
+    root.classList.remove('booting');
+    root.classList.add('glitch');
+    setTimeout(function () { root.classList.remove('glitch'); }, 700);
+    try { sessionStorage.setItem('demosBooted', '1'); } catch (e) {}
+  }
+  boot.textContent = '';
+  var i = 0;
+  (function next() {
+    if (done) return;
+    if (i < lines.length) {
+      boot.textContent += (i ? '\n' : '') + lines[i++];
+      setTimeout(next, 260);
+    } else {
+      setTimeout(finish, 220);
+    }
+  })();
+  ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach(function (type) {
+    window.addEventListener(type, finish, { once: true, passive: true });
+  });
+})();
+</script>
 
 <main>
 
