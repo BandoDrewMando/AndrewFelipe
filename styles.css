@@ -1,3 +1,9 @@
+@font-face {
+  font-family: "VT323";
+  src: url("assets/fonts/vt323.woff") format("woff");
+  font-display: swap;
+}
+
 :root {
   --glass: #140F2E;
   --panel: #1D1645;
@@ -8,13 +14,14 @@
   --cyan: #45F3FF;
   --magenta: #FF3FA4;
   --pixel: "VT323", "DejaVu Sans Mono", ui-monospace, monospace;
-  --sans: "Chakra Petch", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --sans: var(--pixel);
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
+  font-synthesis: none;
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem;
   -webkit-text-size-adjust: 100%;
@@ -25,6 +32,8 @@ body {
   background: var(--glass);
   color: var(--text);
   font: 400 1.0625rem/1.65 var(--sans);
+  /* VT323 has a small x-height; scale reading text up so it stays easy to read */
+  font-size-adjust: .5;
 }
 
 ::selection { background: var(--magenta); color: var(--glass); }
@@ -70,7 +79,7 @@ a:hover { text-decoration-thickness: 2px; }
 .nav ul::-webkit-scrollbar { display: none; }
 .nav li a {
   display: block; padding: .3rem 0;
-  color: var(--dim); font-weight: 500; white-space: nowrap; text-decoration: none;
+  color: var(--dim); font-size: 1rem; font-weight: 500; white-space: nowrap; text-decoration: none;
 }
 .nav li a:hover { color: var(--text); }
 
@@ -91,7 +100,7 @@ a:hover { text-decoration-thickness: 2px; }
 .boot {
   margin: 0 0 2.25rem;
   min-height: 5em;
-  font: 1.375rem/1.25 var(--pixel);
+  font: 1.5rem/1.25 var(--pixel);
   color: var(--amber);
   white-space: pre-wrap;
   text-shadow: 0 0 .45em rgba(255, 181, 71, .35);
@@ -212,7 +221,7 @@ a:hover { text-decoration-thickness: 2px; }
     mask-image: linear-gradient(to right, #000 80%, transparent);
   }
   .nav li a { font-size: .95rem; }
-  .boot { font-size: 1.15rem; }
+  .boot { font-size: 1.25rem; }
   .cmd { font-size: 1.75rem; }
   .entry { grid-template-columns: 1fr; }
   .block .when { margin: 0 0 .4rem; }
@@ -226,3 +235,8 @@ a:hover { text-decoration-thickness: 2px; }
   .cursor, .glitch .name { animation: none; }
   .name, .lede, .actions, .btn { transition: none; }
 }
+
+/* Display type is already sized for the pixel font */
+.mark, .boot, .name, .cmd, .block .when, .skills dt, .links .k, .titlebar { font-size-adjust: none; }
+/* The font shorthand resets size adjustment, so restore it on reading text that uses it */
+.btn, .what h3, .window h3 { font-size-adjust: .5; }
