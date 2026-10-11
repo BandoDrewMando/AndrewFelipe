@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Andrew Felipe: work demos</title>
 <meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services, plus his work history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#140F2E">
 <style>
-@font-face{font-family:"VT323";src:url("../assets/fonts/vt323.woff") format("woff");font-display:swap}
 :root{
   --glass:#140F2E; --magenta:#FF3FA4; --cyan:#45F3FF; --amber:#FFB547; --ok:#6BF5A8;
   --paper:#140F2E; --card:#1D1645; --ink:#EEEAFF; --ink-soft:#ABA3DA;
@@ -17,9 +19,9 @@
   --red:#FF6B7F; --red-tint:rgba(255,107,127,.14); --red-rule:#FF3FA4; --blue-rule:#3B2F7D;
   --code-bg:#0C0922; --code-ink:#DCD7FF; --code-dim:#8E86C2; --code-hi:#FFB547; --code-ok:#45F3FF; --code-warn:#FF6B7F;
   --focus:#45F3FF;
-  --font-ui:"VT323", "DejaVu Sans Mono", ui-monospace, monospace;
+  --font-ui:"Chakra Petch", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-slab:"VT323", "DejaVu Sans Mono", ui-monospace, monospace;
-  --font-code:"VT323", "DejaVu Sans Mono", ui-monospace, monospace;
+  --font-code:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   color-scheme:dark;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -290,11 +292,7 @@ ol.jobs{list-style:none;margin:0 0 20px 7px;padding:0;border-left:2px solid var(
   *,*::before,*::after{animation:none !important;transition:none !important}
 }
 /* ===== 90s cyberpunk skin, matching the home page ===== */
-html{font-synthesis:none}
-/* One font everywhere; scale reading text so the pixel font stays easy to read */
-body{background:var(--glass);font-size-adjust:.5}
-.title,.boot,h1,h2,.plate,.t th,.tcard .no,.stamp,.toc .mark,.info{font-size-adjust:none}
-.console,pre.code{font-size:15px}
+body{background:var(--glass)}
 ::selection{background:var(--magenta);color:var(--glass)}
 a{color:var(--cyan)}
 h1,h2{font-family:var(--font-slab);font-weight:400}
@@ -310,7 +308,7 @@ code{background:var(--green-tint);color:var(--ink);border-radius:0}
 .toc .mark{flex:none;padding:0;font:1.9rem/1 var(--font-slab);color:var(--ink);text-decoration:none;text-shadow:-2px 0 var(--cyan),2px 0 var(--magenta)}
 .toc .mark:hover{background:transparent}
 .toc ul{flex:1;min-width:0;max-width:none;margin:0;padding:0;flex-wrap:nowrap;overflow-x:auto;gap:2px}
-.toc ul a{color:var(--ink-soft);border-radius:0;padding:6px;font-size:1rem;font-weight:500}
+.toc ul a{color:var(--ink-soft);border-radius:0;padding:6px 7px;font-weight:500}
 @media (max-width:1100px){.toc ul{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}}
 .toc ul a:hover{background:transparent;color:var(--ink)}
 .toc ul a[aria-current="true"]{background:transparent;color:var(--cyan);box-shadow:inset 0 -2px 0 var(--cyan)}
@@ -319,10 +317,10 @@ code{background:var(--green-tint);color:var(--ink);border-radius:0}
 .hero{position:relative;overflow:hidden;padding:clamp(2.75rem,8vw,6rem) 0 clamp(3rem,8vw,5.5rem);border-bottom:1px solid var(--line);background:radial-gradient(120% 90% at 25% 30%,#251B5E 0%,var(--glass) 72%)}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(6,3,20,.38) 2px 3px)}
 .hero .lede,.hero .contact,.hero .small{position:relative;z-index:1}
-.boot{margin:0 0 2.25rem;font:1.5rem/1.25 var(--font-slab);color:var(--amber);white-space:pre-wrap;text-shadow:0 0 .45em rgba(255,181,71,.35)}
+.boot{margin:0 0 2.25rem;font:1.375rem/1.25 var(--font-slab);color:var(--amber);white-space:pre-wrap;text-shadow:0 0 .45em rgba(255,181,71,.35)}
 .title{margin:0;font:400 clamp(4rem,13vw,8.5rem)/.85 var(--font-slab);color:var(--ink);text-shadow:-.035em 0 rgba(69,243,255,.8),.035em 0 rgba(255,63,164,.8),0 0 .3em rgba(69,243,255,.25)}
 .hero .lede{max-width:46rem;margin:2rem 0 1rem;font-size:1.0625rem}
-@media (max-width:40rem){.boot{font-size:1.25rem}}
+@media (max-width:40rem){.boot{font-size:1.15rem}}
 
 /* Section heads */
 .drawer-head h2{color:var(--ink)}
@@ -872,14 +870,14 @@ function callHandler(op, e) {
   const base = 'https://api.mailgun.net/v3/routes';
   if (op === 'create') {
     const id = hexId(24);
-    aliasLog.add(H('POST ' + base), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G(`<- 200 {"message":"Route has been created","route":{"id":"${id}"}}`), '');
+    aliasLog.add(H('POST ' + base), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G(`← 200 {"message":"Route has been created","route":{"id":"${id}"}}`), '');
     return id;
   }
   if (op === 'update') {
-    aliasLog.add(H('PUT ' + base + '/' + e.route), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G('<- 200 {"message":"Route has been updated"}'), '');
+    aliasLog.add(H('PUT ' + base + '/' + e.route), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G('← 200 {"message":"Route has been updated"}'), '');
     return e.route;
   }
-  aliasLog.add(H('DELETE ' + base + '/' + e.route), G(`<- 200 {"message":"Route has been deleted","id":"${e.route}"}`), '');
+  aliasLog.add(H('DELETE ' + base + '/' + e.route), G(`← 200 {"message":"Route has been deleted","id":"${e.route}"}`), '');
   return null;
 }
 
@@ -959,7 +957,7 @@ function saveForm() {
     else if (A.fix6054) aliasLog.add(D(`Saved ${addr} as a provided address.`), D('  No mail route: mail already goes straight to the library. (#6054)'), '');
     else {
       target.route = target.route ? callHandler('update', target) : callHandler('create', target);
-      aliasLog.add(W("WARN: A provided address just got a mail rule it doesn't need. This is the bug #6054 fixed."), '');
+      aliasLog.add(W("⚠ A provided address just got a mail rule it doesn't need. This is the bug #6054 fixed."), '');
     }
   }
   closeForm();
