@@ -1,40 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Resume Website</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add your CSS here */
-        #intro {
-            transition: opacity 1s, transform 1s;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Andrew Felipe: Java backend developer</title>
+<meta name="description" content="Andrew Felipe is a Java backend developer near Charlotte, NC, with experience at TIAA and WT Cox Information Services.">
+<meta name="theme-color" content="#140F2E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Andrew Felipe: Java backend developer">
+<meta property="og:description" content="Enterprise Java, API integrations, and automation. Includes clickable demos of my work.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    var root = document.documentElement;
+    try {
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('booted')) {
+        root.classList.add('booting');
+        setTimeout(function () { root.classList.remove('booting'); }, 4000);
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
-    <div id="intro">
-        <div id="loading-text">Loading in... <span id="percentage">0%</span></div>
-        <div id="loading-bar"></div>
-        <div id="intro-text"></div>
-        <img id="arrow" src="assets/arrow.png" alt="Bouncing arrow">
-    </div>
+<a class="skip" href="#main">Skip to content</a>
 
-    <header>
-        <nav>
+<header class="bar">
+  <nav class="wrap nav" aria-label="Sections">
+    <a class="mark" href="#top" aria-label="Andrew Felipe, back to top">AF</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="top" aria-labelledby="name">
+    <div class="wrap">
+<pre class="boot" id="boot" aria-hidden="true">ANDO BIOS v1.995
+Memory test .......... 640K OK
+Mounting /home/drew .. OK
+Loading drew.profile . 100%</pre>
+      <h1 class="name" id="name"><span class="line">Andrew</span> <span class="line">Felipe<span class="cursor" aria-hidden="true"></span></span></h1>
+      <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people&rsquo;s plates.</p>
+      <p class="actions">
+        <a class="btn primary" href="work-demos/">Open my work demos</a>
+        <a class="btn" href="mailto:ando1fe@proton.me">Email me</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="block" id="about">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">About</span><span aria-hidden="true"><span class="ps1">drew@concord:~$</span> whoami</span></h2>
+      <p>I&rsquo;m a Java backend developer near Charlotte, NC, with 3+ years in financial services at TIAA and subscription services at WT Cox Information Services. My work has centered on backend features, API integrations, reporting, and the tests that keep them working.</p>
+      <p>I graduated cum laude from UNC Charlotte with a B.A. in Computer Science, and I&rsquo;m looking for my next backend role.</p>
+    </div>
+  </section>
+
+  <section class="block" id="experience">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">Experience</span><span aria-hidden="true"><span class="ps1">drew@concord:~$</span> cat experience.log</span></h2>
+      <ol class="log">
+        <li class="entry">
+          <p class="when">Jun 2024 &ndash; Feb 2025</p>
+          <div class="what">
+            <h3>Software Developer, <span class="org">WT Cox Information Services</span></h3>
+            <p class="ctx">A subscription agency where libraries, hospitals, schools, and companies order journals, magazines, and newspapers.</p>
             <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+              <li>Built 21 enhancements and fixes across accounting, order entry, customer service, and marketing in CoxNet2, the Java EE system that runs the agency.</li>
+              <li>When publishers began requiring a unique email for every copy of an online subscription, built generated aliases that forward to customers&rsquo; inboxes through Mailgun API routes.</li>
+              <li>Wrote a Java command-line tool that collected 3,772 of 4,070 ScienceDirect journal covers (93%) over three days, with rate limiting and retries.</li>
+              <li>Unit-tested my work with TestNG and Mockito, mocking the JPA EntityManager so tests run without a database.</li>
             </ul>
-        </nav>
-    </header>
-
-    <div id="about">
-        <!-- Add your about me text here -->
+          </div>
+        </li>
+        <li class="entry">
+          <p class="when">Jun 2021 &ndash; Sep 2023</p>
+          <div class="what">
+            <h3>Software Engineer, <span class="org">TIAA</span></h3>
+            <ul>
+              <li>Built automated reporting on Splunk&rsquo;s REST APIs, replacing manual report pulls.</li>
+              <li>Diagnosed and fixed 50+ application defects through debugging and L2 testing.</li>
+              <li>Shipped code through GitLab CI/CD pipelines and deployed containerized apps on OpenShift.</li>
+              <li>Decommissioned inactive F5 load-balancer applications to trim infrastructure.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="entry">
+          <p class="when">Jun &ndash; Aug 2020</p>
+          <div class="what">
+            <h3>Technology Intern, <span class="org">TIAA</span></h3>
+            <ul>
+              <li>Helped maintain and enhance the enterprise FileHub app using Java, Spring, and JUnit on an Agile team.</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
     </div>
+  </section>
 
-    <script src="app.js"></script>
-    <script src="smoothScroll.js"></script>
+  <section class="block" id="projects">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">Projects</span><span aria-hidden="true"><span class="ps1">drew@concord:~$</span> ls ~/projects</span></h2>
+      <article class="window">
+        <div class="titlebar" aria-hidden="true"><span>~/projects/work-demos</span><span class="ctrl"><span></span><span></span><span></span></span></div>
+        <div class="window-body">
+          <h3><a href="work-demos/">Work demos</a></h3>
+          <p>Clickable rebuilds of the 21 tickets I worked at WT Cox and the Cover Image Miner, made with invented data so you can try each feature yourself.</p>
+          <a class="btn" href="work-demos/">Open the work demos</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">Skills</span><span aria-hidden="true"><span class="ps1">drew@concord:~$</span> cat skills.txt</span></h2>
+      <dl class="skills">
+        <div><dt>Languages</dt><dd>Java, SQL, Python, JavaScript, TypeScript, Groovy, HTML/CSS</dd></div>
+        <div><dt>Frameworks and platforms</dt><dd>Java EE (EJB, JPA, JSF/Seam), Spring, REST APIs, Node.js, React, JBoss, MySQL</dd></div>
+        <div><dt>Testing and practices</dt><dd>JUnit, TestNG, Mockito, test-first development, Agile/Scrum, microservices</dd></div>
+        <div><dt>DevOps and cloud</dt><dd>GitLab CI/CD, Jenkins, Docker, OpenShift, AWS (EC2, S3), Maven, Ant</dd></div>
+        <div><dt>Tools and AI</dt><dd>Git/GitHub, SVN, JIRA, Trac, ServiceNow, Splunk, Claude, MCP, Copilot, Cursor</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="block" id="contact">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">Contact</span><span aria-hidden="true"><span class="ps1">drew@concord:~$</span> mail drew</span></h2>
+      <ul class="links">
+        <li><span class="k">Email</span><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a></li>
+        <li><span class="k">LinkedIn</span><a href="https://www.linkedin.com/in/andrewfelipe/">linkedin.com/in/andrewfelipe</a></li>
+        <li><span class="k">GitHub</span><a href="https://github.com/BandoDrewMando">github.com/BandoDrewMando</a></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">&copy; 2026 Andrew Felipe</footer>
+
+<script src="app.js"></script>
 </body>
 </html>

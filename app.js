@@ -1,39 +1,37 @@
-console.log("Welcome to my resume website!");
+// Boot sequence: plays once per visit, skips on any key, click, or scroll,
+// and never runs when the visitor prefers reduced motion.
+(function () {
+  var root = document.documentElement;
+  var boot = document.getElementById('boot');
+  if (!boot) return;
+  var lines = boot.textContent.split('\n');
 
-let loadingBar = document.getElementById('loading-bar');
-let introText = document.getElementById('intro-text');
-let percentage = 0;
-let percentageElement = document.getElementById('percentage');
-let loadingText = document.getElementById('loading-text');
-let arrow = document.getElementById('arrow');
+  if (!root.classList.contains('booting')) return;
 
-let loadingInterval = setInterval(() => {
-    percentage += 2;
-    percentageElement.textContent = percentage + '%';
-    loadingBar.style.width = percentage + '%';
+  var done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    boot.textContent = lines.join('\n');
+    root.classList.remove('booting');
+    root.classList.add('glitch');
+    setTimeout(function () { root.classList.remove('glitch'); }, 700);
+    try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+  }
 
-    if (percentage >= 100) {
-        clearInterval(loadingInterval);
-
-        loadingBar.style.opacity = '0';
-        loadingText.style.opacity = '0';
-
-        setTimeout(function () {
-            loadingBar.style.display = 'none';
-            loadingText.style.display = 'none';
-            introText.textContent = 'Hi there!';
-            introText.style.opacity = '1';
-        }, 2000);
-
-        setTimeout(function () {
-            introText.style.opacity = '0';
-        }, 4000);
-
-        setTimeout(function () {
-            introText.textContent = 'Welcome to my resume! Scroll to learn more....';
-            introText.style.opacity = '1';
-            arrow.style.display = 'block';
-            arrow.style.opacity = '1';
-        }, 6000);
+  boot.textContent = '';
+  var i = 0;
+  (function next() {
+    if (done) return;
+    if (i < lines.length) {
+      boot.textContent += (i ? '\n' : '') + lines[i++];
+      setTimeout(next, 260);
+    } else {
+      setTimeout(finish, 220);
     }
-}, 50);
+  })();
+
+  ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach(function (type) {
+    window.addEventListener(type, finish, { once: true, passive: true });
+  });
+})();
