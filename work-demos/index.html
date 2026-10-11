@@ -1,0 +1,1517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Andrew Felipe: work demos</title>
+<meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services, plus his work history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F1; --card:#FFFFFF; --ink:#1C2A2F; --ink-soft:#4F6167;
+  --line:#D2DBD5; --line-strong:#AEBBB4;
+  --green:#22574A; --on-green:#FFFFFF; --green-tint:#E1EDE7;
+  --brass:#8C6210; --brass-tint:#F4EAD5;
+  --red:#A9342A; --red-tint:#F6E1DD; --red-rule:#DF9C94; --blue-rule:#CADAEA;
+  --code-bg:#16232A; --code-ink:#D8E5E0; --code-dim:#8DA49E; --code-hi:#E6C072; --code-ok:#8FD3AE; --code-warn:#F09A8E;
+  --focus:#1D6CB0;
+  --font-ui:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-slab:"Zilla Slab", Rockwell, "Roboto Slab", Georgia, serif;
+  --font-code:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14201E; --card:#1B2927; --ink:#E3EBE7; --ink-soft:#A6B8B2;
+    --line:#2D3F3B; --line-strong:#466059;
+    --green:#71B79D; --on-green:#0E1A17; --green-tint:#1E3530;
+    --brass:#DDAB52; --brass-tint:#382E1B;
+    --red:#EC8277; --red-tint:#3F2522; --red-rule:#8E4A43; --blue-rule:#2B4459;
+    --code-bg:#0D1614; --code-ink:#D3E1DB; --code-dim:#7E958F;
+    --focus:#7DB8F0;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14201E; --card:#1B2927; --ink:#E3EBE7; --ink-soft:#A6B8B2;
+  --line:#2D3F3B; --line-strong:#466059;
+  --green:#71B79D; --on-green:#0E1A17; --green-tint:#1E3530;
+  --brass:#DDAB52; --brass-tint:#382E1B;
+  --red:#EC8277; --red-tint:#3F2522; --red-rule:#8E4A43; --blue-rule:#2B4459;
+  --code-bg:#0D1614; --code-ink:#D3E1DB; --code-dim:#7E958F;
+  --focus:#7DB8F0;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:17px;line-height:1.55}
+a{color:var(--green);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:3px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:20px;padding-right:20px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-9999px;top:8px}
+.skip:focus{left:12px;z-index:60;background:var(--card);padding:8px 12px;border-radius:6px}
+h1,h2,h3,h4{font-family:var(--font-slab);color:var(--ink)}
+h2{font-weight:600;font-size:clamp(1.65rem,4.2vw,2.15rem);line-height:1.15;margin:0}
+h3{font-weight:600;font-size:1.2rem;line-height:1.3;margin:0 0 6px}
+h4{font-weight:600;font-size:1.05rem;margin:18px 0 6px}
+p{margin:0 0 10px}
+code{font-family:var(--font-code);font-size:.86em;background:var(--green-tint);padding:1px 5px;border-radius:4px}
+.muted{color:var(--ink-soft)}
+.small{font-size:.9rem}
+.ok{color:var(--green);font-weight:700}
+.err{color:var(--red);font-weight:700}
+.err:empty,.ok:empty{display:none}
+
+/* Hero: a library catalog card */
+.hero{padding-top:36px;padding-bottom:12px}
+.catcard{position:relative;max-width:800px;margin:0 12px 0 0;background-color:var(--card);border:1px solid var(--line-strong);border-radius:4px;
+  padding:0 24px 56px 16px;
+  background-image:linear-gradient(var(--red-rule),var(--red-rule)),repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--blue-rule) 31px,var(--blue-rule) 32px);
+  background-size:100% 2px,100% calc(100% - 88px);background-position:0 86px,0 88px;background-repeat:no-repeat;
+  box-shadow:6px 6px 0 -1px var(--card),6px 6px 0 0 var(--line-strong),12px 12px 0 -1px var(--card),12px 12px 0 0 var(--line-strong)}
+.cc-grid{display:grid;grid-template-columns:64px minmax(0,1fr);column-gap:14px}
+.cc-head{grid-column:2;grid-row:1;height:86px;display:flex;align-items:flex-end;padding-bottom:8px}
+.cc-head h1{margin:0;font-weight:700;font-size:clamp(2.1rem,6.4vw,3.3rem);line-height:1;letter-spacing:-.01em}
+.callno{grid-column:1;grid-row:2;margin:0;padding-top:8px;font-family:var(--font-slab);font-weight:600;font-size:.92rem;line-height:16px;color:var(--ink-soft)}
+.cc-body{grid-column:2;grid-row:2}
+.cc-body p{margin:0 0 32px;line-height:32px;font-size:1.06rem}
+.cc-body p:last-child{margin-bottom:0}
+.tracings a{font-weight:700}
+.hole{position:absolute;left:50%;bottom:16px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--paper);border:1px solid var(--line-strong)}
+.lede{max-width:68ch;margin:40px 0 12px;font-size:1.08rem}
+.contact{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0 0 12px;font-weight:700}
+@media (max-width:560px){
+  .catcard{padding:0 16px 52px 10px}
+  .cc-grid{grid-template-columns:44px minmax(0,1fr);column-gap:10px}
+  .callno{font-size:.78rem;line-height:14px}
+  .cc-body p{font-size:1rem}
+}
+
+/* Section nav */
+.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line);margin-top:28px}
+.toc ul{position:relative;list-style:none;margin:0 auto;padding:10px 20px;display:flex;gap:4px;overflow-x:auto;max-width:1080px;scrollbar-width:none}
+.toc ul::-webkit-scrollbar{display:none}
+@media (min-width:700px){.toc ul{flex-wrap:wrap;overflow-x:visible}}
+.toc a{display:block;white-space:nowrap;padding:6px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-weight:700;font-size:.94rem}
+.toc a:hover{background:var(--green-tint)}
+.toc a[aria-current="true"]{background:var(--green);color:var(--on-green)}
+
+/* Drawers (sections) */
+.drawer{padding-top:60px}
+.drawer-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:12px}
+.plate{position:relative;display:inline-block;border:2px solid var(--brass);border-radius:5px;padding:2px 17px;color:var(--brass);background:var(--brass-tint);font-family:var(--font-slab);font-weight:600;font-size:.95rem;word-spacing:.25em}
+.plate::before,.plate::after{content:"";position:absolute;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--brass)}
+.plate::before{left:5px}.plate::after{right:5px}
+.why{max-width:70ch;color:var(--ink-soft);margin:0 0 20px}
+
+.panel{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin:0 0 16px;min-width:0}
+.panel-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;margin-bottom:10px}
+.panel-head p{margin:0}
+.grid2{display:grid;gap:16px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);margin:0 0 16px;align-items:start}
+.grid2>.panel{margin:0}
+@media (max-width:880px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 12px}
+.toolbar:last-child{margin-bottom:0}
+fieldset.fixes{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 14px;padding:8px 12px 10px;border:1.5px dashed var(--line-strong);border-radius:8px;font-size:.94rem}
+fieldset.fixes legend{font-weight:700;padding:0 6px;color:var(--ink-soft);font-size:.88rem}
+.check{display:inline-flex;gap:8px;align-items:center;cursor:pointer}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--green);flex:none}
+
+/* Controls */
+.btn{font:inherit;font-weight:700;font-size:.95rem;line-height:1.2;padding:9px 14px;border-radius:7px;border:1.5px solid var(--green);background:var(--green);color:var(--on-green);cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;color:var(--green)}
+.btn.ghost:hover{background:var(--green-tint);filter:none}
+.btn.sm{padding:5px 10px;font-size:.88rem}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.linkbtn{font:inherit;font-weight:700;background:none;border:0;padding:0;color:var(--green);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.linkbtn.danger{color:var(--red)}
+input[type=text],input[type=email],input[type=search],select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1.5px solid var(--line-strong);border-radius:7px;padding:7px 10px;min-height:40px;max-width:100%}
+select.sm{min-height:34px;padding:4px 8px;font-size:15px}
+.f{display:grid;gap:4px;font-weight:700;font-size:.9rem;min-width:0}
+.f input,.f select,.f textarea{width:100%;font-weight:400}
+.formgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));align-items:end}
+.seg{display:inline-flex;border:1.5px solid var(--green);border-radius:8px;overflow:hidden;margin:2px 0 12px}
+.seg label{padding:6px 16px;cursor:pointer;font-weight:700;font-size:.92rem;color:var(--green)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label:has(input:checked){background:var(--green);color:var(--on-green)}
+.seg label:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:-3px}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;line-height:1.5;padding:0 7px;border-radius:999px;background:var(--green-tint);color:var(--green);vertical-align:middle}
+.info{width:22px;height:22px;padding:0;border-radius:50%;border:1.5px solid var(--brass);color:var(--brass);background:var(--brass-tint);font:700 13px/1 var(--font-slab);cursor:pointer;vertical-align:middle;margin-left:6px}
+.info[aria-expanded="true"]{background:var(--brass);color:var(--card)}
+
+/* Tables */
+.scroll-x{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.t{width:100%;border-collapse:collapse;font-size:.94rem}
+.t th{text-align:left;font-weight:700;color:var(--ink-soft);padding:8px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+.t td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.t .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.t tr.click{cursor:pointer}
+.t tr.click:hover td{background:var(--green-tint)}
+.t tr.sel td{background:var(--green-tint);box-shadow:inset 0 -2px 0 var(--green)}
+.t td.actions{white-space:nowrap}
+@media (min-width:641px){#aliasTable{font-size:.9rem}#aliasTable th,#aliasTable td{padding-left:8px;padding-right:8px}}
+#aliasTable td.kind{white-space:nowrap}
+.tracings .tr{white-space:nowrap}
+.t .rate{font-weight:700;white-space:nowrap}
+.tier-row td{background:var(--brass-tint)}
+.tier-list{margin:0 0 4px;padding-left:1.2em}
+@keyframes flash{from{background:var(--brass-tint)}to{background:transparent}}
+.flash td{animation:flash 2s ease-out}
+.clip{display:inline-flex;align-items:center;gap:2px;color:var(--brass);font-weight:700;font-size:.85rem;vertical-align:middle;margin-left:6px}
+.clip svg{width:16px;height:16px}
+
+/* Sub-forms and email pickers */
+.subform{border:1.5px solid var(--green);border-radius:8px;padding:12px 14px;margin:0 0 14px;background:var(--green-tint)}
+.subform h4{margin:0 0 10px}
+.subform .addr{display:block;font-weight:700;padding:8px 0;word-break:break-all}
+.oi{padding:12px 0;border-bottom:1px solid var(--line)}
+.oi:first-child{padding-top:4px}
+.oi-h{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+.ee-list{list-style:none;margin:6px 0;padding:0}
+.ee-list li{padding:2px 0;word-break:break-word}
+.ee-add{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 6px}
+.ee-add select{flex:1 1 220px;min-width:0}
+.ee .addr{font-weight:700}
+.ee p{margin:4px 0 0}
+.facts{display:flex;flex-wrap:wrap;gap:8px 24px;margin:8px 0 6px}
+.facts dt{font-size:.82rem;color:var(--ink-soft)}
+.facts dd{margin:0;font-weight:700}
+
+/* Consoles and code */
+.console,pre.code{background:var(--code-bg);color:var(--code-ink);font-family:var(--font-code);font-size:12.5px;line-height:1.6;border-radius:8px;padding:12px 14px;margin:0}
+.console{max-height:300px;min-height:84px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+pre.code{overflow-x:auto;white-space:pre;margin:8px 0 12px}
+.console .d,pre.code .c{color:var(--code-dim)}
+.console .h,pre.code .k{color:var(--code-hi)}
+.console .g,pre.code .s{color:var(--code-ok)}
+.console .w{color:var(--code-warn)}
+details.more{margin-top:14px}
+details.more summary{cursor:pointer;font-weight:700;color:var(--green)}
+details.more[open] summary{margin-bottom:8px}
+
+/* Stamps */
+.stamp{display:inline-block;font-family:var(--font-slab);font-weight:700;font-size:.92rem;line-height:1.25;color:var(--red);border:3px double currentColor;border-radius:5px;padding:1px 9px;transform:rotate(-3deg);white-space:nowrap}
+.stamp.brass{color:var(--brass)}
+.stamp.green{color:var(--green)}
+@keyframes thunk{0%{transform:scale(1.7) rotate(-9deg);opacity:0}100%{transform:scale(1) rotate(-3deg);opacity:1}}
+.stamp.pop{animation:thunk .28s ease-out}
+
+/* Printed proposal (stays paper-white in dark mode) */
+.paper{background:#FFFFFF;color:#1C2A2F;border:1px solid #AEBBB4;border-radius:4px;padding:20px 22px;font-size:.92rem;min-width:0}
+.paper .doc-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:2px solid #1C2A2F;padding-bottom:8px;margin-bottom:8px;font-family:var(--font-slab)}
+.paper .doc-h strong{font-size:1.35rem}
+.paper table{width:100%;border-collapse:collapse;margin:8px 0}
+.paper th,.paper td{text-align:left;padding:5px 0;vertical-align:top}
+.paper .doc-meta th{width:50%;color:#4F6167;font-weight:400;padding-right:10px}
+.paper .doc-items thead th{border-bottom:1px solid #AEBBB4;font-weight:700}
+.paper .doc-items tbody td{border-bottom:1px solid #E1E7E3}
+.paper tfoot th,.paper tfoot td{font-weight:700;border-top:2px solid #1C2A2F}
+.paper .num{text-align:right}
+.paper .faint{color:#7A8B86;font-style:italic}
+.paper tr.hilite td,.paper tr.hilite th{background:#F4EAD5}
+
+/* Catalog preview */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 10px}
+.tab{font:inherit;font-weight:700;font-size:.92rem;padding:5px 12px;border-radius:999px;border:1.5px solid var(--line-strong);background:transparent;color:var(--ink);cursor:pointer}
+.tab.on{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.tab.on .tag{background:var(--on-green);color:var(--green)}
+.titles{margin:0;padding:10px 12px 10px 30px;border:1.5px solid var(--line-strong);border-radius:8px}
+
+/* Spreadsheet previews and mail */
+.sheet{position:relative;border:1px solid var(--line-strong);border-radius:6px 6px 0 6px;overflow:auto;background:var(--card)}
+.sheet table{border-collapse:collapse;font-size:.88rem;min-width:100%}
+.sheet th,.sheet td{border:1px solid var(--line);padding:5px 9px;white-space:nowrap;text-align:left}
+.sheet thead th{background:var(--green-tint);color:var(--ink-soft);font-weight:700;text-align:center}
+.sheet tbody th{background:var(--green-tint);color:var(--ink-soft);font-weight:400;text-align:center;width:36px}
+.sheet tr.hdr td{font-weight:700}
+.sheet .num{text-align:right;font-variant-numeric:tabular-nums}
+.sheet-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:6px 12px;margin:0 0 10px}
+.sheet-tab{display:inline-block;font-size:.85rem;font-weight:700;padding:3px 12px;border:1px solid var(--line-strong);border-top:0;border-radius:0 0 6px 6px;background:var(--card)}
+.diffs{margin:6px 0 0;padding-left:1.2em}
+.diffs li{margin:0 0 4px}
+.mail{border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;background:var(--card)}
+.mail-h{display:grid;gap:2px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.92rem}
+.mail-h b{display:inline-block;min-width:64px;color:var(--ink-soft);font-weight:400}
+.mail-b{padding:12px 14px}
+.widen-row{display:grid;gap:4px;margin:0 0 12px}
+.widen-row textarea{width:100%;resize:vertical;line-height:1.45}
+.widen-row.narrow input{width:15ch}
+
+/* Cover miner */
+.covers{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));min-height:90px}
+.cover{position:relative;aspect-ratio:200/267;border-radius:2px;padding:5px;color:#FFFFFF;background:var(--c);background-image:linear-gradient(to bottom,rgba(255,255,255,.2) 0,rgba(255,255,255,.2) 24%,transparent 24%);font-family:var(--font-slab);font-weight:600;font-size:9px;line-height:1.15;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.cover .cv-i{font-family:var(--font-ui);font-weight:400;font-size:7.5px;opacity:.85}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.cover.new{animation:pop .25s ease-out}
+.empty{color:var(--ink-soft);font-size:.92rem;grid-column:1/-1;align-self:center}
+.progress{font-family:var(--font-code);font-size:12.5px;margin:10px 0 0;white-space:pre;overflow-x:auto}
+.bars{display:grid;gap:10px;margin:6px 0 12px}
+.bar{display:grid;grid-template-columns:52px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:.92rem}
+.bar .track{height:12px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar .fill{display:block;height:100%;background:var(--green)}
+.bar .val{font-variant-numeric:tabular-nums;font-weight:700}
+ul.plain{margin:0;padding-left:1.2em}
+ul.plain li{margin:0 0 6px}
+ol.steps{margin:0 0 16px;padding-left:1.4em}
+ol.steps li{margin:0 0 8px;padding-left:2px}
+ul.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+ul.chips li{border:1.5px solid var(--line-strong);border-radius:6px;padding:1px 9px;font-size:.88rem;font-weight:700}
+
+/* Work history */
+ol.jobs{list-style:none;margin:0 0 20px 7px;padding:0;border-left:2px solid var(--line-strong)}
+.job{position:relative;padding:0 0 22px 24px;max-width:76ch}
+.job:last-child{padding-bottom:4px}
+.job::before{content:"";position:absolute;left:-9px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:3px solid var(--green)}
+.job-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 6px}
+.job-h h3{margin:0}
+.job-h .plate{word-spacing:normal}
+.job p{margin:0 0 6px}
+.skills{margin:0;display:grid;gap:10px}
+.skills dt{font-weight:700;font-size:.88rem;color:var(--ink-soft)}
+.skills dd{margin:0}
+
+/* Ticket index cards */
+.cards{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.tcard{display:flex;flex-direction:column;background-color:var(--card);border:1px solid var(--line-strong);border-radius:3px;padding:0 16px 10px;
+  background-image:linear-gradient(var(--red-rule),var(--red-rule)),repeating-linear-gradient(to bottom,transparent 0,transparent 23px,var(--blue-rule) 23px,var(--blue-rule) 24px);
+  background-size:100% 2px,100% calc(100% - 52px);background-position:0 50px,0 52px;background-repeat:no-repeat}
+.tcard .top{height:50px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tcard .no{font-family:var(--font-slab);font-weight:700;font-size:1.4rem}
+.tcard .body{flex:1;display:flex;flex-direction:column;padding-top:2px}
+.tcard p{margin:0;line-height:24px}
+.tcard .tt{font-weight:700;flex:1}
+.tcard .meta{color:var(--ink-soft);font-size:.88rem}
+.tcard a{font-weight:700}
+.foot{margin-top:64px;padding-top:24px;padding-bottom:48px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.92rem}
+
+/* Tables become label/value lists on phones */
+@media (max-width:640px){
+  table.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  table.stack,table.stack tbody,table.stack tfoot,table.stack tr{display:block;width:100%}
+  table.stack tr{padding:8px 0;border-bottom:1px solid var(--line)}
+  table.stack td{display:block;position:relative;border:0;padding:3px 2px 3px 9.4em;min-height:1.7em}
+  table.stack td.em{overflow-wrap:anywhere}
+  table.stack td::before{content:attr(data-label);position:absolute;left:2px;top:5px;width:10em;white-space:nowrap;color:var(--ink-soft);font-size:.84rem;font-weight:700;line-height:1.35}
+  table.stack td:not([data-label]){padding-left:2px}
+  table.stack td:not([data-label])::before{content:none}
+  table.stack td.num{text-align:left}
+  table.stack tr.sel{background:var(--green-tint)}
+  table.stack tr.sel td{box-shadow:none;background:transparent}
+  table.stack tfoot tr{display:flex;justify-content:space-between;border-bottom:0}
+  table.stack tfoot th,table.stack tfoot td{display:block;border:0;padding:8px 2px}
+  table.stack tfoot td::before{content:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#aliases">Skip to the demos</a>
+
+<header class="hero wrap">
+  <div class="catcard">
+    <div class="cc-grid">
+      <div class="cc-head"><h1>Felipe, Andrew.</h1></div>
+      <p class="callno" title="QA76.73.J38 is the Library of Congress class for Java. F45 is the cutter for Felipe.">QA<br>76.73<br>.J38<br>F45<br>2025</p>
+      <div class="cc-body">
+        <p>Software engineer : backend Java, API integrations, and automation / Andrew Felipe.</p>
+        <p>21 tickets and 1 side tool from WT Cox Information Services, 2024–2025, rebuilt with made-up data so each one can be clicked through.</p>
+        <p class="tracings"><span class="tr">1.&nbsp;<a href="#aliases">Email aliases</a>.</span> <span class="tr">2.&nbsp;<a href="#payitnow">Pay It Now</a>.</span> <span class="tr">3.&nbsp;<a href="#tiers">Tier info</a>.</span> <span class="tr">4.&nbsp;<a href="#resets">Resets</a>.</span> <span class="tr">5.&nbsp;<a href="#cs">Customer service</a>.</span> <span class="tr">6.&nbsp;<a href="#quotes">Quotes and catalogs</a>.</span> <span class="tr">7.&nbsp;<a href="#reports">Reports and exports</a>.</span> <span class="tr">8.&nbsp;<a href="#miner">Cover Image Miner</a>.</span> <span class="tr">I.&nbsp;<a href="#history">Work history</a>.</span> <span class="tr">II.&nbsp;<a href="#tickets">All tickets</a>.</span></p>
+      </div>
+    </div>
+    <span class="hole" aria-hidden="true"></span>
+  </div>
+  <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people's plates. Most recently I was a software developer at WT Cox Information Services, a subscription agency where libraries, hospitals, schools, and companies order their journals, magazines, and newspapers. CoxNet2 is the Java system behind it, and I shipped work across order entry, accounting, customer service, and marketing, including a Mailgun integration. Before that I was a software engineer at TIAA, automating reporting on Splunk's REST APIs and shipping through GitLab CI/CD and OpenShift.</p>
+  <p class="contact"><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a></p>
+  <p class="small muted">Every screen below is rebuilt from scratch with invented customers, emails, IDs, and amounts. Code samples are short rewrites for illustration.</p>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <ul>
+    <li><a href="#aliases">Aliases</a></li>
+    <li><a href="#payitnow">Pay It Now</a></li>
+    <li><a href="#tiers">Tiers</a></li>
+    <li><a href="#resets">Resets</a></li>
+    <li><a href="#cs">Customer service</a></li>
+    <li><a href="#quotes">Quotes</a></li>
+    <li><a href="#reports">Reports</a></li>
+    <li><a href="#miner">Cover miner</a></li>
+    <li><a href="#craft">How I work</a></li>
+    <li><a href="#history">Work history</a></li>
+    <li><a href="#tickets">All tickets</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ============ Email aliases ============ -->
+<section id="aliases" class="drawer wrap" aria-labelledby="h-aliases">
+  <div class="drawer-head"><h2 id="h-aliases">Online subscription emails</h2><span class="plate">#6002 #6024 #6054 #6055</span></div>
+  <p class="why">Publishers started requiring a separate email address for every copy of an online subscription, so a library with three copies had to come up with three addresses. I built a place on each customer to keep those addresses, plus aliases that forward to the library's real inbox through Mailgun, so WT Cox can supply as many as an order needs.</p>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Maple Grove Public Library</h3><p class="small muted">Customer management, online subscription emails tab</p></div>
+    <fieldset class="fixes">
+      <legend>Settings</legend>
+      <span class="check" role="radiogroup" aria-label="Mail handler">
+        <span class="muted">Mail handler:</span>
+        <label class="check"><input type="radio" name="handler" value="mailgun" checked data-act="handler"> Mailgun API</label>
+        <label class="check"><input type="radio" name="handler" value="mock" data-act="handler"> In-memory mock</label>
+      </span>
+      <label class="check"><input type="checkbox" checked data-act="fix6054"> #6054 only aliases get mail routes</label>
+    </fieldset>
+    <div class="toolbar">
+      <button class="btn" type="button" data-act="new-alias">Generate new alias</button>
+      <button class="btn ghost" type="button" data-act="new-provided">Add customer-provided email</button>
+      <button class="btn ghost" type="button" data-act="bulk-disable" id="bulkBtn" disabled>Disable selected</button>
+      <label class="check small"><input type="checkbox" data-act="hide-disabled"> Hide disabled</label>
+    </div>
+    <div id="aliasForm"></div>
+    <div class="scroll-x"><table class="t stack" id="aliasTable"></table></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Order 48213: assign emails, then finalize</h3>
+      <p class="small muted">An online item needs either one shared address or one address per copy. The check runs when the order is finalized.</p>
+      <div id="orderItems"></div>
+      <div class="toolbar" style="margin-top:12px"><button class="btn" type="button" data-act="finalize">Finalize order</button><span id="finalizeStamp"></span></div>
+      <p id="finalizeMsg" role="status"></p>
+    </div>
+    <div class="panel">
+      <h3>Activity log</h3>
+      <p class="small muted">Mailgun route calls, mock handler calls, and order checks.</p>
+      <pre class="console" id="aliasLog" aria-live="polite"></pre>
+      <details class="more">
+        <summary>How aliases are made (#6002)</summary>
+        <p class="small">An alias is <code>u</code> plus four random hex digits on WT Cox's mail domain. Mailgun gets a route that matches the alias and forwards to every address listed. If a staff member leaves the library, only the forward changes; the publisher never needs a new address.</p>
+<pre class="code"><span class="c">// u + 4 hex digits, e.g. u1d7a@usr.example.com</span>
+String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<span class="k">0x10000</span>)) + <span class="s">"@"</span> + domain;</pre>
+      </details>
+      <details class="more">
+        <summary>The cleanup (#6055)</summary>
+        <p class="small">I retired the old per-customer "electronic email" field. Each order item now carries its own access emails, and one getter decides which address goes on order files and screens.</p>
+<pre class="code"><span class="k">public</span> String getEmail() {
+    <span class="k">if</span> (entityType == EntityType.PROVIDED) <span class="k">return</span> providedEmail;
+    <span class="k">if</span> (entityType == EntityType.ALIASED)  <span class="k">return</span> alias;
+    <span class="k">return</span> <span class="s">""</span>;
+}</pre>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Pay It Now ============ -->
+<section id="payitnow" class="drawer wrap" aria-labelledby="h-pin">
+  <div class="drawer-head"><h2 id="h-pin">Pay It Now</h2><span class="plate">#5997 #5998 #6000</span></div>
+  <p class="why">Finance uses this screen to find unpaid order items and pay vendors quickly. Fulfilled items with open urgent payment requests never showed up, anyone outside customer service opened it to an empty list, and there was no way to look an item up by the vendor payment it belonged to. I fixed all three.</p>
+  <div class="panel">
+    <fieldset class="fixes">
+      <legend>Turn a fix off to see the old behavior</legend>
+      <label class="check"><input type="checkbox" checked data-act="pin-fix" value="5997"> #5997 include fulfilled items with active urgent requests</label>
+      <label class="check"><input type="checkbox" checked data-act="pin-fix" value="5998"> #5998 CSR filter starts blank</label>
+      <label class="check"><input type="checkbox" checked data-act="pin-fix" value="6000"> #6000 search by vendor payment ID</label>
+    </fieldset>
+    <p class="small muted">Signed in as: Finance, accounts payable</p>
+    <div class="formgrid">
+      <label class="f">Search by<select id="pinBy"></select></label>
+      <label class="f">Search for<input type="search" id="pinQ" placeholder="Try VP-77131" autocomplete="off"></label>
+      <label class="f">CSR filter<select id="pinCsr"></select></label>
+    </div>
+    <div class="scroll-x" style="margin-top:14px"><table class="t stack" id="pinTable"></table></div>
+    <p id="pinEmpty" role="status" style="margin-top:10px"></p>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Urgent payment request UPR-3150</h3>
+      <p class="small">Order item 880218, Hydrology Letters: fulfilled, with a new open request. Saving the request should refresh the Pay It Now cache so finance can see the item.</p>
+      <div class="toolbar"><button class="btn" type="button" data-act="pin-save-upr">Save request</button></div>
+    </div>
+    <div class="panel">
+      <h3>Cache refresh log</h3>
+      <pre class="console" id="pinLog" aria-live="polite"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Tier info ============ -->
+<section id="tiers" class="drawer wrap" aria-labelledby="h-tiers">
+  <div class="drawer-head"><h2 id="h-tiers">Tier info on Add Items</h2><span class="plate">#6040 #6041</span></div>
+  <p class="why">Publishers price institutions by tier, but order entry only showed WT Cox's internal "TIER 1" or "TIER 2", so the production team kept flipping to the publisher's page to work out the right one. Now each rate shows the publisher's own tier code with the details one tap away, and a vendor's own tiers win when it has them. This one was marked critical.</p>
+  <div class="panel">
+    <fieldset class="fixes">
+      <legend>Turn a fix off to see the old behavior</legend>
+      <label class="check"><input type="checkbox" checked data-act="tier-fix" value="6040"> #6040 publisher tier codes</label>
+      <label class="check"><input type="checkbox" checked data-act="tier-fix" value="6041" id="fix6041"> #6041 vendor tiers checked first</label>
+    </fieldset>
+    <p class="small muted">Order detail, Add Items tab. The Switch rate menu uses the same labels.</p>
+    <div class="scroll-x"><table class="t stack" id="tierTable"></table></div>
+  </div>
+  <div class="panel">
+    <h3>How the last rate was looked up</h3>
+    <pre class="console" id="tierTrace" aria-live="polite"></pre>
+  </div>
+</section>
+
+<!-- ============ Resets ============ -->
+<section id="resets" class="drawer wrap" aria-labelledby="h-resets">
+  <div class="drawer-head"><h2 id="h-resets">Resets and standing orders</h2><span class="plate">#6015 #6070</span></div>
+  <p class="why">A reset sends an item back through fulfillment, usually because a payment failed. Standing orders ship as volumes come out instead of renewing every year, so resetting one breaks it. The reset logic now returns early for them, and a unit test keeps it that way. Finance also got a new reset reason: check not cashed.</p>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Payment details: reset an order item</h3>
+      <fieldset class="fixes">
+        <legend>Turn a fix off to see the old behavior</legend>
+        <label class="check"><input type="checkbox" checked data-act="rs-fix" value="6015"> #6015 standing orders skip resets</label>
+        <label class="check"><input type="checkbox" checked data-act="rs-fix" value="6070"> #6070 check not cashed reason</label>
+      </fieldset>
+      <div class="scroll-x"><table class="t stack" id="rsTable"></table></div>
+      <div class="formgrid" style="margin-top:14px">
+        <label class="f">Order item<select id="rsItem"></select></label>
+        <label class="f">Reset reason<select id="rsReason"></select></label>
+        <button class="btn" type="button" data-act="rs-reset">Reset order item</button>
+      </div>
+      <p id="rsMsg" role="status" style="margin-top:12px"></p>
+    </div>
+    <div class="panel">
+      <h3>OrderItemBoundaryCaseTests</h3>
+      <p class="small muted">Runs with every build. Turn #6015 off and run it again.</p>
+      <div class="toolbar"><button class="btn ghost" type="button" data-act="rs-test">Run tests</button></div>
+      <pre class="console" id="rsTests" aria-live="polite"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Customer service ============ -->
+<section id="cs" class="drawer wrap" aria-labelledby="h-cs">
+  <div class="drawer-head"><h2 id="h-cs">Customer service: ordered titles</h2><span class="plate">#6019 #6044 #6059 #6067</span></div>
+  <p class="why">Customer service answers "where's my issue?" all day. I put the things reps kept clicking around for on one screen: a paper clip when documents are attached, the newspaper expiration guarantee on newspaper titles, each claim's most recent internal note, and access emails they can fix in place.</p>
+  <div class="panel">
+    <fieldset class="fixes">
+      <legend>Compare</legend>
+      <label class="check"><input type="checkbox" data-act="cs-before"> Show this screen before my changes</label>
+    </fieldset>
+    <p class="small muted">Ordered title search results. Select a row to open its detail.</p>
+    <div class="scroll-x"><table class="t" id="csTable"></table></div>
+  </div>
+  <div class="panel" id="csDetail" aria-live="polite"></div>
+</section>
+
+<!-- ============ Quotes and catalogs ============ -->
+<section id="quotes" class="drawer wrap" aria-labelledby="h-quotes">
+  <div class="drawer-head"><h2 id="h-quotes">Quotes and catalogs</h2><span class="plate">#6011 #6030</span></div>
+  <p class="why">Two sales-side changes. Quotes got the purchase order / organization contract field that orders already had, and it prints on the service proposal. Marketing's featured-title catalogs can now target one organization, which makes pre-approved title lists possible for corporate and hospital customers.</p>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Quote Q-20931</h3>
+      <p class="small muted">Lakeside Community College Library</p>
+      <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="q-fix"> #6011 PO / contract field</label>
+      <div id="qForm"><label class="f">Purchase order / org contract<input type="text" id="qPo" placeholder="e.g. PO-55821" autocomplete="off"></label></div>
+    </div>
+    <div class="paper" id="qPreview" aria-live="polite"></div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Marketing: catalog detail</h3>
+      <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="cat-fix"> #6030 organization-specific catalogs</label>
+      <div id="catEditor"></div>
+    </div>
+    <div class="panel">
+      <h3>What the customer sees</h3>
+      <label class="f">Signed in as a customer under<select id="catViewAs"></select></label>
+      <div id="catPreview" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Reports and exports ============ -->
+<section id="reports" class="drawer wrap" aria-labelledby="h-reports">
+  <div class="drawer-head"><h2 id="h-reports">Reports and exports</h2><span class="plate">#5982 #5985 #5987 #6071</span></div>
+  <p class="why">The paperwork side: a weekly report that helps finance trace refunds back to orders, a publisher's order file rebuilt to their exact spec, an Excel export for an organization's IP addresses, and email fields wide enough for more than one address.</p>
+  <div class="panel">
+    <h3>Weekly: unallocated refunds (#5982)</h3>
+    <p class="small muted">Goes out Monday mornings to customer service managers and finance, listing every open refund that still has to be matched to a customer order.</p>
+    <div class="toolbar"><button class="btn ghost" type="button" data-act="ref-run">Send this week's report</button><span id="refStamp"></span></div>
+    <div id="refunds"></div>
+  </div>
+  <div class="panel">
+    <h3>Publisher order file (#5985)</h3>
+    <p class="small muted">Sent with payment to a Spanish-language magazine publisher. Their format has no quantity column, they wanted list price instead of remit total and a different payment address, and they wanted their own column headers, not English paraphrases. I built it against the unit test first, then regenerated real batches to check it.</p>
+    <div class="seg" role="radiogroup" aria-label="File version">
+      <label><input type="radio" name="xlsv" value="before" data-act="xls-ver"> Before</label>
+      <label><input type="radio" name="xlsv" value="after" checked data-act="xls-ver"> After</label>
+    </div>
+    <div id="xls"></div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>IP addresses tab: Excel export (#5987)</h3>
+      <p class="small muted">Crestview Health System. Written as an XHTML template with Seam's Excel support, reusing the data already behind the tab.</p>
+      <div class="scroll-x"><table class="t stack" id="ipTable"></table></div>
+      <div class="toolbar" style="margin-top:12px"><button class="btn ghost" type="button" data-act="ip-export">Export to Excel</button></div>
+      <div id="ipExport" aria-live="polite"></div>
+    </div>
+    <div class="panel">
+      <h3>Vendor payment preferences (#6071)</h3>
+      <p class="small muted">Harbor Press. Finance needed room for several addresses per field.</p>
+      <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="widen"> Wider email fields</label>
+      <div id="widen"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Cover Image Miner ============ -->
+<section id="miner" class="drawer wrap" aria-labelledby="h-miner">
+  <div class="drawer-head"><h2 id="h-miner">Cover Image Miner</h2><span class="plate">Side tool, January 2025</span></div>
+  <p class="why">CoxNet needed cover thumbnails for thousands of journals. I wrote a command-line tool that opens each title's page on the vendor's site, finds the cover, shrinks it to 200 by 267, and saves it under the title's ID, logging every miss with a link to check by hand. Over three days of runs it collected 3,772 of 4,070 ScienceDirect covers.</p>
+  <div class="grid2">
+    <div class="panel">
+      <div class="toolbar">
+        <button class="btn" type="button" data-act="mn-run" id="mnRun">Run the miner</button>
+        <button class="btn ghost" type="button" data-act="mn-reset">Start over</button>
+      </div>
+      <p class="small muted">40 made-up titles. The real tool waits 2 seconds between requests; this one is sped up.</p>
+      <pre class="console" id="mnConsole"></pre>
+      <p class="progress" id="mnProgress" aria-live="polite"></p>
+    </div>
+    <div class="panel">
+      <h3>output/images</h3>
+      <div class="covers" id="mnGrid"></div>
+      <p id="mnFailed" class="small muted" style="margin-top:10px"></p>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>The real runs</h3>
+      <p class="small muted">Covers saved out of 4,070 ScienceDirect titles, after each day's last run.</p>
+      <div class="bars">
+        <div class="bar"><span>Jan 7</span><span class="track"><span class="fill" style="width:75.3%"></span></span><span class="val">3,063 (75%)</span></div>
+        <div class="bar"><span>Jan 8</span><span class="track"><span class="fill" style="width:91.7%"></span></span><span class="val">3,731 (92%)</span></div>
+        <div class="bar"><span>Jan 9</span><span class="track"><span class="fill" style="width:92.7%"></span></span><span class="val">3,772 (93%)</span></div>
+      </div>
+      <p class="small">The last 298 went to <code>failed_titles.csv</code>, each with the page URL so a person could finish them.</p>
+    </div>
+    <div class="panel">
+      <h3>How it's built</h3>
+      <ul class="plain">
+        <li>Prototyped as a Groovy script, then rebuilt as a Java command-line app with Maven.</li>
+        <li>One handler class per vendor site. ScienceDirect is finished; Springer, Wiley, JSTOR, Taylor &amp; Francis, and SAGE are stubbed for later. The full input list has 30,592 titles across vendors.</li>
+        <li>Skips covers it already has, so a rerun only retries the misses.</li>
+        <li>One request every 2 seconds, and up to 3 tries with growing waits when a request is refused.</li>
+        <li>Resizes with Thumbnailator and writes every miss to a CSV with the URL to check.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ How I work ============ -->
+<section id="craft" class="drawer wrap" aria-labelledby="h-craft">
+  <div class="drawer-head"><h2 id="h-craft">How I work</h2></div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>From ticket to staging</h3>
+      <ol class="steps">
+        <li>Read the ticket in Trac and pull real test cases with a query against the test database.</li>
+        <li>Make the change against the unit tests first, running <code>ant test</code> from Eclipse.</li>
+        <li>Put any schema change in its own script, like <code>ticket-6000.sql</code>, and list it in the deploy email so one ticket can be rolled back by itself.</li>
+        <li>Merge and commit each ticket separately from the maintenance branch to trunk in SVN, with the ticket number in the message.</li>
+        <li>Check it on staging by tailing the JBoss server log over SSH.</li>
+      </ol>
+      <h3>Tools</h3>
+      <ul class="chips">
+        <li>Java 8</li><li>EJB and JPA</li><li>JBoss 4.2</li><li>JSF, Seam, RichFaces</li><li>MySQL</li><li>Ant</li><li>Maven</li><li>SVN</li><li>Trac</li><li>TestNG</li><li>Mockito</li><li>Mailgun API</li><li>Groovy</li><li>Eclipse</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Testing without the real mail server</h3>
+      <p class="small">The mail handler class comes from an application setting, so tests and local runs use an in-memory mock. The live Mailgun test stays disabled so the API key never lands in the repository.</p>
+<pre class="code"><span class="c">// coxnet2.defaultMailRuleHandler names the class to load:</span>
+<span class="c">// Mailgun in production, the in-memory mock everywhere else.</span>
+CustomerAccessEmailHandler handler = CustomerAccessEmailHandler.newInstance();
+String routeId = handler.createRule(accessEmail);</pre>
+      <p class="small">Unit tests have no database, so Mockito stands in for the EntityManager and hands out IDs the way auto-increment would. I inject it with plain reflection rather than pulling in Spring's test utilities.</p>
+<pre class="code">doAnswer(invocation -&gt; {
+    CustomerAccessEmail saved = (CustomerAccessEmail) invocation.getArguments()[<span class="k">0</span>];
+    saved.setCustomerAccessEmailId(nextId.getAndIncrement());
+    <span class="k">return null</span>;
+}).when(entityManager).persist(any(CustomerAccessEmail.<span class="k">class</span>));
+
+Field field = bean.getClass().getDeclaredField(<span class="s">"entityManager"</span>);
+field.setAccessible(<span class="k">true</span>);
+field.set(bean, entityManager);</pre>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Tier lookup in SQL (#6040, #6041)</h3>
+    <p class="small">Reports needed the same tier labels as the screens, so the lookup also lives in two MySQL functions: vendor tiers first, then the publisher's.</p>
+<pre class="code"><span class="c">-- Vendor tier codes first...</span>
+<span class="k">SELECT</span> GROUP_CONCAT(<span class="k">DISTINCT</span> TRIM(vti.TIER_CODE) <span class="k">SEPARATOR</span> <span class="s">' / '</span>) <span class="k">INTO</span> result
+  <span class="k">FROM</span> VENDOR_TIER_INFO vti
+ <span class="k">WHERE</span> vti.VENDOR_ID = vendor_id <span class="k">AND</span> vti.LEVEL = tier_level;
+
+<span class="c">-- ...then the publisher's, if the vendor has none.</span>
+<span class="k">IF</span> result <span class="k">IS NULL OR</span> result = <span class="s">''</span> <span class="k">THEN</span>
+  <span class="k">SELECT</span> GROUP_CONCAT(<span class="k">DISTINCT</span> TRIM(pti.TIER_CODE) <span class="k">SEPARATOR</span> <span class="s">' / '</span>) <span class="k">INTO</span> result
+    <span class="k">FROM</span> PUBLISHER_TIER_INFO pti
+   <span class="k">WHERE</span> pti.PUBLISHER_ID = publisher_id <span class="k">AND</span> pti.LEVEL = tier_level;
+<span class="k">END IF</span>;</pre>
+  </div>
+</section>
+
+<!-- ============ Work history ============ -->
+<section id="history" class="drawer wrap" aria-labelledby="h-history">
+  <div class="drawer-head"><h2 id="h-history">Work history</h2></div>
+  <ol class="jobs">
+    <li class="job">
+      <div class="job-h"><h3>Software Developer, WT Cox Information Services</h3><span class="plate">June 2024 – Feb. 2025</span></div>
+      <p>Built and fixed features in CoxNet2, the Java system (EJB and JPA on JBoss, JSF, MySQL) that runs the agency: 21 tickets across finance, customer service, order entry, and marketing, an email alias system on the Mailgun API, and the Cover Image Miner. <a href="#aliases">Every one is rebuilt above.</a></p>
+    </li>
+    <li class="job">
+      <div class="job-h"><h3>Software Engineer, TIAA</h3><span class="plate">June 2021 – Sept. 2023</span></div>
+      <ul class="plain">
+        <li>Built automated reporting on Splunk's REST APIs, cutting manual reporting work and making delivery consistent.</li>
+        <li>Found and fixed 50+ application defects through debugging and L2 testing.</li>
+        <li>Shipped code through GitLab CI/CD pipelines and deployed containerized apps on OpenShift, from builds to routing.</li>
+        <li>Decommissioned inactive F5 applications to trim infrastructure.</li>
+      </ul>
+    </li>
+    <li class="job">
+      <div class="job-h"><h3>Technology Intern, TIAA</h3><span class="plate">June – Aug. 2020</span></div>
+      <p>Maintenance and enhancements on the enterprise FileHub application with Java, Spring, and JUnit, on an Agile team.</p>
+    </li>
+  </ol>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Skills</h3>
+      <dl class="skills">
+        <div><dt>Languages</dt><dd>Java, Python, JavaScript, TypeScript, Node.js, SQL, REST APIs</dd></div>
+        <div><dt>Frontend</dt><dd>React, HTML, CSS</dd></div>
+        <div><dt>Cloud and DevOps</dt><dd>AWS (EC2, S3), Docker, OpenShift, Jenkins, GitLab CI/CD</dd></div>
+        <div><dt>Tools</dt><dd>Git and GitHub, SVN, JIRA, ServiceNow, Splunk, Wireshark</dd></div>
+        <div><dt>AI tools</dt><dd>Cursor, Claude, ChatGPT, MCP, Copilot</dd></div>
+        <div><dt>Testing and process</dt><dd>JUnit, TestNG, Mockito, microservices, Agile and Scrum</dd></div>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3>Education</h3>
+      <p>University of North Carolina at Charlotte<br>B.A. in Computer Science, cum laude</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ All tickets ============ -->
+<section id="tickets" class="drawer wrap" aria-labelledby="h-tickets">
+  <div class="drawer-head"><h2 id="h-tickets">All tickets</h2><span class="plate">21 tickets, 1 tool</span></div>
+  <p class="why">Every ticket I worked, by number, with its last status and a link to its demo.</p>
+  <div class="cards" id="ticketCards"></div>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <p class="contact"><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a></p>
+  <p>Rebuilt for this portfolio. Customers, emails, IDs, and amounts are invented, and none of WT Cox's code, data, or internal systems are included.</p>
+</footer>
+<script>
+(() => {
+'use strict';
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const money = n => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const isEmail = s => /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+$/.test(s);
+const hexId = len => Array.from({ length: len }, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('');
+const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+const stamp = (text, tone) => `<span class="stamp ${tone || ''} pop">${esc(text)}</span>`;
+const D = s => `<span class="d">${esc(s)}</span>`;
+const H = s => `<span class="h">${esc(s)}</span>`;
+const G = s => `<span class="g">${esc(s)}</span>`;
+const W = s => `<span class="w">${esc(s)}</span>`;
+
+function makeConsole(el) {
+  const lines = [];
+  return {
+    add(...ls) {
+      lines.push(...ls);
+      if (lines.length > 240) lines.splice(0, lines.length - 240);
+      el.innerHTML = lines.join('\n');
+      el.scrollTop = el.scrollHeight;
+    },
+    clear() { lines.length = 0; el.innerHTML = ''; }
+  };
+}
+function typeLines(el, lines, delay) {
+  clearInterval(el._timer);
+  if (reduceMotion || !delay) { el.innerHTML = lines.join('\n'); return; }
+  el.innerHTML = '';
+  let i = 0;
+  el._timer = setInterval(() => {
+    el.innerHTML += (i ? '\n' : '') + lines[i++];
+    el.scrollTop = el.scrollHeight;
+    if (i >= lines.length) clearInterval(el._timer);
+  }, delay);
+}
+
+/* ---------- Online subscription emails (#6002, #6024, #6054, #6055) ---------- */
+const ALIAS_DOMAIN = 'usr.example.com';
+const LIB = 'maplegrove.example.org';
+const A = {
+  handler: 'mailgun', fix6054: true, hideDisabled: false, form: null, nextId: 7, flash: null,
+  selected: new Set(),
+  emails: [
+    { id: 1, type: 'PROVIDED', usage: 'SHARED', email: 'eresources@' + LIB, fwd: [], status: 'Active', route: null },
+    { id: 2, type: 'ALIASED', usage: 'SHARED', email: 'u1d7a@' + ALIAS_DOMAIN, fwd: ['eresources@' + LIB], status: 'Active', route: '65f0c1a2b3c4d5e6f7a8b901' },
+    { id: 3, type: 'ALIASED', usage: 'SHARED', email: 'u4f32@' + ALIAS_DOMAIN, fwd: ['eresources@' + LIB, 'periodicals@' + LIB], status: 'Active', route: '65f0c1a2b3c4d5e6f7a8b902' },
+    { id: 4, type: 'ALIASED', usage: 'PRIVATE', email: 'u88b9@' + ALIAS_DOMAIN, fwd: ['kim.ortiz@' + LIB], status: 'Active', route: '65f0c1a2b3c4d5e6f7a8b903' },
+    { id: 5, type: 'PROVIDED', usage: 'PRIVATE', email: 'sam.reed@' + LIB, fwd: [], status: 'Active', route: null },
+    { id: 6, type: 'ALIASED', usage: 'SHARED', email: 'u015b@' + ALIAS_DOMAIN, fwd: ['ill@' + LIB], status: 'Disabled', route: null }
+  ]
+};
+const aliasLog = makeConsole($('#aliasLog'));
+const byId = id => A.emails.find(e => e.id === id);
+
+function newAliasAddress() {
+  let a;
+  do { a = 'u' + Math.floor(Math.random() * 0x10000).toString(16).padStart(4, '0') + '@' + ALIAS_DOMAIN; }
+  while (A.emails.some(e => e.email === a));
+  return a;
+}
+function routeParams(e) {
+  const p = [['priority', '0'], ['description', 'Route for Online Subscription Email'], ['expression', `match_recipient("${e.email}")`]];
+  if (e.type === 'ALIASED') e.fwd.forEach(f => p.push(['action', `forward("${f}")`]));
+  else p.push(['action', 'stop()']);
+  return p;
+}
+function callHandler(op, e) {
+  if (A.handler === 'mock') {
+    const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const id = op === 'create' ? Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join('') : e.route;
+    const verb = op === 'remove' ? 'removed from' : op === 'update' ? 'updated in' : 'added to';
+    aliasLog.add(H(`MockCustomerAccessEmailHandler.${op}Rule()`), D(`  ${e.email} ${verb} the in-memory rule list as ${id}`), D('  no network call'), '');
+    return op === 'remove' ? null : id;
+  }
+  const base = 'https://api.mailgun.net/v3/routes';
+  if (op === 'create') {
+    const id = hexId(24);
+    aliasLog.add(H('POST ' + base), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G(`← 200 {"message":"Route has been created","route":{"id":"${id}"}}`), '');
+    return id;
+  }
+  if (op === 'update') {
+    aliasLog.add(H('PUT ' + base + '/' + e.route), ...routeParams(e).map(([k, v]) => D(`  ${k}=${v}`)), G('← 200 {"message":"Route has been updated"}'), '');
+    return e.route;
+  }
+  aliasLog.add(H('DELETE ' + base + '/' + e.route), G(`← 200 {"message":"Route has been deleted","id":"${e.route}"}`), '');
+  return null;
+}
+
+function renderAliases() {
+  const rows = A.emails.filter(e => !(A.hideDisabled && e.status === 'Disabled'));
+  const head = '<thead><tr><th scope="col"><span class="sr">Select</span></th><th scope="col">Email address</th><th scope="col">Kind</th><th scope="col">Forwards to</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>';
+  const body = rows.map(e => `<tr${A.flash === e.id ? ' class="flash"' : ''}>
+    <td data-label="Select"><input type="checkbox" data-act="sel" value="${e.id}" aria-label="Select ${esc(e.email)}"${A.selected.has(e.id) ? ' checked' : ''}${e.status !== 'Active' ? ' disabled' : ''}></td>
+    <td data-label="Email" class="em"><strong>${esc(e.email)}</strong>${e.id === 1 ? ' <span class="tag">default</span>' : ''}</td>
+    <td data-label="Kind" class="kind">${e.type === 'ALIASED' ? 'Alias' : 'Provided'}, ${e.usage === 'SHARED' ? 'shared' : 'private'}</td>
+    <td data-label="Forwards to" class="small em">${e.fwd.length ? e.fwd.map(esc).join('<br>') : '<span class="muted">N/A</span>'}</td>
+    <td data-label="Status" class="${e.status === 'Active' ? 'ok' : 'err'}">${e.status}</td>
+    <td data-label="Actions" class="actions"><button type="button" class="linkbtn" data-act="edit" value="${e.id}">Edit</button>${e.status === 'Active' ? ` <button type="button" class="linkbtn danger" data-act="disable" value="${e.id}">Disable</button>` : ''}</td>
+  </tr>`).join('');
+  $('#aliasTable').innerHTML = head + '<tbody>' + body + '</tbody>';
+  A.flash = null;
+  updateBulk();
+}
+function updateBulk() {
+  const b = $('#bulkBtn'), n = A.selected.size;
+  b.disabled = n === 0;
+  b.textContent = n ? `Disable selected (${n})` : 'Disable selected';
+}
+function openForm(kind, id) {
+  const e = id ? byId(id) : null;
+  A.form = { kind, id: id || null, address: kind === 'alias' ? newAliasAddress() : null };
+  const isAlias = kind === 'alias' || (e && e.type === 'ALIASED');
+  const title = kind === 'alias' ? 'New alias' : kind === 'provided' ? 'New customer-provided email' : 'Edit ' + e.email;
+  const usage = e ? e.usage : 'SHARED';
+  $('#aliasForm').innerHTML = `<div class="subform" role="group" aria-labelledby="afTitle">
+    <h4 id="afTitle">${esc(title)}</h4>
+    <div class="formgrid">
+      ${isAlias ? `<div class="f"><span>Email address</span><span class="addr">${esc(A.form.address || e.email)}</span></div>`
+        : `<label class="f">Email address<input type="email" id="afEmail" value="${esc(e ? e.email : '')}" placeholder="name@library.org" autocomplete="off"></label>`}
+      <label class="f">Usage<select id="afUsage"><option value="SHARED"${usage === 'SHARED' ? ' selected' : ''}>Shared by many patrons</option><option value="PRIVATE"${usage === 'PRIVATE' ? ' selected' : ''}>Private to one person</option></select></label>
+      ${isAlias ? `<label class="f">Forwards to (separate with commas)<input type="text" id="afFwd" value="${esc(e ? e.fwd.join(', ') : 'eresources@' + LIB)}" autocomplete="off"></label>` : ''}
+    </div>
+    <p class="err" id="afErr" role="alert"></p>
+    <div class="toolbar" style="margin-top:12px"><button type="button" class="btn" data-act="form-save">Save</button><button type="button" class="btn ghost" data-act="form-cancel">Cancel</button></div>
+  </div>`;
+  const first = $('#afEmail') || $('#afFwd');
+  if (first) first.focus();
+}
+function closeForm() { A.form = null; $('#aliasForm').innerHTML = ''; }
+function formError(msg) { $('#afErr').textContent = msg; }
+function saveForm() {
+  const f = A.form;
+  if (!f) return;
+  const e = f.id ? byId(f.id) : null;
+  const isAlias = f.kind === 'alias' || (e && e.type === 'ALIASED');
+  const usage = $('#afUsage').value;
+  if (isAlias) {
+    const fwd = $('#afFwd').value.split(/[,;\s]+/).map(s => s.trim()).filter(Boolean);
+    if (!fwd.length) return formError('Add at least one address for the alias to forward to.');
+    const bad = fwd.filter(x => !isEmail(x));
+    if (bad.length) return formError(`${bad.join(', ')} ${bad.length > 1 ? "aren't full email addresses" : "isn't a full email address"}.`);
+    if (f.kind === 'alias') {
+      const n = { id: A.nextId++, type: 'ALIASED', usage, email: f.address, fwd, status: 'Active', route: null };
+      n.route = callHandler('create', n);
+      A.emails.push(n);
+      A.flash = n.id;
+    } else {
+      e.usage = usage; e.fwd = fwd;
+      if (e.status === 'Active') e.route = e.route ? callHandler('update', e) : callHandler('create', e);
+      else aliasLog.add(D(`Saved ${e.email}. It's disabled, so Mailgun isn't called.`), '');
+      A.flash = e.id;
+    }
+  } else {
+    const addr = $('#afEmail').value.trim();
+    if (!isEmail(addr)) return formError('Enter a full email address, like name@library.org.');
+    if (A.emails.some(x => x.email.toLowerCase() === addr.toLowerCase() && (!e || x.id !== e.id))) return formError('That address is already on this customer.');
+    const target = e || { id: A.nextId++, type: 'PROVIDED', fwd: [], status: 'Active', route: null };
+    target.email = addr; target.usage = usage;
+    if (!e) A.emails.push(target);
+    A.flash = target.id;
+    if (target.status !== 'Active') aliasLog.add(D(`Saved ${addr}. It's disabled, so nothing else happens.`), '');
+    else if (A.fix6054) aliasLog.add(D(`Saved ${addr} as a provided address.`), D('  No mail route: mail already goes straight to the library. (#6054)'), '');
+    else {
+      target.route = target.route ? callHandler('update', target) : callHandler('create', target);
+      aliasLog.add(W("⚠ A provided address just got a mail rule it doesn't need. This is the bug #6054 fixed."), '');
+    }
+  }
+  closeForm();
+  renderAliases(); renderOrder(); renderCSDetail();
+}
+function disableEmails(ids) {
+  ids.forEach(id => {
+    const e = byId(id);
+    if (!e || e.status !== 'Active') return;
+    if (e.route) e.route = callHandler('remove', e);
+    else aliasLog.add(D(`Disabled ${e.email}. It had no mail route to remove.`), '');
+    e.status = 'Disabled';
+    A.selected.delete(id);
+  });
+  renderAliases(); renderOrder(); renderCSDetail();
+}
+
+/* shared access-email editor: orders (#6024) and customer service (#6044) */
+function checkEmails(item) {
+  const n = item.emails.length, q = item.qty;
+  if (n === 0) return { ok: false, msg: q > 1 ? `Needs 1 shared address or ${q}, one per copy.` : 'Needs an address.' };
+  if (n === 1) return { ok: true, msg: q === 1 ? 'One address for one copy.' : q === 2 ? 'One shared address covers both copies.' : `One shared address covers all ${q} copies.` };
+  if (n === q) return { ok: true, msg: 'One address per copy.' };
+  return { ok: false, msg: `Has ${n}. Needs 1 shared address or ${q}, one per copy.` };
+}
+function emailEditor(scope, item, editable) {
+  const chk = checkEmails(item);
+  const list = item.emails.map(id => {
+    const e = byId(id);
+    return `<li><span class="addr">${esc(e.email)}</span> <span class="small muted">${e.type === 'ALIASED' ? 'alias' : 'provided'}${e.status !== 'Active' ? ', disabled' : ''}</span>${editable ? ` <button type="button" class="linkbtn danger small" data-act="ee-remove" data-scope="${scope}" data-item="${item.id}" value="${id}">Remove</button>` : ''}</li>`;
+  }).join('');
+  const opts = A.emails.filter(e => e.status === 'Active' && !item.emails.includes(e.id)).map(e => `<option value="${e.id}">${esc(e.email)}</option>`).join('');
+  const sid = `ee-${scope}-${item.id}`;
+  const adder = editable ? `<div class="ee-add"><label class="sr" for="${sid}">Email to add to ${esc(item.title)}</label><select id="${sid}">${opts || '<option value="">No other active emails</option>'}</select><button type="button" class="btn sm ghost" data-act="ee-add" data-scope="${scope}" data-item="${item.id}"${opts ? '' : ' disabled'}>Add email</button></div>` : '';
+  return `<div class="ee"><ul class="ee-list">${list || '<li class="muted">No emails yet</li>'}</ul>${adder}<p class="small ${chk.ok ? 'ok' : 'err'}">${esc(chk.msg)}</p></div>`;
+}
+const ORDER = { finalized: false, items: [
+  { id: 880101, title: 'Journal of Coastal Ecology', format: 'Print + online', qty: 3, emails: [2, 3] },
+  { id: 880102, title: 'Applied Linguistics Review', format: 'Online only', qty: 2, emails: [] },
+  { id: 880103, title: 'The Weekly Ledger', format: 'Online only', qty: 1, emails: [1] }
+] };
+function renderOrder() {
+  $('#orderItems').innerHTML = ORDER.items.map(it => `<div class="oi"><div class="oi-h"><strong>${esc(it.title)}</strong><span class="small muted">Item ${it.id}, ${esc(it.format)}, ${it.qty} ${it.qty > 1 ? 'copies' : 'copy'}</span></div>${emailEditor('order', it, !ORDER.finalized)}</div>`).join('');
+}
+function finalizeOrder() {
+  const bad = ORDER.items.filter(i => !checkEmails(i).ok);
+  if (bad.length) {
+    $('#finalizeStamp').innerHTML = '';
+    $('#finalizeMsg').innerHTML = `<span class="err">Can't finalize yet.</span> ${bad.map(b => esc(b.title)).join(' and ')} ${bad.length > 1 ? 'need' : 'needs'} one shared address or one per copy.`;
+    aliasLog.add(W(`Order.prepareOrderForClosing(): ${bad.length} item${bad.length > 1 ? 's' : ''} short on access emails, order stays open`), '');
+    return;
+  }
+  ORDER.finalized = true;
+  renderOrder();
+  $('#finalizeStamp').innerHTML = stamp('Finalized', 'green');
+  $('#finalizeMsg').innerHTML = '<span class="ok">Order 48213 is finalized.</span> <button type="button" class="linkbtn" data-act="reopen">Reopen it</button>';
+  aliasLog.add(G('Order.prepareOrderForClosing(): every item has 1 or N access emails, order closed'), '');
+}
+
+/* ---------- Pay It Now (#5997, #5998, #6000) ---------- */
+const ACTIVE_UPR = ['open', 'researching', 'confirmed'];
+const CSRS = ['J. Park', 'L. Gomez', 'M. Chen'];
+const ME = 'Finance (your accounts)';
+const P = {
+  fix: { 5997: true, 5998: true, 6000: true }, by: 'oi', q: '', csr: '', flash: null,
+  items: [
+    { oi: 880210, title: 'Journal of Coastal Ecology', vendor: 'Northfield Academic', status: 'awaiting', inv: false, csr: 'J. Park', amount: 412, uprs: [], vps: [] },
+    { oi: 880211, title: 'The Weekly Ledger', vendor: 'Ledger Media', status: 'fulfilled', inv: true, csr: 'L. Gomez', amount: 96, uprs: [], vps: ['VP-77120'] },
+    { oi: 880212, title: 'Applied Linguistics Review', vendor: 'Harbor Press', status: 'fulfilled', inv: false, csr: 'J. Park', amount: 230, uprs: [{ id: 'UPR-3121', status: 'open' }], vps: ['VP-77131'] },
+    { oi: 880213, title: 'Pediatric Nursing Today', vendor: 'Harbor Press', status: 'fulfilled', inv: false, csr: 'M. Chen', amount: 318.5, uprs: [{ id: 'UPR-3127', status: 'researching' }, { id: 'UPR-3129', status: 'open' }], vps: ['VP-77131', 'VP-77188'] },
+    { oi: 880214, title: 'Rural Health Quarterly', vendor: 'Northfield Academic', status: 'awaiting', inv: false, csr: 'M. Chen', amount: 154, uprs: [], vps: [] },
+    { oi: 880215, title: 'Materials Letters Digest', vendor: 'Kestrel Science', status: 'fulfilled', inv: false, csr: 'L. Gomez', amount: 642, uprs: [{ id: 'UPR-3102', status: 'closed' }], vps: ['VP-76990'] },
+    { oi: 880216, title: 'Coastal Birds Monthly', vendor: 'Ledger Media', status: 'awaiting', inv: false, csr: 'L. Gomez', amount: 58, uprs: [], vps: [] },
+    { oi: 880217, title: 'Library Tech Forum', vendor: 'Kestrel Science', status: 'fulfilled', inv: false, csr: 'J. Park', amount: 275, uprs: [{ id: 'UPR-3140', status: 'confirmed' }], vps: ['VP-77202'] },
+    { oi: 880218, title: 'Hydrology Letters', vendor: 'Kestrel Science', status: 'fulfilled', inv: false, csr: 'M. Chen', amount: 390, uprs: [], vps: ['VP-77215'], stale: false }
+  ]
+};
+const pinLog = makeConsole($('#pinLog'));
+const activeUprs = i => i.uprs.filter(u => ACTIVE_UPR.includes(u.status));
+function cacheRows() {
+  return P.items.filter(i => {
+    if (i.stale) return false;
+    if (i.status === 'awaiting' || i.inv) return true;
+    return P.fix[5997] && activeUprs(i).length > 0;
+  });
+}
+const pinStatus = i => i.status === 'awaiting' ? 'Awaiting fulfillment' : i.inv ? 'Fulfilled, awaiting invoice' : 'Fulfilled, urgent request open';
+function renderPin() {
+  const byOpts = [['oi', 'Order item ID'], ['upr', 'Urgent payment request ID']];
+  if (P.fix[6000]) byOpts.push(['vp', 'Vendor payment ID']);
+  if (!byOpts.some(o => o[0] === P.by)) P.by = 'oi';
+  $('#pinBy').innerHTML = byOpts.map(([v, l]) => `<option value="${v}"${v === P.by ? ' selected' : ''}>${l}</option>`).join('');
+  $('#pinCsr').innerHTML = [['', 'Any CSR'], ...CSRS.map(c => [c, c]), [ME, ME]].map(([v, l]) => `<option value="${esc(v)}"${v === P.csr ? ' selected' : ''}>${esc(l)}</option>`).join('');
+  $('#pinQ').placeholder = P.by === 'vp' ? 'Try VP-77131' : P.by === 'upr' ? 'Try UPR-3127' : 'Try 880212';
+  const q = P.q.trim().toLowerCase();
+  let rows = cacheRows();
+  if (P.csr) rows = rows.filter(r => r.csr === P.csr);
+  if (q) rows = rows.filter(r => (P.by === 'oi' ? String(r.oi) : P.by === 'upr' ? activeUprs(r).map(u => u.id).join(' ') : r.vps.join(' ')).toLowerCase().includes(q));
+  const vpCol = P.fix[6000];
+  const none = '<span class="muted">None</span>';
+  const head = `<thead><tr><th scope="col">Order item</th><th scope="col">Title</th><th scope="col">Vendor</th><th scope="col">Status</th><th scope="col">CSR</th><th scope="col">Urgent requests</th>${vpCol ? '<th scope="col">Vendor payments</th>' : ''}<th scope="col" class="num">Amount</th></tr></thead>`;
+  const body = rows.map(r => `<tr${P.flash === r.oi ? ' class="flash"' : ''}><td data-label="Order item">${r.oi}</td><td data-label="Title">${esc(r.title)}</td><td data-label="Vendor">${esc(r.vendor)}</td><td data-label="Status">${pinStatus(r)}</td><td data-label="CSR">${esc(r.csr)}</td><td data-label="Urgent requests">${activeUprs(r).map(u => u.id).join(', ') || none}</td>${vpCol ? `<td data-label="Vendor payments">${r.vps.join(', ') || none}</td>` : ''}<td data-label="Amount" class="num">${money(r.amount)}</td></tr>`).join('');
+  $('#pinTable').innerHTML = head + '<tbody>' + body + '</tbody>';
+  P.flash = null;
+  $('#pinEmpty').innerHTML = rows.length
+    ? `<span class="small muted">${rows.length} unpaid item${rows.length > 1 ? 's' : ''} found.</span>`
+    : P.csr
+      ? `<span class="err">No unpaid items found.</span> The CSR filter only shows ${esc(P.csr)}. <button type="button" class="linkbtn" data-act="pin-clear-csr">Clear the CSR filter</button>`
+      : '<span class="err">No unpaid items match that search.</span>';
+}
+function saveUpr() {
+  const it = P.items.find(i => i.oi === 880218);
+  if (!it.uprs.length) it.uprs.push({ id: 'UPR-3150', status: 'open' });
+  pinLog.add(H('UrgentPaymentRequestManagementBean.updateUrgentPaymentRequest(UPR-3150)'));
+  if (P.fix[5997]) {
+    it.stale = false;
+    pinLog.add(D('  the request has an order item, so refresh its cache row:'), H('  unPaidOrderItemManagementBean.updateUnpaidItemsCache(880218)'), G('  880218 written to UNPAID_ORDER_ITEM_CACHE: fulfilled, urgent request open'), '');
+    P.flash = 880218;
+  } else {
+    it.stale = true;
+    pinLog.add(D('  request saved; nothing refreshes the Pay It Now cache,'), W('  and the cache query skips fulfilled items, so 880218 stays hidden.'), D('  Turn #5997 back on and save again.'), '');
+  }
+  renderPin();
+}
+
+/* ---------- Tier info (#6040, #6041) ---------- */
+const T = { fix: { 6040: true, 6041: true }, open: new Set(), last: 4 };
+const TIERS = {
+  publishers: {
+    'Wexford Scientific': {
+      1: [['Academic', 'Small', '1 to 10,000 FTEs'], ['Corporate', 'Small', '1 to 1,000 FTEs'], ['Government', 'Small', '1 to 1,000 FTEs'], ['Medical', 'Small', '1 to 99 beds']],
+      2: [['Academic', 'Medium', '10,001 to 25,000 FTEs'], ['Corporate', 'Medium', '1,001 to 5,000 FTEs'], ['Medical', 'Medium', '100 to 499 beds']],
+      3: [['Academic', 'Large', 'over 25,000 FTEs'], ['Corporate', 'Large', 'over 5,000 FTEs'], ['Medical', 'Large', '500 or more beds']]
+    },
+    'Calder & Finch': {
+      1: [['Academic', 'A1', 'up to 5,000 FTEs'], ['Hospital', 'H1', 'up to 150 beds'], ['Other', 'O1', 'up to 500 employees']],
+      2: [['Academic', 'A2', '5,001 to 15,000 FTEs'], ['Hospital', 'H2', '151 to 400 beds'], ['Other', 'O2', '501 to 2,500 employees']]
+    },
+    'Orchard University Press': { 2: [['Academic', '', 'two-year and community colleges']] }
+  },
+  vendors: { 'Harbor Subscriptions': { 1: [['Academic', 'HS-Basic', "Harbor's own band, under 2,500 FTEs"]] } }
+};
+const RATES = {
+  'Journal of Coastal Ecology': { pub: 'Wexford Scientific', rates: [['TIER 1', 1240], ['TIER 2', 1980], ['TIER 3', 2760]] },
+  'Clinical Pathways Review': { pub: 'Calder & Finch', rates: [['TIER 1', 860], ['TIER 2', 1320]] },
+  'Studies in Regional History': { pub: 'Orchard University Press', rates: [['TIER 1', 210], ['TIER 2', 310]] },
+  'The Weekly Ledger': { pub: 'Ledger Media', rates: [['LIST', 96]] }
+};
+const TROWS = [
+  { id: 1, title: 'Journal of Coastal Ecology', vendor: 'Direct from publisher', rate: 0 },
+  { id: 2, title: 'Journal of Coastal Ecology', vendor: 'Direct from publisher', rate: 1 },
+  { id: 3, title: 'Clinical Pathways Review', vendor: 'Direct from publisher', rate: 0 },
+  { id: 4, title: 'Clinical Pathways Review', vendor: 'Harbor Subscriptions', rate: 0 },
+  { id: 5, title: 'Studies in Regional History', vendor: 'Direct from publisher', rate: 1 },
+  { id: 6, title: 'The Weekly Ledger', vendor: 'Direct from publisher', rate: 0 }
+];
+function tierLookup(row, rateIdx) {
+  const t = RATES[row.title], rt = t.rates[rateIdx][0];
+  const m = /^TIER\s*(\d+)?$/i.exec(rt);
+  if (!m) return { label: rt, entries: [], trace: [`${rt} isn't a tier rate, so it shows as is.`] };
+  const lvl = m[1] ? +m[1] : 1;
+  if (!T.fix[6040]) return { label: rt, entries: [], trace: [`Before #6040 the screen shows the internal code ${rt} and nothing else.`] };
+  const trace = [`${rt} is tier level ${lvl}`];
+  let entries = null, source = '';
+  if (T.fix[6041]) {
+    const v = (TIERS.vendors[row.vendor] || {})[lvl];
+    trace.push(`VENDOR_TIER_INFO for ${row.vendor}, level ${lvl}: ${v ? v.length + ' found' : 'none'}`);
+    if (v) { entries = v; source = 'vendor'; }
+  }
+  if (!entries) {
+    const p = (TIERS.publishers[t.pub] || {})[lvl];
+    trace.push(`PUBLISHER_TIER_INFO for ${t.pub}, level ${lvl}: ${p ? p.length + ' found' : 'none'}`);
+    if (p) { entries = p; source = 'publisher'; }
+  }
+  if (!entries) return { label: rt, entries: [], trace: trace.concat(`No tier info anywhere, so it stays ${rt}.`) };
+  const codes = [...new Set(entries.map(e => e[1]).filter(Boolean))];
+  const label = codes.length ? `${rt} – ${codes.join(' / ')}` : rt;
+  trace.push(codes.length ? `Shows "${label}", details from the ${source}.` : `No codes, so it shows ${rt} with the ${source}'s details behind the info button.`);
+  return { label, entries, source, trace };
+}
+function renderTiers() {
+  const head = '<thead><tr><th scope="col">Title</th><th scope="col">Publisher</th><th scope="col">Vendor</th><th scope="col">Rate type</th><th scope="col" class="num">Price</th><th scope="col">Switch rate</th></tr></thead>';
+  const body = TROWS.map(r => {
+    const t = RATES[r.title], res = tierLookup(r, r.rate), price = t.rates[r.rate][1];
+    const open = T.open.has(r.id) && res.entries.length > 0;
+    const info = res.entries.length ? `<button type="button" class="info" data-act="tier-info" value="${r.id}" aria-expanded="${open}" aria-label="Tier details for ${esc(r.title)}, ${esc(r.vendor)}">i</button>` : '';
+    const sw = t.rates.length > 1
+      ? `<select class="sm" data-act="tier-switch" data-row="${r.id}" aria-label="Switch rate for ${esc(r.title)}, ${esc(r.vendor)}">${t.rates.map((x, i) => `<option value="${i}"${i === r.rate ? ' selected' : ''}>${esc(tierLookup(r, i).label)}</option>`).join('')}</select>`
+      : '<span class="small muted">One rate</span>';
+    let html = `<tr${T.last === r.id ? ' class="sel"' : ''}><td data-label="Title">${esc(r.title)}</td><td data-label="Publisher">${esc(t.pub)}</td><td data-label="Vendor">${esc(r.vendor)}</td><td data-label="Rate type"><span class="rate">${esc(res.label)}</span>${info}</td><td data-label="Price" class="num">${money(price)}</td><td data-label="Switch rate">${sw}</td></tr>`;
+    if (open) html += `<tr class="tier-row"><td colspan="6"><ul class="tier-list small">${res.entries.map(e => `<li><strong>${esc(e[1] || 'No code')}</strong>: ${esc(e[0])}, ${esc(e[2])}</li>`).join('')}</ul><span class="small muted">From the ${res.source}'s tier info.</span></td></tr>`;
+    return html;
+  }).join('');
+  $('#tierTable').innerHTML = head + '<tbody>' + body + '</tbody>';
+}
+function renderTrace() {
+  const r = TROWS.find(x => x.id === T.last), t = RATES[r.title], res = tierLookup(r, r.rate);
+  $('#tierTrace').innerHTML = [H(`${r.title}, ${r.vendor}, ${t.rates[r.rate][0]}`)].concat(res.trace.map((s, i, a) => (i === a.length - 1 ? G : D)('  ' + s))).join('\n');
+}
+
+/* ---------- Resets (#6015, #6070) ---------- */
+const R = { fix: { 6015: true, 6070: true }, items: [] };
+const R_START = [
+  { id: 880301, title: 'Journal of Coastal Ecology', kind: 'Subscription', status: 'Paid', pay: 'Check 10442' },
+  { id: 880302, title: 'Annual Review of Hydrology (series)', kind: 'Standing order', status: 'Fulfilled', pay: 'ACH 55120' },
+  { id: 880303, title: 'The Weekly Ledger', kind: 'Subscription', status: 'Paid', pay: 'Check 10457' }
+];
+const BASE_REASONS = ['Incorrect amount', 'Payment rejected', 'Stale-dated check', 'Lost check'];
+function resetData() { R.items = R_START.map(x => Object.assign({}, x, { reason: '' })); }
+function renderResets() {
+  $('#rsTable').innerHTML = '<thead><tr><th scope="col">Order item</th><th scope="col">Title</th><th scope="col">Kind</th><th scope="col">Status</th><th scope="col">Payment</th></tr></thead><tbody>'
+    + R.items.map(i => `<tr><td data-label="Order item">${i.id}</td><td data-label="Title">${esc(i.title)}</td><td data-label="Kind">${i.kind}</td><td data-label="Status">${esc(i.status)}${i.reason ? `<br><span class="small muted">Reset: ${esc(i.reason)}</span>` : ''}</td><td data-label="Payment">${esc(i.pay)}</td></tr>`).join('') + '</tbody>';
+  const curItem = $('#rsItem').value || '880302';
+  $('#rsItem').innerHTML = R.items.map(i => `<option value="${i.id}"${String(i.id) === curItem ? ' selected' : ''}>${i.id}: ${esc(i.title)}</option>`).join('');
+  const reasons = BASE_REASONS.concat(R.fix[6070] ? ['Check not cashed'] : []);
+  const curReason = $('#rsReason').value || (R.fix[6070] ? 'Check not cashed' : '');
+  $('#rsReason').innerHTML = reasons.map(r => `<option${r === curReason ? ' selected' : ''}>${r}</option>`).join('');
+}
+function doReset() {
+  const id = +$('#rsItem').value, reason = $('#rsReason').value;
+  const it = R.items.find(i => i.id === id), msg = $('#rsMsg');
+  const restore = ' <button type="button" class="linkbtn" data-act="rs-restore">Restore the demo data</button>';
+  if (it.status === 'Awaiting fulfillment') { msg.innerHTML = `<span class="muted">${esc(it.title)} is already awaiting fulfillment.</span>${restore}`; return; }
+  if (it.kind === 'Standing order' && R.fix[6015]) {
+    msg.innerHTML = `<span class="ok">Nothing changed.</span> ${esc(it.title)} is a standing order, so OrderItem.resetOrderItem() returns before touching it.`;
+    return;
+  }
+  it.status = 'Awaiting fulfillment'; it.pay += ', voided'; it.reason = reason;
+  renderResets();
+  msg.innerHTML = it.kind === 'Standing order'
+    ? `<span class="err">The standing order went back into fulfillment</span> as if it were a yearly renewal. This is what #6015 prevents.${restore}`
+    : `<span class="ok">Reset.</span> Item ${it.id} is awaiting fulfillment again, payment voided, reason: ${esc(reason)}.${restore}`;
+}
+function runTests() {
+  const ok = R.fix[6015];
+  const lines = [H('$ ant test'), D('[testng] Running: OrderItemBoundaryCaseTests'), G('[testng] PASSED: resetSendsSubscriptionBackToAwaitingFulfillment')];
+  if (ok) lines.push(G('[testng] PASSED: resetLeavesStandingOrderUntouched'));
+  else lines.push(W('[testng] FAILED: resetLeavesStandingOrderUntouched'), W('  expected [Fulfilled] but found [Awaiting fulfillment]'));
+  lines.push(D('==============================================='), ok ? G('Tests run: 2, Failures: 0, Skips: 0') : W('Tests run: 2, Failures: 1, Skips: 0'), ok ? G('BUILD SUCCESSFUL') : W('BUILD FAILED'));
+  typeLines($('#rsTests'), lines, 140);
+}
+
+/* ---------- Customer service (#6019, #6044, #6059, #6067) ---------- */
+const CLIP = n => `<span class="clip" title="${n} linked document${n > 1 ? 's' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg><span class="sr">${n} linked document${n > 1 ? 's' : ''}</span></span>`;
+const CS = { before: false, sel: 880401, rows: [
+  { id: 880401, title: 'The Weekly Ledger', commodity: 'Newspaper', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 2, qty: 1, emails: [1], claims: [
+    { id: 'C-52012', issue: 'Missing issue', desc: 'Publisher says the March 4 issue was reshipped.', note: 'Called the publisher; reship confirmed and tracking saved on the claim.', date: '03/04/25', status: 'Open' }] },
+  { id: 880402, title: 'Journal of Coastal Ecology', commodity: 'Journal', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 0, qty: 3, emails: [2, 3, 4], claims: [
+    { id: 'C-51830', issue: 'Duplicate issue', desc: 'Library received two copies of the April issue.', note: null, date: '02/18/25', status: 'Open' },
+    { id: 'C-51244', issue: 'Online access', desc: 'Access restored after the IP update.', note: 'Sent the new IP ranges to the publisher.', date: '01/09/25', status: 'Resolved' }] },
+  { id: 880403, title: 'Harbor Town Gazette', commodity: 'Newspaper', status: 'Expired', customer: 'Maple Grove Public Library', neg: true, docs: 1, qty: 1, emails: [1], claims: [] },
+  { id: 880404, title: 'Applied Linguistics Review', commodity: 'Journal', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 3, qty: 2, emails: [1], claims: [
+    { id: 'C-52107', issue: 'Online access', desc: 'Patron gets a login error on the publisher site.', note: 'Asked the publisher to reset the online account.', date: '03/11/25', status: 'Open' }] }
+] };
+function renderCSTable() {
+  const after = !CS.before;
+  $('#csTable').innerHTML = '<thead><tr><th scope="col">Order item</th><th scope="col">Title</th><th scope="col">Commodity</th><th scope="col">Status</th></tr></thead><tbody>'
+    + CS.rows.map(r => `<tr class="click${r.id === CS.sel ? ' sel' : ''}" data-act="cs-pick" data-id="${r.id}" tabindex="0"><td>${r.id}</td><td>${esc(r.title)}</td><td>${r.commodity}</td><td>${r.status}${after && r.docs ? CLIP(r.docs) : ''}</td></tr>`).join('') + '</tbody>';
+}
+function renderCSDetail() {
+  const after = !CS.before, r = CS.rows.find(x => x.id === CS.sel);
+  const neg = after && r.commodity === 'Newspaper' ? `<div><dt>Newspaper expiration guarantee</dt><dd>${r.neg ? 'Yes' : 'No'}</dd></div>` : '';
+  const claims = r.claims.length
+    ? r.claims.map(c => `<tr><td data-label="Claim">${c.id}</td><td data-label="Issue">${esc(c.issue)}</td><td data-label="Description">${esc(c.desc)}</td>${after ? `<td data-label="Internal note">${c.note ? esc(c.note) : '<span class="muted">None yet</span>'}</td>` : ''}<td data-label="Received">${c.date}</td><td data-label="Status">${c.status}</td></tr>`).join('')
+    : `<tr><td colspan="${after ? 6 : 5}" class="muted">No claims on this item.</td></tr>`;
+  const emails = after
+    ? emailEditor('cs', r, true)
+    : `<ul class="ee-list">${r.emails.map(id => `<li class="ee"><span class="addr">${esc(byId(id).email)}</span></li>`).join('')}</ul><p class="small muted">Read-only on this screen. Changing them meant going back to order management.</p>`;
+  $('#csDetail').innerHTML = `<h3>Ordered title detail: ${esc(r.title)}</h3>
+    <dl class="facts"><div><dt>Order item</dt><dd>${r.id}</dd></div><div><dt>Commodity</dt><dd>${r.commodity}</dd></div><div><dt>Copies</dt><dd>${r.qty}</dd></div>${neg}</dl>
+    <h4>Order item claims</h4>
+    <div class="scroll-x"><table class="t stack"><thead><tr><th scope="col">Claim</th><th scope="col">Issue</th><th scope="col">Description</th>${after ? '<th scope="col">Most recent internal note</th>' : ''}<th scope="col">Received</th><th scope="col">Status</th></tr></thead><tbody>${claims}</tbody></table></div>
+    <h4>Customer access emails</h4>${emails}`;
+}
+function renderCS() { renderCSTable(); renderCSDetail(); }
+
+/* ---------- Quotes (#6011) ---------- */
+const Q = { fix: true, po: '' };
+function renderQuote() {
+  $('#qForm').hidden = !Q.fix;
+  const po = Q.fix ? `<tr class="${Q.po ? 'hilite' : ''}"><th>Purchase order / org contract</th><td>${Q.po ? esc(Q.po) : '<span class="faint">Not provided</span>'}</td></tr>` : '';
+  $('#qPreview').innerHTML = `<div class="doc-h"><strong>Service proposal</strong><span>Q-20931</span></div>
+    <table class="doc-meta"><tbody><tr><th>Prepared for</th><td>Lakeside Community College Library</td></tr><tr><th>Valid through</th><td>June 30</td></tr>${po}</tbody></table>
+    <table class="doc-items"><thead><tr><th>Title</th><th>Term</th><th class="num">Price</th></tr></thead><tbody>
+      <tr><td>Studies in Regional History</td><td>1 year</td><td class="num">$310.00</td></tr>
+      <tr><td>Applied Linguistics Review</td><td>1 year</td><td class="num">$230.00</td></tr>
+      <tr><td>Service charge</td><td></td><td class="num">$16.20</td></tr></tbody>
+      <tfoot><tr><th colspan="2">Total</th><td class="num">$556.20</td></tr></tfoot></table>`;
+}
+
+/* ---------- Catalogs (#6030) ---------- */
+const ORGS = { 'Crestview Health System': 'Medical', 'Brookside Clinic Group': 'Medical', 'Lakeside Community College': 'Academic', 'Maple Grove Library System': 'Public library' };
+const FULL = ['Applied Linguistics Review', 'Clinical Pathways Review', 'Coastal Birds Monthly', 'Harbor Town Gazette', 'Hospital Pharmacy Notes', 'Infection Control Brief', 'Journal of Coastal Ecology', 'Pediatric Nursing Today', 'Rural Health Quarterly', 'Studies in Regional History', 'The Weekly Ledger'];
+const CAT = { fix: true, editing: 2, viewAs: 'Crestview Health System', tab: null, catalogs: [
+  { id: 1, name: 'Featured nursing titles', market: 'Medical', org: null, titles: ['Pediatric Nursing Today', 'Rural Health Quarterly', 'Clinical Pathways Review'] },
+  { id: 2, name: 'Pre-approved titles', market: 'Medical', org: 'Crestview Health System', titles: ['Clinical Pathways Review', 'Hospital Pharmacy Notes', 'Infection Control Brief', 'The Weekly Ledger'] },
+  { id: 3, name: 'New for community colleges', market: 'Academic', org: null, titles: ['Studies in Regional History', 'Applied Linguistics Review'] }
+] };
+function catTabs() {
+  const org = CAT.viewAs, market = ORGS[org];
+  const tabs = [{ key: 'full', name: 'Full catalog', titles: FULL, mine: false }];
+  if (CAT.fix) CAT.catalogs.filter(c => c.org === org).forEach(c => tabs.push({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: true }));
+  CAT.catalogs.filter(c => (!CAT.fix || !c.org) && c.market === market).forEach(c => tabs.push({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: false }));
+  return tabs;
+}
+function renderCatEditor() {
+  const c = CAT.catalogs.find(x => x.id === CAT.editing);
+  $('#catEditor').innerHTML = `<label class="f">Catalog<select data-act="cat-pick">${CAT.catalogs.map(x => `<option value="${x.id}"${x.id === c.id ? ' selected' : ''}>${esc(x.name)}</option>`).join('')}</select></label>
+    <dl class="facts"><div><dt>Market</dt><dd>${esc(c.market)}</dd></div><div><dt>Titles</dt><dd>${c.titles.length}</dd></div></dl>
+    ${CAT.fix
+      ? `<label class="f" style="margin-top:10px">Organization (optional)<select data-act="cat-org"><option value="">None: the whole market sees it</option>${Object.keys(ORGS).map(o => `<option${o === c.org ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select></label><p class="small muted" style="margin-top:8px">With an organization set, only that organization's customers see the list, right after the full catalog and selected by default.</p>`
+      : '<p class="small muted" style="margin-top:10px">No organization field yet, so every list goes to its whole market. Sign in as Brookside Clinic Group to see Crestview\'s pre-approved list leak.</p>'}`;
+}
+function renderCatPreview() {
+  $('#catViewAs').innerHTML = Object.keys(ORGS).map(o => `<option${o === CAT.viewAs ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  const tabs = catTabs();
+  const sel = tabs.find(t => t.key === CAT.tab) || tabs.find(t => t.mine) || tabs[0];
+  $('#catPreview').innerHTML = `<p class="small muted" style="margin:10px 0 0">${esc(ORGS[CAT.viewAs])} market</p>
+    <div class="tabs" role="tablist" aria-label="Catalogs">${tabs.map(t => `<button type="button" role="tab" class="tab${t === sel ? ' on' : ''}" aria-selected="${t === sel}" data-act="cat-tab" value="${t.key}">${esc(t.name)}${t.mine ? ' <span class="tag">your organization</span>' : ''}</button>`).join('')}</div>
+    <ul class="titles">${sel.titles.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+}
+function renderCat() { renderCatEditor(); renderCatPreview(); }
+
+/* ---------- Reports and exports (#5982, #5985, #5987, #6071) ---------- */
+const REFUNDS = [
+  ['RF-1182', 'Maple Grove Public Library', 'Northfield Academic', '2025-01-06', 412.00],
+  ['RF-1187', 'Crestview Health System', 'Harbor Press', '2025-01-13', 318.50],
+  ['RF-1190', 'Lakeside Community College', 'Kestrel Science', '2025-01-21', 96.00],
+  ['RF-1201', 'Brookside Clinic Group', 'Calder & Finch', '2025-01-28', 860.00],
+  ['RF-1204', 'Maple Grove Public Library', 'Ledger Media', '2025-01-31', 58.00]
+];
+function renderRefunds() {
+  const asOf = Date.UTC(2025, 1, 3);
+  const rows = REFUNDS.map(([id, cust, from, rec, amt]) => {
+    const [y, m, d] = rec.split('-').map(Number);
+    return { id, cust, from, amt, rec: `${m}/${d}/${String(y).slice(2)}`, days: Math.round((asOf - Date.UTC(y, m - 1, d)) / 864e5) };
+  });
+  const total = rows.reduce((s, r) => s + r.amt, 0);
+  $('#refunds').innerHTML = `<div class="mail"><div class="mail-h"><span><b>To</b> Customer service managers; Finance</span><span><b>Subject</b> Weekly: unallocated refunds, ${rows.length} open (${money(total)})</span><span><b>Sent</b> Monday, February 3, 7:00 AM</span></div>
+    <div class="mail-b"><p class="small">Refunds received from vendors that aren't matched to a customer order yet, oldest first.</p>
+    <div class="scroll-x"><table class="t stack"><thead><tr><th scope="col">Refund</th><th scope="col">Customer</th><th scope="col">From vendor</th><th scope="col">Received</th><th scope="col" class="num">Days open</th><th scope="col" class="num">Amount</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td data-label="Refund">${r.id}</td><td data-label="Customer">${esc(r.cust)}</td><td data-label="From vendor">${esc(r.from)}</td><td data-label="Received">${r.rec}</td><td data-label="Days open" class="num">${r.days}</td><td data-label="Amount" class="num">${money(r.amt)}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><th colspan="5">Total open</th><td class="num"><strong>${money(total)}</strong></td></tr></tfoot></table></div></div></div>`;
+}
+function sheetHTML(headers, rows, numCols) {
+  const letters = headers.map((_, i) => String.fromCharCode(65 + i));
+  return `<div class="sheet"><table><thead><tr><th><span class="sr">Row</span></th>${letters.map(l => `<th scope="col">${l}</th>`).join('')}</tr></thead><tbody>`
+    + `<tr class="hdr"><th scope="row">1</th>${headers.map(h => `<td>${esc(h)}</td>`).join('')}</tr>`
+    + rows.map((r, i) => `<tr><th scope="row">${i + 2}</th>${r.map((c, j) => `<td${numCols.includes(j) ? ' class="num"' : ''}>${esc(c)}</td>`).join('')}</tr>`).join('')
+    + '</tbody></table></div>';
+}
+const XLS = { ver: 'after', batch: [
+  { order: '48213-1', cust: 'Maple Grove Public Library', code: 'BRI-12', title: 'Revista Brisa', qty: 3, list: 54, remit: 49.95 },
+  { order: '48217-2', cust: 'Lakeside Community College', code: 'BRC-04', title: 'Brisa Cocina', qty: 1, list: 38, remit: 35.10 },
+  { order: '48230-1', cust: 'Crestview Health System', code: 'BRI-12', title: 'Revista Brisa', qty: 2, list: 54, remit: 49.95 }
+] };
+function renderXls() {
+  const after = XLS.ver === 'after';
+  const headers = after ? ['Nº de pedido', 'Cliente', 'Código de producto', 'Publicación', 'Precio', 'Email de pago'] : ['Order no.', 'Customer', 'Product code', 'Title', 'Price', 'Payment email'];
+  const email = after ? 'titleinfo@agency.example' : 'orders@agency.example';
+  const rows = [];
+  XLS.batch.forEach(b => { for (let i = 0; i < (after ? b.qty : 1); i++) rows.push([b.order, b.cust, b.code, b.title, (after ? b.list : b.remit).toFixed(2), email]); });
+  const copies = XLS.batch.reduce((s, b) => s + b.qty, 0);
+  const notes = after
+    ? [`One line per copy, since their format has no quantity: ${rows.length} lines for ${copies} copies.`, 'Price is the vendor list price.', 'Payment address is titleinfo@.', 'Headers match their file word for word.']
+    : [`One line per subscription, so ${copies} copies went out as ${rows.length} lines.`, 'Price was the remit total.', 'Payment address was orders@.', 'Headers were English paraphrases.'];
+  $('#xls').innerHTML = sheetHTML(headers, rows, [4])
+    + `<div class="sheet-foot"><span class="sheet-tab">${after ? 'Pedidos' : 'Orders'}</span><span class="small muted">transmittal_batch_10422.xls</span></div>`
+    + `<ul class="diffs small">${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>`;
+}
+const IPS = [['192.0.2.0', '192.0.2.255', 'Main campus'], ['198.51.100.14', '198.51.100.14', 'Library proxy server'], ['203.0.113.32', '203.0.113.63', 'North clinic']];
+function renderIp() {
+  $('#ipTable').innerHTML = '<thead><tr><th scope="col">Start</th><th scope="col">End</th><th scope="col">Description</th></tr></thead><tbody>'
+    + IPS.map(r => `<tr><td data-label="Start">${r[0]}</td><td data-label="End">${r[1]}</td><td data-label="Description">${esc(r[2])}</td></tr>`).join('') + '</tbody>';
+}
+function renderIpExport() {
+  $('#ipExport').innerHTML = '<p class="small" style="margin:12px 0 6px"><span class="ok">Exported</span> crestview-health-system-ip-addresses.xls</p>'
+    + sheetHTML(['Organization', 'Start IP', 'End IP', 'Description'], IPS.map(r => ['Crestview Health System', r[0], r[1], r[2]]), [])
+    + '<div class="sheet-foot"><span class="sheet-tab">IP Addresses</span></div>';
+}
+const WID = { on: true, fields: [
+  ['Ordering email', 'orders@harborpress.example, subscriptions@harborpress.example'],
+  ['Payment email', 'ar@harborpress.example, finance@harborpress.example'],
+  ['Request invoice email', 'invoices@harborpress.example, ar@harborpress.example']
+] };
+function renderWiden() {
+  $('#widen').innerHTML = WID.fields.map((f, i) => `<label class="widen-row f${WID.on ? '' : ' narrow'}">${esc(f[0])}${WID.on
+    ? `<textarea rows="2" data-wid="${i}">${esc(f[1])}</textarea>`
+    : `<input type="text" value="${esc(f[1])}" data-wid="${i}" autocomplete="off">`}</label>`).join('');
+}
+
+/* ---------- Cover Image Miner ---------- */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const SUBJECTS = ['Coastal Ecology', 'Applied Optics', 'Soil Biology', 'Urban Hydrology', 'Protein Chemistry', 'Clinical Nutrition', 'Energy Storage', 'Plant Genetics', 'Marine Geology', 'Neural Computation', 'Food Science', 'Polymer Physics', 'Veterinary Surgery', 'Water Research', 'Field Robotics', 'Atmospheric Science', 'Rural Medicine', 'Catalysis', 'Glacier Studies', 'Cell Signaling'];
+const PREFIXES = ['Journal of', 'Annals of', 'Review of', 'Letters in', 'Advances in', 'Studies in'];
+const COLORS = ['#2E5E7E', '#7A3B2E', '#4B6B3A', '#5B4A7A', '#8A6A1F', '#2F6F6A', '#6E2F4F', '#3D4F7C', '#7C5A3A', '#1F5F4A'];
+function issnFrom(n) {
+  const s = String(n).padStart(7, '0');
+  let sum = 0;
+  for (let i = 0; i < 7; i++) sum += Number(s[i]) * (8 - i);
+  const c = (11 - sum % 11) % 11;
+  return s.slice(0, 4) + '-' + s.slice(4) + (c === 10 ? 'X' : c);
+}
+const slugify = t => t.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+const MN = { titles: [], saved: new Set(), failed: new Map(), running: false, run: 0, idx: 0, timer: null, token: 0, rng: null };
+(function buildTitles() {
+  const r = mulberry32(42);
+  for (let i = 0; i < 40; i++) {
+    const title = `${PREFIXES[(i * 5 + (i >= 20 ? 3 : 0)) % PREFIXES.length]} ${SUBJECTS[i % SUBJECTS.length]}`;
+    MN.titles.push({ id: 100015 + i * 37, title, slug: slugify(title), issn: issnFrom(Math.floor(r() * 9000000) + 1000000), color: COLORS[(i * 3) % COLORS.length] });
+  }
+})();
+const mnCon = makeConsole($('#mnConsole'));
+function mnLater(fn, ms) { const tok = MN.token; MN.timer = setTimeout(() => { if (tok === MN.token) fn(); }, ms); }
+const coverHTML = t => `<div class="cover new" style="--c:${t.color}" role="img" aria-label="Cover for ${esc(t.title)}"><span class="cv-t">${esc(t.title)}</span><span class="cv-i">ISSN ${t.issn}</span></div>`;
+function mnProgress() {
+  const n = MN.titles.length, done = MN.idx, width = 20, fill = Math.round(done / n * width);
+  const bar = fill >= width ? '='.repeat(width) : fill > 0 ? '='.repeat(fill - 1) + '>' + ' '.repeat(width - fill) : ' '.repeat(width);
+  $('#mnProgress').textContent = `[${bar}] ${Math.round(done / n * 100)}%  ${done}/${n}, ${MN.saved.size} saved`;
+}
+function mnStart() {
+  if (MN.running) return;
+  MN.running = true; MN.run += 1; MN.idx = 0; MN.rng = mulberry32(1000 + MN.run * 7919);
+  $('#mnRun').disabled = true;
+  mnCon.add(H('$ java -jar cover-image-miner-1.0.0-SNAPSHOT-jar-with-dependencies.jar'), D('=== Cover Image Miner ==='), D('Processing vendor: ScienceDirect'), D(`Total items to process for ScienceDirect: ${MN.titles.length}`), '');
+  mnStep();
+}
+function mnSave(t) {
+  MN.saved.add(t.id); MN.failed.delete(t.id);
+  mnCon.add(G(`  cover found, resized to 200×267, saved ${t.id}.png`));
+  const grid = $('#mnGrid'), empty = $('.empty', grid);
+  if (empty) empty.remove();
+  grid.insertAdjacentHTML('beforeend', coverHTML(t));
+}
+function mnFail(t, why) { MN.failed.set(t.id, why); mnCon.add(W(`  ${why}: added to failed_titles.csv`)); }
+function mnStep() {
+  if (MN.idx >= MN.titles.length) return mnFinish();
+  const t = MN.titles[MN.idx++];
+  const next = () => { mnProgress(); mnLater(mnStep, 110); };
+  if (MN.saved.has(t.id)) { mnCon.add(D(`File already exists for titleId: ${t.id}, skipping...`)); mnProgress(); return mnLater(mnStep, 30); }
+  mnCon.add(D(`GET sciencedirect.com/journal/${t.slug}`));
+  const retry = MN.failed.has(t.id), x = MN.rng();
+  const pOk = retry ? 0.42 : 0.62, pRetryOk = retry ? 0.16 : 0.12, p403 = retry ? 0.18 : 0.10;
+  if (x < pOk) { mnSave(t); return next(); }
+  if (x >= pOk + pRetryOk + p403) { mnFail(t, 'no cover image on the page'); return next(); }
+  mnCon.add(W('  403, retrying in 1.5 s (attempt 1 of 3)'));
+  mnLater(() => {
+    if (x < pOk + pRetryOk) { mnSave(t); return next(); }
+    mnCon.add(W('  403, retrying in 3 s (attempt 2 of 3)'));
+    mnLater(() => { mnFail(t, 'HTTP 403 after 3 attempts'); next(); }, 150);
+  }, 150);
+}
+function mnFinish() {
+  MN.running = false;
+  mnCon.add('', G(`Completed ScienceDirect: ${MN.saved.size} successful downloads`), D(`Total processed: ${MN.titles.length}`), MN.failed.size ? W(`failed_titles.csv: ${MN.failed.size} titles to check by hand`) : G('failed_titles.csv: nothing left to check'), '');
+  const b = $('#mnRun');
+  b.disabled = MN.failed.size === 0;
+  b.textContent = MN.failed.size ? 'Run again (retries the misses)' : 'Every cover found';
+  const f = [...MN.failed.keys()].map(id => MN.titles.find(t => t.id === id));
+  $('#mnFailed').innerHTML = f.length ? `<strong>failed_titles.csv</strong>, ${f.length} row${f.length > 1 ? 's' : ''}: ${f.slice(0, 4).map(t => esc(t.title)).join('; ')}${f.length > 4 ? `; and ${f.length - 4} more` : ''}.` : '';
+}
+function mnReset() {
+  MN.token += 1; clearTimeout(MN.timer);
+  MN.running = false; MN.saved.clear(); MN.failed.clear(); MN.run = 0; MN.idx = 0;
+  mnCon.clear(); mnCon.add(D('Press Run the miner to start.'));
+  $('#mnProgress').textContent = '';
+  $('#mnGrid').innerHTML = '<p class="empty">No covers yet.</p>';
+  $('#mnFailed').innerHTML = '';
+  const b = $('#mnRun'); b.disabled = false; b.textContent = 'Run the miner';
+}
+
+/* ---------- All tickets ---------- */
+const TICKETS = [
+  [5982, 'Weekly report of open refunds that still need matching to orders', 'Enhancement', 'Accounting', 'closed', 'reports'],
+  [5985, "A publisher's order file, rebuilt to their exact format", 'Enhancement', 'Order processing', 'closed', 'reports'],
+  [5987, "Excel export for an organization's IP addresses", 'Enhancement', 'Customer/org maintenance', 'closed', 'reports'],
+  [5997, 'Pay It Now: include fulfilled items with active urgent requests', 'Enhancement', 'Accounting', 'closed', 'payitnow'],
+  [5998, 'Pay It Now: start with the CSR filter blank', 'Defect', 'Accounting', 'closed', 'payitnow'],
+  [6000, 'Pay It Now: search by vendor payment ID', 'Defect', 'Accounting', 'closed', 'payitnow'],
+  [6002, 'Online subscription emails and generated aliases', 'Enhancement', 'Other', 'closed', 'aliases'],
+  [6011, 'Purchase order / contract field on quotes and proposals', 'Enhancement', 'Pricing/quotes', 'closed', 'quotes'],
+  [6015, 'Standing orders skip the reset workflow', 'Enhancement', 'Accounting', 'closed', 'resets'],
+  [6019, 'Newspaper expiration guarantee indicator', 'Enhancement', 'Customer service', 'closed', 'cs'],
+  [6024, 'Link access emails to order items, 1 or N per item', 'Enhancement', 'Order entry', 'closed', 'aliases'],
+  [6030, 'Organization-specific catalogs', 'Enhancement', 'CoxNet', 'closed', 'quotes'],
+  [6040, 'Publisher tier codes on Add Items and Switch Rate', 'Enhancement', 'Order entry', 'closed', 'tiers', true],
+  [6041, 'Vendor-level tier info, checked first', 'Enhancement', 'Titles', 'closed', 'tiers'],
+  [6044, 'Edit access emails from customer service', 'Enhancement', 'Customer service', 'closed', 'cs'],
+  [6054, 'Only aliases get Mailgun routes', 'Defect', 'Customer/org maintenance', 'awaiting', 'aliases'],
+  [6055, 'Retire the old electronic email field', 'Enhancement', 'Customer/org maintenance', 'testing', 'aliases'],
+  [6059, 'Paper clip for linked documents', 'Enhancement', 'Customer service', 'closed', 'cs'],
+  [6067, 'Most recent internal note on claims', 'Enhancement', 'Customer service', 'closed', 'cs'],
+  [6070, 'New reset reason: check not cashed', 'Enhancement', 'Accounting', 'awaiting', 'resets'],
+  [6071, 'Wider email fields on vendor payment preferences', 'Enhancement', 'Accounting', 'awaiting', 'reports']
+];
+const STAMPS = { closed: ['Closed', ''], awaiting: ['Awaiting deploy', 'brass'], testing: ['In testing', 'green'] };
+function renderTickets() {
+  $('#ticketCards').innerHTML = TICKETS.map(([no, title, type, comp, st, demo, crit]) => `<article class="tcard"><div class="top"><span class="no">#${no}</span><span class="stamp ${STAMPS[st][1]}">${STAMPS[st][0]}</span></div><div class="body"><p class="tt">${esc(title)}</p><p class="meta">${type}, ${esc(comp)}${crit ? ', critical' : ''}</p><p><a href="#${demo}">See it working</a></p></div></article>`).join('')
+    + '<article class="tcard"><div class="top"><span class="no">Tool</span><span class="stamp green">3,772 covers</span></div><div class="body"><p class="tt">Cover Image Miner: journal covers from ScienceDirect</p><p class="meta">Side tool, Java and Maven</p><p><a href="#miner">See it working</a></p></div></article>';
+}
+
+/* ---------- section nav ---------- */
+const navLinks = $$('.toc a');
+function setCurrent(id) {
+  navLinks.forEach(a => {
+    if (a.getAttribute('href') === '#' + id) {
+      a.setAttribute('aria-current', 'true');
+      const ul = a.closest('ul');
+      if (a.offsetLeft < ul.scrollLeft || a.offsetLeft + a.offsetWidth > ul.scrollLeft + ul.clientWidth) ul.scrollTo({ left: Math.max(0, a.offsetLeft - 20), behavior: reduceMotion ? 'auto' : 'smooth' });
+    } else a.removeAttribute('aria-current');
+  });
+}
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) setCurrent(en.target.id); }), { rootMargin: '-40% 0px -55% 0px' });
+  navLinks.forEach(a => { const s = document.querySelector(a.getAttribute('href')); if (s) io.observe(s); });
+}
+
+/* ---------- events ---------- */
+const scopeItems = scope => scope === 'order' ? ORDER.items : CS.rows;
+const rerenderScope = scope => scope === 'order' ? renderOrder() : renderCSDetail();
+document.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]');
+  if (!el || el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
+  const v = el.value;
+  switch (el.dataset.act) {
+    case 'new-alias': openForm('alias'); break;
+    case 'new-provided': openForm('provided'); break;
+    case 'edit': openForm('edit', +v); break;
+    case 'form-save': saveForm(); break;
+    case 'form-cancel': closeForm(); break;
+    case 'disable': disableEmails([+v]); break;
+    case 'bulk-disable': disableEmails([...A.selected]); break;
+    case 'ee-add': {
+      const item = scopeItems(el.dataset.scope).find(i => i.id === +el.dataset.item);
+      const sel = document.getElementById(`ee-${el.dataset.scope}-${el.dataset.item}`);
+      if (item && sel && sel.value) { item.emails.push(+sel.value); rerenderScope(el.dataset.scope); }
+      break;
+    }
+    case 'ee-remove': {
+      const item = scopeItems(el.dataset.scope).find(i => i.id === +el.dataset.item);
+      if (item) { item.emails = item.emails.filter(id => id !== +v); rerenderScope(el.dataset.scope); }
+      break;
+    }
+    case 'finalize': finalizeOrder(); break;
+    case 'reopen': ORDER.finalized = false; $('#finalizeStamp').innerHTML = ''; $('#finalizeMsg').innerHTML = ''; renderOrder(); break;
+    case 'pin-clear-csr': P.csr = ''; renderPin(); break;
+    case 'pin-save-upr': saveUpr(); break;
+    case 'tier-info': { const id = +v; if (T.open.has(id)) T.open.delete(id); else T.open.add(id); T.last = id; renderTiers(); renderTrace(); break; }
+    case 'rs-reset': doReset(); break;
+    case 'rs-restore': resetData(); renderResets(); $('#rsMsg').innerHTML = '<span class="muted">Demo data restored.</span>'; break;
+    case 'rs-test': runTests(); break;
+    case 'cs-pick': CS.sel = +el.dataset.id; renderCS(); break;
+    case 'cat-tab': CAT.tab = v; renderCatPreview(); break;
+    case 'ref-run': $('#refStamp').innerHTML = stamp('Sent', 'green'); break;
+    case 'ip-export': renderIpExport(); break;
+    case 'mn-run': mnStart(); break;
+    case 'mn-reset': mnReset(); break;
+  }
+});
+document.addEventListener('change', ev => {
+  const el = ev.target, act = el.dataset ? el.dataset.act : null;
+  if (!act) return;
+  switch (act) {
+    case 'handler':
+      A.handler = el.value;
+      aliasLog.add(D(`coxnet2.defaultMailRuleHandler = ${el.value === 'mock' ? 'MockCustomerAccessEmailHandler' : 'MailgunCustomerAccessEmailAPIHandler'}`), '');
+      break;
+    case 'fix6054': A.fix6054 = el.checked; break;
+    case 'hide-disabled': A.hideDisabled = el.checked; renderAliases(); break;
+    case 'sel': if (el.checked) A.selected.add(+el.value); else A.selected.delete(+el.value); updateBulk(); break;
+    case 'pin-fix': P.fix[el.value] = el.checked; if (el.value === '5998') P.csr = el.checked ? '' : ME; renderPin(); break;
+    case 'tier-fix': T.fix[el.value] = el.checked; if (el.value === '6040') $('#fix6041').disabled = !el.checked; renderTiers(); renderTrace(); break;
+    case 'tier-switch': { const r = TROWS.find(x => x.id === +el.dataset.row); r.rate = +el.value; T.last = r.id; renderTiers(); renderTrace(); break; }
+    case 'rs-fix': R.fix[el.value] = el.checked; renderResets(); break;
+    case 'cs-before': CS.before = el.checked; renderCS(); break;
+    case 'q-fix': Q.fix = el.checked; renderQuote(); break;
+    case 'cat-fix': CAT.fix = el.checked; CAT.tab = null; renderCat(); break;
+    case 'cat-pick': CAT.editing = +el.value; renderCatEditor(); break;
+    case 'cat-org': { const c = CAT.catalogs.find(x => x.id === CAT.editing); c.org = el.value || null; CAT.tab = null; renderCat(); break; }
+    case 'xls-ver': XLS.ver = el.value; renderXls(); break;
+    case 'widen': WID.on = el.checked; renderWiden(); break;
+  }
+});
+document.addEventListener('input', ev => {
+  const el = ev.target;
+  if (el.dataset && el.dataset.wid != null) WID.fields[+el.dataset.wid][1] = el.value;
+});
+document.addEventListener('keydown', ev => {
+  const tr = ev.target.closest ? ev.target.closest('tr[data-act="cs-pick"]') : null;
+  if (!tr || (ev.key !== 'Enter' && ev.key !== ' ')) return;
+  ev.preventDefault();
+  CS.sel = +tr.dataset.id; renderCS();
+  const again = document.querySelector(`tr[data-id="${tr.dataset.id}"]`);
+  if (again) again.focus();
+});
+$('#pinBy').addEventListener('change', e => { P.by = e.target.value; renderPin(); });
+$('#pinCsr').addEventListener('change', e => { P.csr = e.target.value; renderPin(); });
+$('#pinQ').addEventListener('input', e => { P.q = e.target.value; renderPin(); });
+$('#qPo').addEventListener('input', e => { Q.po = e.target.value; renderQuote(); });
+$('#catViewAs').addEventListener('change', e => { CAT.viewAs = e.target.value; CAT.tab = null; renderCatPreview(); });
+
+/* ---------- first render ---------- */
+aliasLog.add(D('Generate an alias, or disable one, to see the Mailgun call.'), '');
+pinLog.add(D('Press Save request to trigger the refresh.'), '');
+renderAliases(); renderOrder();
+renderPin();
+renderTiers(); renderTrace();
+resetData(); renderResets(); $('#rsTests').innerHTML = D('Press Run tests to run the suite.');
+renderCS();
+renderQuote(); renderCat();
+renderRefunds(); renderXls(); renderIp(); renderWiden();
+mnReset();
+renderTickets();
+})();
+</script>
+</body>
+</html>
