@@ -37,7 +37,7 @@ a {
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
-.wrap { max-width: 52rem; margin-inline: auto; padding-inline: 1.25rem; }
+.wrap { max-width: 1080px; margin-inline: auto; padding-inline: 20px; }
 
 .skip { position: absolute; left: -999px; top: .75rem; z-index: 100; padding: .5rem .75rem; background: var(--panel); }
 .skip:focus { left: 1rem; }
@@ -160,7 +160,7 @@ a:hover { text-decoration-thickness: 2px; }
 .block p:last-child { margin-bottom: 0; }
 
 /* Experience: a log, newest first */
-.log { margin: 0; padding: 0; list-style: none; }
+.log { max-width: 54rem; margin: 0; padding: 0; list-style: none; }
 .entry { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0 1.5rem; padding-bottom: 2.25rem; }
 .entry:last-child { padding-bottom: 0; }
 .block .when { margin: .1rem 0 0; font: 1.375rem/1.2 var(--pixel); color: var(--amber); }
@@ -190,7 +190,7 @@ a:hover { text-decoration-thickness: 2px; }
 .block .window p { margin-bottom: 1.4rem; }
 
 /* Skills */
-.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; margin: 0; }
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; max-width: 54rem; margin: 0; }
 .skills dt { font: 1.375rem/1.2 var(--pixel); color: var(--amber); }
 .skills dd { margin: .3rem 0 0; }
 
