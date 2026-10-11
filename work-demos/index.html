@@ -7,41 +7,21 @@
 <meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services, plus his work history.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#140F2E">
 <style>
 :root{
-  --paper:#F2F4F1; --card:#FFFFFF; --ink:#1C2A2F; --ink-soft:#4F6167;
-  --line:#D2DBD5; --line-strong:#AEBBB4;
-  --green:#22574A; --on-green:#FFFFFF; --green-tint:#E1EDE7;
-  --brass:#8C6210; --brass-tint:#F4EAD5;
-  --red:#A9342A; --red-tint:#F6E1DD; --red-rule:#DF9C94; --blue-rule:#CADAEA;
-  --code-bg:#16232A; --code-ink:#D8E5E0; --code-dim:#8DA49E; --code-hi:#E6C072; --code-ok:#8FD3AE; --code-warn:#F09A8E;
-  --focus:#1D6CB0;
-  --font-ui:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-slab:"Zilla Slab", Rockwell, "Roboto Slab", Georgia, serif;
+  --glass:#140F2E; --magenta:#FF3FA4; --cyan:#45F3FF; --amber:#FFB547; --ok:#6BF5A8;
+  --paper:#140F2E; --card:#1D1645; --ink:#EEEAFF; --ink-soft:#ABA3DA;
+  --line:#3B2F7D; --line-strong:#5546A8;
+  --green:#45F3FF; --on-green:#140F2E; --green-tint:#262063;
+  --brass:#FFB547; --brass-tint:rgba(255,181,71,.13);
+  --red:#FF6B7F; --red-tint:rgba(255,107,127,.14); --red-rule:#FF3FA4; --blue-rule:#3B2F7D;
+  --code-bg:#0C0922; --code-ink:#DCD7FF; --code-dim:#8E86C2; --code-hi:#FFB547; --code-ok:#45F3FF; --code-warn:#FF6B7F;
+  --focus:#45F3FF;
+  --font-ui:"Chakra Petch", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-slab:"VT323", "DejaVu Sans Mono", ui-monospace, monospace;
   --font-code:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#14201E; --card:#1B2927; --ink:#E3EBE7; --ink-soft:#A6B8B2;
-    --line:#2D3F3B; --line-strong:#466059;
-    --green:#71B79D; --on-green:#0E1A17; --green-tint:#1E3530;
-    --brass:#DDAB52; --brass-tint:#382E1B;
-    --red:#EC8277; --red-tint:#3F2522; --red-rule:#8E4A43; --blue-rule:#2B4459;
-    --code-bg:#0D1614; --code-ink:#D3E1DB; --code-dim:#7E958F;
-    --focus:#7DB8F0;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#14201E; --card:#1B2927; --ink:#E3EBE7; --ink-soft:#A6B8B2;
-  --line:#2D3F3B; --line-strong:#466059;
-  --green:#71B79D; --on-green:#0E1A17; --green-tint:#1E3530;
-  --brass:#DDAB52; --brass-tint:#382E1B;
-  --red:#EC8277; --red-tint:#3F2522; --red-rule:#8E4A43; --blue-rule:#2B4459;
-  --code-bg:#0D1614; --code-ink:#D3E1DB; --code-dim:#7E958F;
-  --focus:#7DB8F0;
   color-scheme:dark;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -311,31 +291,105 @@ ol.jobs{list-style:none;margin:0 0 20px 7px;padding:0;border-left:2px solid var(
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
 }
+/* ===== 90s cyberpunk skin, matching the home page ===== */
+body{background:var(--glass)}
+::selection{background:var(--magenta);color:var(--glass)}
+a{color:var(--cyan)}
+h1,h2{font-family:var(--font-slab);font-weight:400}
+h2{font-size:clamp(2rem,5vw,2.75rem);line-height:1.05}
+h3,h4{font-family:var(--font-ui);font-weight:600}
+.ok{color:var(--ok)}
+.err{color:var(--red)}
+code{background:var(--green-tint);color:var(--ink);border-radius:0}
+
+/* Header bar */
+.toc{position:sticky;top:env(safe-area-inset-top,0px);margin-top:0;background:rgba(20,15,46,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.toc-inner{display:flex;align-items:center;gap:1.25rem;max-width:1080px;margin:0 auto;padding:0 20px}
+.toc .mark{flex:none;padding:0;font:1.9rem/1 var(--font-slab);color:var(--ink);text-decoration:none;text-shadow:-2px 0 var(--cyan),2px 0 var(--magenta)}
+.toc .mark:hover{background:transparent}
+.toc ul{flex:1;min-width:0;max-width:none;margin:0;padding:10px 0;flex-wrap:nowrap;overflow-x:auto;gap:2px}
+.toc ul a{color:var(--ink-soft);border-radius:0;padding:6px 7px}
+@media (max-width:1100px){.toc ul{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}}
+.toc ul a:hover{background:transparent;color:var(--ink)}
+.toc ul a[aria-current="true"]{background:transparent;color:var(--cyan);box-shadow:inset 0 -2px 0 var(--cyan)}
+
+/* Hero: the CRT screen */
+.hero{position:relative;overflow:hidden;padding:clamp(2.5rem,7vw,5rem) 0 clamp(2.5rem,6vw,4rem);border-bottom:1px solid var(--line);background:radial-gradient(120% 90% at 25% 30%,#251B5E 0%,var(--glass) 72%)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(6,3,20,.38) 2px 3px)}
+.hero .lede,.hero .contact,.hero .small{position:relative;z-index:1}
+.boot{margin:0 0 1.75rem;font:1.3rem/1.3 var(--font-slab);color:var(--amber);white-space:pre-wrap;text-shadow:0 0 .45em rgba(255,181,71,.35)}
+.title{margin:0;font:400 clamp(4rem,13vw,8.5rem)/.85 var(--font-slab);color:var(--ink);text-shadow:-.035em 0 rgba(69,243,255,.8),.035em 0 rgba(255,63,164,.8),0 0 .3em rgba(69,243,255,.25)}
+.hero .lede{max-width:46rem;margin:2rem 0 1rem;font-size:1.0625rem}
+@media (max-width:40rem){.boot{font-size:1.15rem}}
+
+/* Section heads */
+.drawer-head h2{color:var(--ink)}
+.plate{border:2px solid var(--amber);border-radius:0;background:transparent;color:var(--amber);font:1.25rem/1.2 var(--font-slab);padding:0 .5rem;word-spacing:.3em}
+.plate::before,.plate::after{content:none}
+
+/* Panels and forms */
+.panel{border:2px solid var(--line);border-radius:0;background:var(--card)}
+fieldset.fixes{border-radius:0;border-color:var(--line-strong)}
+.subform{border-radius:0;border-color:var(--cyan);background:var(--green-tint)}
+input[type=text],input[type=email],input[type=search],select,textarea{border-radius:0;background:var(--glass);border-color:var(--line-strong);color:var(--ink)}
+.check input{accent-color:var(--magenta)}
+.seg{border-radius:0;border-color:var(--cyan)}
+.seg label{color:var(--cyan)}
+.seg label:has(input:checked){background:var(--cyan);color:var(--glass)}
+.tag{border-radius:0;background:var(--green-tint);color:var(--cyan)}
+.info{border-radius:0;border-color:var(--amber);color:var(--amber);background:transparent;font:1rem/1 var(--font-slab)}
+.info[aria-expanded="true"]{background:var(--amber);color:var(--glass)}
+
+/* Buttons: magenta with a cyan pixel shadow, like the home page */
+.btn{border-radius:0;border:2px solid var(--magenta);background:var(--magenta);color:var(--glass);box-shadow:4px 4px 0 var(--cyan);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{filter:none;transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--cyan)}
+.btn:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--cyan)}
+.btn.ghost{background:transparent;border-color:var(--cyan);color:var(--cyan);box-shadow:4px 4px 0 rgba(69,243,255,.28)}
+.btn.ghost:hover{background:transparent;box-shadow:6px 6px 0 rgba(69,243,255,.4)}
+.btn.sm{box-shadow:3px 3px 0 rgba(69,243,255,.28)}
+.btn:disabled,.btn:disabled:hover{transform:none;box-shadow:none}
+.linkbtn{color:var(--cyan)}
+.linkbtn.danger{color:var(--red)}
+
+/* Tables */
+.t th{color:var(--amber);font:400 1.15rem/1.2 var(--font-slab);border-bottom-color:var(--line-strong)}
+.t tr.sel td{box-shadow:inset 0 -2px 0 var(--cyan)}
+
+/* Consoles, stamps, previews */
+.console,pre.code{border-radius:0;border:1px solid var(--line)}
+details.more summary{color:var(--cyan)}
+.stamp{font:400 1.2rem/1.2 var(--font-slab);color:var(--magenta)}
+.stamp.brass{color:var(--amber)}
+.stamp.green{color:var(--ok)}
+.tab{border-radius:0}
+.tab.on{background:var(--cyan);border-color:var(--cyan);color:var(--glass)}
+.tab.on .tag{background:var(--glass);color:var(--cyan)}
+.titles,.sheet,.mail,.sheet-tab{border-radius:0}
+.paper{border-radius:0;box-shadow:6px 6px 0 var(--magenta)}
+.progress{color:var(--amber)}
+.bar .track{border-radius:0;background:var(--line)}
+.bar .fill{background:var(--cyan)}
+.cover{border-radius:0;font-family:var(--font-ui)}
+ul.chips li{border-radius:0;border-color:var(--line-strong)}
+
+/* Work history and tickets */
+ol.jobs{border-left-color:var(--line-strong)}
+.job::before{border-radius:0;border-color:var(--magenta);background:var(--glass)}
+.tcard{background-image:none;border:2px solid var(--line);border-radius:0;padding:0 16px 14px}
+.tcard .top{border-bottom:1px solid var(--line)}
+.tcard .no{font:400 1.7rem/1 var(--font-slab);color:var(--amber)}
+.tcard .body{gap:6px;padding-top:10px}
+.tcard p{line-height:1.45}
+.foot{border-top-color:var(--line)}
 </style>
 </head>
 <body>
 <a class="skip" href="#aliases">Skip to the demos</a>
 
-<header class="hero wrap">
-  <div class="catcard">
-    <div class="cc-grid">
-      <div class="cc-head"><h1>Felipe, Andrew.</h1></div>
-      <p class="callno" title="QA76.73.J38 is the Library of Congress class for Java. F45 is the cutter for Felipe.">QA<br>76.73<br>.J38<br>F45<br>2025</p>
-      <div class="cc-body">
-        <p>Software engineer : backend Java, API integrations, and automation / Andrew Felipe.</p>
-        <p>21 tickets and 1 side tool from WT Cox Information Services, 2024–2025, rebuilt with made-up data so each one can be clicked through.</p>
-        <p class="tracings"><span class="tr">1.&nbsp;<a href="#aliases">Email aliases</a>.</span> <span class="tr">2.&nbsp;<a href="#payitnow">Pay It Now</a>.</span> <span class="tr">3.&nbsp;<a href="#tiers">Tier info</a>.</span> <span class="tr">4.&nbsp;<a href="#resets">Resets</a>.</span> <span class="tr">5.&nbsp;<a href="#cs">Customer service</a>.</span> <span class="tr">6.&nbsp;<a href="#quotes">Quotes and catalogs</a>.</span> <span class="tr">7.&nbsp;<a href="#reports">Reports and exports</a>.</span> <span class="tr">8.&nbsp;<a href="#miner">Cover Image Miner</a>.</span> <span class="tr">I.&nbsp;<a href="#history">Work history</a>.</span> <span class="tr">II.&nbsp;<a href="#tickets">All tickets</a>.</span></p>
-      </div>
-    </div>
-    <span class="hole" aria-hidden="true"></span>
-  </div>
-  <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people's plates. Most recently I was a software developer at WT Cox Information Services, a subscription agency where libraries, hospitals, schools, and companies order their journals, magazines, and newspapers. CoxNet2 is the Java system behind it, and I shipped work across order entry, accounting, customer service, and marketing, including a Mailgun integration. Before that I was a software engineer at TIAA, automating reporting on Splunk's REST APIs and shipping through GitLab CI/CD and OpenShift.</p>
-  <p class="contact"><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a></p>
-  <p class="small muted">Every screen below is rebuilt from scratch with invented customers, emails, IDs, and amounts. Code samples are short rewrites for illustration.</p>
-</header>
-
 <nav class="toc" aria-label="Sections">
-  <ul>
+  <div class="toc-inner">
+    <a class="mark" href="../" aria-label="Andrew Felipe, home">AF</a>
+    <ul>
     <li><a href="#aliases">Aliases</a></li>
     <li><a href="#payitnow">Pay It Now</a></li>
     <li><a href="#tiers">Tiers</a></li>
@@ -348,7 +402,20 @@ ol.jobs{list-style:none;margin:0 0 20px 7px;padding:0;border-left:2px solid var(
     <li><a href="#history">Work history</a></li>
     <li><a href="#tickets">All tickets</a></li>
   </ul>
+  </div>
 </nav>
+
+<header class="hero">
+  <div class="wrap">
+<pre class="boot" aria-hidden="true">drew@concord:~$ cd work-demos
+drew@concord:~/work-demos$ ls
+21 tickets  1 tool  0 real data</pre>
+    <h1 class="title">Work demos</h1>
+    <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people's plates. Most recently I was a software developer at WT Cox Information Services, a subscription agency where libraries, hospitals, schools, and companies order their journals, magazines, and newspapers. CoxNet2 is the Java system behind it, and I shipped work across order entry, accounting, customer service, and marketing, including a Mailgun integration. Before that I was a software engineer at TIAA, automating reporting on Splunk's REST APIs and shipping through GitLab CI/CD and OpenShift.</p>
+    <p class="contact"><a href="../">Home</a><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a></p>
+    <p class="small muted">Every screen below is rebuilt from scratch with invented customers, emails, IDs, and amounts. Code samples are short rewrites for illustration.</p>
+  </div>
+</header>
 
 <main>
 
@@ -1400,7 +1467,7 @@ function renderTickets() {
 }
 
 /* ---------- section nav ---------- */
-const navLinks = $$('.toc a');
+const navLinks = $$('.toc ul a');
 function setCurrent(id) {
   navLinks.forEach(a => {
     if (a.getAttribute('href') === '#' + id) {
