@@ -289,6 +289,7 @@ ol.jobs{list-style:none;margin:0 0 20px 7px;padding:0;border-left:2px solid var(
   table.stack tfoot tr{display:flex;justify-content:space-between;border-bottom:0}
   table.stack tfoot th,table.stack tfoot td{display:block;border:0;padding:8px 2px}
   table.stack tfoot td::before{content:none}
+  table.stack tfoot td:empty{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
@@ -399,6 +400,32 @@ ol.jobs{border-left-color:var(--line-strong)}
 .tcard .body{gap:6px;padding-top:10px}
 .tcard p{line-height:1.45}
 .foot{border-top-color:var(--line)}
+
+/* Bug notes: what broke, why, and the fix */
+details.bugs summary{color:var(--magenta)}
+ol.bugs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:14px}
+ol.bugs li{border-left:3px solid var(--magenta);padding:2px 0 2px 12px;min-width:0}
+ol.bugs p{margin:0 0 4px;font-size:.92rem}
+pre.bug-err{margin:0 0 6px;padding:6px 10px;background:var(--code-bg);border:1px solid var(--line);color:var(--code-warn);font:12.5px/1.5 var(--font-code);white-space:pre-wrap;word-break:break-word}
+.bug-sym{font-weight:700}
+/* Pop-up confirmation window */
+dialog.pop{padding:0;border:2px solid var(--magenta);background:var(--card);color:var(--ink);width:min(440px,calc(100vw - 32px));box-shadow:8px 8px 0 var(--cyan)}
+dialog.pop::backdrop{background:rgba(6,3,20,.75)}
+@keyframes popin{from{transform:translateY(10px) scale(.97);opacity:0}}
+dialog.pop[open]{animation:popin .16s ease-out}
+.pop-in{padding:18px 20px}
+.pop-in h4{margin:0 0 10px;font-size:1.1rem;line-height:1.35}
+.pop-in .addr{display:block;font-weight:700;word-break:break-all;padding:2px 0}
+.pop-in .toolbar{margin:14px 0 0}
+.seg{flex-wrap:wrap;max-width:100%}
+.paper .doc-h{align-items:flex-start}
+.paper .doc-nums{margin:0;text-align:right;font:400 .85rem/1.4 var(--font-ui);white-space:pre-line}
+.paper .doc-file{margin:10px 0 0;font-size:.8rem;color:#4F6167}
+.t td.note-cell{min-width:12em}
+.brassy{color:var(--amber)}
+.linkbtn.small{font-size:.9rem}
+.t td.id{white-space:nowrap}
+@media (max-width:360px){.tcard .stamp{font-size:1rem;padding:1px 6px}}
 </style>
 <script>
   (function () {
@@ -485,7 +512,7 @@ andrew@concord:~/work-demos$ ls
 <!-- ============ Email aliases ============ -->
 <section id="aliases" class="drawer wrap" aria-labelledby="h-aliases">
   <div class="drawer-head"><h2 id="h-aliases">Online subscription emails</h2><span class="plate">#6002 #6024 #6054 #6055</span></div>
-  <p class="why">Publishers started requiring a separate email address for every copy of an online subscription, so a library with three copies had to come up with three addresses. I built a place on each customer to keep those addresses, plus aliases that forward to the library's real inbox through Mailgun, so WT Cox can supply as many as an order needs.</p>
+  <p class="why">Publishers started requiring a separate email address for every copy of an online subscription, so a library with three copies had to come up with three addresses. I built a place on each customer to keep those addresses, plus aliases that forward to the library's real inbox through Mailgun, so WT Cox can supply as many as an order needs. Then I linked the addresses to order and quote items and retired the old one-email-per-customer field.</p>
 
   <div class="panel">
     <div class="panel-head"><h3>Maple Grove Public Library</h3><p class="small muted">Customer management, online subscription emails tab</p></div>
@@ -501,17 +528,25 @@ andrew@concord:~/work-demos$ ls
     <div class="toolbar">
       <button class="btn" type="button" data-act="new-alias">Generate new alias</button>
       <button class="btn ghost" type="button" data-act="new-provided">Add customer-provided email</button>
+      <button class="btn ghost" type="button" data-act="select-all" id="selAllBtn">Select all</button>
       <button class="btn ghost" type="button" data-act="bulk-disable" id="bulkBtn" disabled>Disable selected</button>
       <label class="check small"><input type="checkbox" data-act="hide-disabled"> Hide disabled</label>
     </div>
     <div id="aliasForm"></div>
     <div class="scroll-x"><table class="t stack" id="aliasTable"></table></div>
+    <dialog class="pop" id="confirmDlg" role="alertdialog" aria-labelledby="cfTitle" aria-describedby="cfBody">
+      <div class="pop-in">
+        <h4 id="cfTitle"></h4>
+        <p class="small" id="cfBody"></p>
+        <div class="toolbar"><button type="button" class="btn" data-act="confirm-yes">Yes</button><button type="button" class="btn ghost" data-act="confirm-no" autofocus>No</button></div>
+      </div>
+    </dialog>
   </div>
 
   <div class="grid2">
     <div class="panel">
-      <h3>Order 48213: assign emails, then finalize</h3>
-      <p class="small muted">An online item needs either one shared address or one address per copy. The check runs when the order is finalized.</p>
+      <h3>Order 48213: link emails, then finalize</h3>
+      <p class="small muted">An online item needs one shared address or one per copy, checked when the order is finalized. Print-only items skip the check, and an online item with no emails gets the customer's default.</p>
       <div id="orderItems"></div>
       <div class="toolbar" style="margin-top:12px"><button class="btn" type="button" data-act="finalize">Finalize order</button><span id="finalizeStamp"></span></div>
       <p id="finalizeMsg" role="status"></p>
@@ -522,18 +557,64 @@ andrew@concord:~/work-demos$ ls
       <pre class="console" id="aliasLog" aria-live="polite"></pre>
       <details class="more">
         <summary>How aliases are made (#6002)</summary>
-        <p class="small">An alias is <code>u</code> plus four random hex digits on WT Cox's mail domain. Mailgun gets a route that matches the alias and forwards to every address listed. If a staff member leaves the library, only the forward changes; the publisher never needs a new address.</p>
+        <p class="small">An alias is <code>u</code> plus four random hex digits on WT Cox's mail domain. Its Mailgun route matches the alias, forwards to every listed address in one <code>forward()</code> action, then stops. If a staff member leaves the library, only the forward changes; the publisher never needs a new address.</p>
 <pre class="code"><span class="c">// u + 4 hex digits, e.g. u1d7a@usr.example.com</span>
-String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<span class="k">0x10000</span>)) + <span class="s">"@"</span> + domain;</pre>
+String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<span class="k">0x10000</span>)) + <span class="s">"@"</span> + domain;
+
+<span class="c">// One forward for every address, then stop. No forwards: stop() alone.</span>
+List&lt;String&gt; actions = <span class="k">new</span> ArrayList&lt;String&gt;();
+<span class="k">if</span> (!forwards.isEmpty()) actions.add(<span class="s">"forward(\""</span> + join(forwards, <span class="s">", "</span>) + <span class="s">"\")"</span>);
+actions.add(<span class="s">"stop()"</span>);</pre>
+      </details>
+      <details class="more">
+        <summary>Linking emails to items (#6024)</summary>
+        <ul class="plain small">
+          <li>The 1-or-N check only runs on online titles. Print-only items skip it.</li>
+          <li>When an order is finalized, an online item with no emails gets the customer's default address.</li>
+          <li>Removing an item's last email loads the default back, since an online item always needs one.</li>
+          <li>When the default is an item's only email it's labeled [Customer Default]. Otherwise each address shows its usage, [SHARED] or [PRIVATE].</li>
+          <li>Quote items carry the same links as order items.</li>
+          <li>A one-time back-fill linked each customer's default to the items that were still active, still current, and online.</li>
+        </ul>
       </details>
       <details class="more">
         <summary>The cleanup (#6055)</summary>
-        <p class="small">I retired the old per-customer "electronic email" field. Each order item now carries its own access emails, and one getter decides which address goes on order files and screens.</p>
+        <p class="small">I retired the old per-customer "electronic email" field. Each order item now carries its own access emails, one getter decides which address an email shows, and order files list an item's addresses separated by semicolons.</p>
 <pre class="code"><span class="k">public</span> String getEmail() {
     <span class="k">if</span> (entityType == EntityType.PROVIDED) <span class="k">return</span> providedEmail;
     <span class="k">if</span> (entityType == EntityType.ALIASED)  <span class="k">return</span> alias;
     <span class="k">return</span> <span class="s">""</span>;
-}</pre>
+}
+
+<span class="c">// Order file, email column for a 3-copy item:</span>
+<span class="c">// u1d7a@usr.example.com; u4f32@usr.example.com; u88b9@usr.example.com</span></pre>
+      </details>
+      <details class="more bugs">
+        <summary>What broke along the way (5)</summary>
+        <ol class="bugs">
+          <li>
+            <pre class="bug-err">HTTP 400 {"message":"invalid syntax (&lt;unknown&gt;, line 1)"}</pre>
+            <p>Mailgun reads a route's expression as code, and my first routes passed addresses bare, like <code>match_recipient(u1d7a@…)</code>. Quoting the addresses inside <code>match_recipient()</code> and <code>forward()</code> fixed it.</p>
+            <button type="button" class="linkbtn small" data-act="replay" value="quote">Replay it in the log</button>
+          </li>
+          <li>
+            <pre class="bug-err">action=N/A</pre>
+            <p>Provided emails have nothing to forward to, and the screen shows that as "N/A". That placeholder was going out to Mailgun as a route action. Now an address with no forwards gets <code>stop()</code> alone, and since #6054, provided emails get no route at all.</p>
+            <button type="button" class="linkbtn small" data-act="replay" value="na">Replay it in the log</button>
+          </li>
+          <li>
+            <pre class="bug-err">no active conversation</pre>
+            <p>Adding a customer-provided email failed with a Seam conversation error. An AJAX call was rebuilding the route expression on the entity while the form was still open. Building it once, on save, fixed it.</p>
+          </li>
+          <li>
+            <p class="bug-sym">Every "last updated" time came back as midnight.</p>
+            <p>The column was a MySQL <code>DATE</code>, which keeps the day and drops the time. A <code>DATETIME</code> column, mapped as a timestamp, keeps both.</p>
+          </li>
+          <li>
+            <p class="bug-sym">The #6055 unit tests passed without testing anything.</p>
+            <p>The test order items had no IDs, so every lookup came back empty and the checks never ran. Giving the fixtures IDs and emails made the tests real.</p>
+          </li>
+        </ol>
       </details>
     </div>
   </div>
@@ -584,10 +665,40 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
     </fieldset>
     <p class="small muted">Order detail, Add Items tab. The Switch rate menu uses the same labels.</p>
     <div class="scroll-x"><table class="t stack" id="tierTable"></table></div>
+    <details class="more">
+      <summary>How it's built</summary>
+      <ul class="plain small">
+        <li>Vendor tiers live in a new table that mirrors the publisher's tier info, with a vendor where the publisher was.</li>
+        <li>Both kinds of tier row share one <code>TierInfo</code> interface, every field except the owner's ID, so the label, the details, and the Switch rate menu work with either.</li>
+        <li>A label reads like <code>TIER 1 - Small</code>: the internal tier, then every publisher code at that level.</li>
+        <li>In CoxNet2 the details sit in a tooltip on an info icon. Here they open in place, so they work on a phone too.</li>
+      </ul>
+<pre class="code"><span class="k">public interface</span> TierInfo {
+    Integer getLevel();
+    String getTierCode();
+    String getInstitutionType();
+    String getDescription();
+}
+<span class="c">// PublisherTierInfo implements TierInfo, plus a publisher ID</span>
+<span class="c">// VendorTierInfo implements TierInfo, plus a vendor ID</span></pre>
+    </details>
   </div>
-  <div class="panel">
-    <h3>How the last rate was looked up</h3>
-    <pre class="console" id="tierTrace" aria-live="polite"></pre>
+  <div class="grid2">
+    <div class="panel">
+      <h3>How the last rate was looked up</h3>
+      <pre class="console" id="tierTrace" aria-live="polite"></pre>
+    </div>
+    <div class="panel">
+      <h3>Same lookup in SQL, four ways out</h3>
+      <p class="small muted">Reports call MySQL functions that return the last rate's tier details, joined for wherever the text is going.</p>
+      <div class="seg" role="radiogroup" aria-label="Output format">
+        <label><input type="radio" name="tfmt" value="HTML" checked data-act="tier-fmt"> HTML</label>
+        <label><input type="radio" name="tfmt" value="EXCEL" data-act="tier-fmt"> EXCEL</label>
+        <label><input type="radio" name="tfmt" value="REPORT" data-act="tier-fmt"> REPORT</label>
+        <label><input type="radio" name="tfmt" value="PLAIN" data-act="tier-fmt"> PLAIN</label>
+      </div>
+      <pre class="console" id="tierFmt" aria-live="polite"></pre>
+    </div>
   </div>
 </section>
 
@@ -613,9 +724,31 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
     </div>
     <div class="panel">
       <h3>OrderItemBoundaryCaseTests</h3>
-      <p class="small muted">Runs with every build. Turn #6015 off and run it again.</p>
+      <p class="small muted">Runs with every build: the existing cancel, invoice, and balance-due cases, plus the standing-order case I added. Turn #6015 off and run it again.</p>
       <div class="toolbar"><button class="btn ghost" type="button" data-act="rs-test">Run tests</button></div>
       <pre class="console" id="rsTests" aria-live="polite"></pre>
+      <details class="more">
+        <summary>The guard and its test (#6015)</summary>
+<pre class="code"><span class="k">public boolean</span> resetOrderItem(String comments) {
+    <span class="k">if</span> (isStandingOrder()) <span class="k">return false</span>;  <span class="c">// ships as volumes come out</span>
+    ...
+}
+
+@Test
+<span class="k">public void</span> resetLeavesStandingOrderUntouched() {
+    OrderItem item = standingOrder();
+    OrderItemStatus status = item.getStatus();
+    Batch batch = item.getBatch();
+    Date fulfilled = item.getFulfillmentDate();
+
+    assertFalse(item.resetOrderItem(<span class="s">"check not cashed"</span>));
+    assertEquals(item.getStatus(), status);
+    assertEquals(item.getBatch(), batch);
+    assertEquals(item.getFulfillmentDate(), fulfilled);
+    assertFalse(item.isReset());
+    assertTrue(item.isStandingOrder());
+}</pre>
+      </details>
     </div>
   </div>
 </section>
@@ -631,6 +764,28 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
     </fieldset>
     <p class="small muted">Ordered title search results. Select a row to open its detail.</p>
     <div class="scroll-x"><table class="t" id="csTable"></table></div>
+    <details class="more">
+      <summary>Where each piece comes from</summary>
+      <ul class="plain small">
+        <li><strong>Paper clip (#6059):</strong> shows when an item has active linked documents, right of the status and sized to the text.</li>
+        <li><strong>Newspaper expiration guarantee (#6019):</strong> a Yes/No flag on the customer's organization, shown only on newspaper titles.</li>
+        <li><strong>Most recent internal note (#6067):</strong> the newest claim entry of type internal note, pulled with a subquery. Plenty of claims have none, so it's often blank. Description still shows the newest entry of any type.</li>
+        <li><strong>Access emails (#6044):</strong> the same editor as order entry, so reps fix addresses without leaving the screen.</li>
+      </ul>
+    </details>
+    <details class="more bugs">
+      <summary>What broke along the way (2)</summary>
+      <ol class="bugs">
+        <li>
+          <pre class="bug-err">java.lang.ClassCastException: java.math.BigInteger cannot be cast to java.lang.Boolean</pre>
+          <p>The paper clip flag comes from native SQL, where MySQL's <code>TRUE</code> is really the number 1, and it came back as a BigInteger. The code cast it straight to Boolean. A small helper now turns 0 and 1 into false and true for every flag the query returns.</p>
+        </li>
+        <li>
+          <p class="bug-sym">The whole internal note column disappeared.</p>
+          <p>My first version put the "is there a note?" check on the column itself, which hid the column for every row. Moving the check onto the cell's text fixed it: the column always shows, and a claim without a note leaves its cell blank.</p>
+        </li>
+      </ol>
+    </details>
   </div>
   <div class="panel" id="csDetail" aria-live="polite"></div>
 </section>
@@ -638,15 +793,26 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
 <!-- ============ Quotes and catalogs ============ -->
 <section id="quotes" class="drawer wrap" aria-labelledby="h-quotes">
   <div class="drawer-head"><h2 id="h-quotes">Quotes and catalogs</h2><span class="plate">#6011 #6030</span></div>
-  <p class="why">Two sales-side changes. Quotes got the purchase order / organization contract field that orders already had, and it prints on the service proposal. Marketing's featured-title catalogs can now target one organization, which makes pre-approved title lists possible for corporate and hospital customers.</p>
+  <p class="why">Two sales-side changes. Quotes got the PO number that orders already had, with the same duplicate check, a Print Quote Summary PDF, and the organization's contract number on their documents. Marketing's featured-title catalogs can now target one organization, which makes pre-approved title lists possible for corporate and hospital customers.</p>
   <div class="grid2">
     <div class="panel">
       <h3>Quote Q-20931</h3>
-      <p class="small muted">Lakeside Community College Library</p>
-      <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="q-fix"> #6011 PO / contract field</label>
-      <div id="qForm"><label class="f">Purchase order / org contract<input type="text" id="qPo" placeholder="e.g. PO-55821" autocomplete="off"></label></div>
+      <p class="small muted">Lakeside Community College Library, part of Lakeside Community College</p>
+      <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="q-fix"> #6011 PO number, contract number, quote summary</label>
+      <div id="qForm">
+        <h4>Order preferences</h4>
+        <div class="formgrid">
+          <label class="f">PO number<input type="text" id="qPo" placeholder="Try PO-55821" autocomplete="off"></label>
+          <div class="f"><span>Contract no., from the organization</span><span class="addr">LCC-2025-014</span></div>
+        </div>
+        <p id="qPoMsg" class="small" role="status" style="margin-top:10px"></p>
+        <p class="small muted">The duplicate check looks at every quote and order under the same organization, except cancelled ones. Try PO-55821, PO-55900, or PO-60012.</p>
+      </div>
     </div>
-    <div class="paper" id="qPreview" aria-live="polite"></div>
+    <div>
+      <div id="qDocs"></div>
+      <div class="paper" id="qPreview" aria-live="polite"></div>
+    </div>
   </div>
   <div class="grid2">
     <div class="panel">
@@ -657,18 +823,42 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
     <div class="panel">
       <h3>What the customer sees</h3>
       <label class="f">Signed in as a customer under<select id="catViewAs"></select></label>
+      <div id="catConstraint"></div>
       <div id="catPreview" aria-live="polite"></div>
     </div>
+  </div>
+  <div class="panel">
+    <details class="more bugs" style="margin-top:0">
+      <summary>What broke along the way (4)</summary>
+      <ol class="bugs">
+        <li>
+          <pre class="bug-err">You have an error in your SQL syntax … near 'AND  AND ( … STATUS != _binary'…QuoteStatus'</pre>
+          <p>The first Print Quote Summary link went through a servlet built for searching quotes by date range and keyword. With one quote and no keywords, it wrote empty conditions and bound the status enum as a serialized Java object. It now loads the one quote by ID, the way the order summary already did.</p>
+        </li>
+        <li>
+          <p class="bug-sym">Contract No. printed on order summaries but not on quote documents.</p>
+          <p>The header only shows a contract number if the code building the PDF looks up the organization's contract first. Orders did; quotes didn't. Quotes make the same lookup now.</p>
+        </li>
+        <li>
+          <pre class="bug-err">java.lang.NullPointerException</pre>
+          <p>The customer catalog page crashed for customers with no organization, and for organizations whose catalog constraint was left blank, which is null in the database. Both now count as no constraint.</p>
+        </li>
+        <li>
+          <p class="bug-sym">A link to one catalog opened the organization's catalog instead.</p>
+          <p>The organization's catalog was being selected on every page load. Now it's only the default when no catalog was asked for.</p>
+        </li>
+      </ol>
+    </details>
   </div>
 </section>
 
 <!-- ============ Reports and exports ============ -->
 <section id="reports" class="drawer wrap" aria-labelledby="h-reports">
   <div class="drawer-head"><h2 id="h-reports">Reports and exports</h2><span class="plate">#5982 #5985 #5987 #6071</span></div>
-  <p class="why">The paperwork side: a weekly report that helps finance trace refunds back to orders, a publisher's order file rebuilt to their exact spec, an Excel export for an organization's IP addresses, and email fields wide enough for more than one address.</p>
+  <p class="why">The paperwork side: a weekly report that helps finance trace vendor refunds back to orders, a publisher's order file rebuilt to their exact spec, Excel exports for customer and organization IP addresses, and email fields wide enough for more than one address.</p>
   <div class="panel">
     <h3>Weekly: unallocated refunds (#5982)</h3>
-    <p class="small muted">Goes out Monday mornings to customer service managers and finance, listing every open refund that still has to be matched to a customer order.</p>
+    <p class="small muted">A JasperReports report on one SQL query, sent Monday mornings to customer service managers and finance. It lists every open, non-voided vendor refund with money still to allocate back to orders, plus every hint about where it belongs.</p>
     <div class="toolbar"><button class="btn ghost" type="button" data-act="ref-run">Send this week's report</button><span id="refStamp"></span></div>
     <div id="refunds"></div>
   </div>
@@ -683,15 +873,20 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
   </div>
   <div class="grid2">
     <div class="panel">
-      <h3>IP addresses tab: Excel export (#5987)</h3>
-      <p class="small muted">Crestview Health System. Written as an XHTML template with Seam's Excel support, reusing the data already behind the tab.</p>
+      <h3>IP addresses tabs: Excel export (#5987)</h3>
+      <p class="small muted">Modeled on the claim search export: an XHTML template with Seam's Excel support, reusing the data already behind each tab. IP Owner says whether a range is the customer's own or comes from its organization.</p>
+      <div class="seg" role="radiogroup" aria-label="Which tab">
+        <label><input type="radio" name="iptab" value="customer" checked data-act="ip-tab"> Customer tab</label>
+        <label><input type="radio" name="iptab" value="org" data-act="ip-tab"> Organization tab</label>
+      </div>
+      <p class="small" id="ipWho" style="margin:0 0 6px"></p>
       <div class="scroll-x"><table class="t stack" id="ipTable"></table></div>
       <div class="toolbar" style="margin-top:12px"><button class="btn ghost" type="button" data-act="ip-export">Export to Excel</button></div>
       <div id="ipExport" aria-live="polite"></div>
     </div>
     <div class="panel">
       <h3>Vendor payment preferences (#6071)</h3>
-      <p class="small muted">Harbor Press. Finance needed room for several addresses per field.</p>
+      <p class="small muted">Harbor Press. Finance needed room for several addresses per field, so the three email fields now match the payment email instructions box.</p>
       <label class="check small" style="margin-bottom:12px"><input type="checkbox" checked data-act="widen"> Wider email fields</label>
       <div id="widen"></div>
     </div>
@@ -757,7 +952,7 @@ String alias = String.format(<span class="s">"u%04x"</span>, random.nextInt(<spa
       </ol>
       <h3>Tools</h3>
       <ul class="chips">
-        <li>Java</li><li>EJB and JPA</li><li>JBoss 4.2</li><li>JSF, Seam, RichFaces</li><li>MySQL</li><li>Ant</li><li>Maven</li><li>SVN</li><li>Trac</li><li>TestNG</li><li>Mockito</li><li>Mailgun API</li><li>Groovy</li><li>Eclipse</li>
+        <li>Java</li><li>EJB and JPA</li><li>Hibernate</li><li>JBoss 4.2</li><li>JSF, Seam, RichFaces</li><li>MySQL</li><li>JasperReports</li><li>Ant</li><li>Maven</li><li>SVN</li><li>Trac</li><li>TestNG</li><li>Mockito</li><li>Mailgun API</li><li>Groovy</li><li>Eclipse</li>
       </ul>
     </div>
     <div class="panel">
@@ -781,7 +976,7 @@ field.set(bean, entityManager);</pre>
   </div>
   <div class="panel">
     <h3>Tier lookup in SQL (#6040, #6041)</h3>
-    <p class="small">Reports needed the same tier labels as the screens, so the lookup also lives in two MySQL functions: vendor tiers first, then the publisher's.</p>
+    <p class="small">Reports needed the same tier labels and details as the screens, so the lookup also lives in MySQL functions. The label checks vendor tiers first, then the publisher's. The details come back as one string, joined for wherever it's going.</p>
 <pre class="code"><span class="c">-- Vendor tier codes first...</span>
 <span class="k">SELECT</span> GROUP_CONCAT(<span class="k">DISTINCT</span> TRIM(vti.TIER_CODE) <span class="k">SEPARATOR</span> <span class="s">' / '</span>) <span class="k">INTO</span> result
   <span class="k">FROM</span> VENDOR_TIER_INFO vti
@@ -792,7 +987,56 @@ field.set(bean, entityManager);</pre>
   <span class="k">SELECT</span> GROUP_CONCAT(<span class="k">DISTINCT</span> TRIM(pti.TIER_CODE) <span class="k">SEPARATOR</span> <span class="s">' / '</span>) <span class="k">INTO</span> result
     <span class="k">FROM</span> PUBLISHER_TIER_INFO pti
    <span class="k">WHERE</span> pti.PUBLISHER_ID = publisher_id <span class="k">AND</span> pti.LEVEL = tier_level;
-<span class="k">END IF</span>;</pre>
+<span class="k">END IF</span>;
+
+<span class="c">-- The details function, last step: join the rows for their destination.</span>
+<span class="k">SET</span> result = <span class="k">CASE</span> p_format
+  <span class="k">WHEN</span> <span class="s">'HTML'</span>   <span class="k">THEN</span> REPLACE(details, <span class="s">'|||'</span>, <span class="s">'&lt;br /&gt;'</span>)  <span class="c">-- tooltips</span>
+  <span class="k">WHEN</span> <span class="s">'EXCEL'</span>  <span class="k">THEN</span> REPLACE(details, <span class="s">'|||'</span>, CHAR(10))  <span class="c">-- line breaks in a cell</span>
+  <span class="k">WHEN</span> <span class="s">'REPORT'</span> <span class="k">THEN</span> REPLACE(details, <span class="s">'|||'</span>, CHAR(13))
+  <span class="k">WHEN</span> <span class="s">'PLAIN'</span>  <span class="k">THEN</span> REPLACE(details, <span class="s">'|||'</span>, <span class="s">'; '</span>)
+<span class="k">END</span>;</pre>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Habits from this job</h3>
+      <ul class="plain">
+        <li><strong>Copy what already works.</strong> The mail handler's screens, beans, and settings switch were modeled on the existing credit card stub handler, and when mine broke I diffed it against that one.</li>
+        <li><strong>Stay inside the classpath.</strong> JBoss 4.2 on Java 7 with RichFaces 3 meant json-simple instead of Jackson, <code>a4j:support</code> instead of <code>a4j:ajax</code>, and loops instead of lambdas. No new libraries.</li>
+        <li><strong>Act on review notes.</strong> One default-email column on the customer instead of another many-to-many table; its own auto-increment ID, foreign keys, and indexes on every new table; one create and update path with an alias/provided branch instead of two copies.</li>
+        <li><strong>100 rows first.</strong> Data fixes ran on a small batch I could check by hand before they touched the rest.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Debug log: the platform</h3>
+      <p class="small muted">Errors that came from the stack itself, not the tickets.</p>
+      <ol class="bugs">
+        <li>
+          <pre class="bug-err">java.io.IOException: invalid constant type: 18</pre>
+          <p>JBoss 4.2 couldn't deploy a class with a single lambda in it, because its bytecode reader predates Java 8. A plain <code>Iterator</code> loop fixed it, and Java 8 calls like <code>Map.getOrDefault</code> and <code>java.util.Base64</code> got Java 7 rewrites.</p>
+        </li>
+        <li>
+          <pre class="bug-err">&lt;a4j:ajax&gt; Tag Library supports namespace: http://richfaces.org/a4j, but no tag was defined for name: ajax</pre>
+          <p><code>a4j:ajax</code> is RichFaces 4. This app runs RichFaces 3, where the same job is <code>a4j:support</code>.</p>
+        </li>
+        <li>
+          <pre class="bug-err">HibernateException: Missing table: …</pre>
+          <p>Hibernate checks the schema when the app deploys, and the new join table wasn't on that database yet. Table changes go in the ticket's SQL script, run before the deploy.</p>
+        </li>
+        <li>
+          <pre class="bug-err">Error Code: 1005. Can't create table … (errno: 121)</pre>
+          <p>MySQL constraint names have to be unique across the whole database, and the quote item table reused a foreign key name from the order item table. Every constraint got its own name.</p>
+        </li>
+        <li>
+          <pre class="bug-err">Too many tables; MySQL can only use 61 tables in a join</pre>
+          <p>Eager loading on the new email links made Hibernate join every related table at once. Switching order items and quote items to lazy loading fixed it.</p>
+        </li>
+        <li>
+          <pre class="bug-err">Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column</pre>
+          <p>Workbench's safe update mode stopped the default-email back-fill. I ran it on 100 rows first, checked them, then ran the rest.</p>
+        </li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -896,7 +1140,7 @@ function typeLines(el, lines, delay) {
 const ALIAS_DOMAIN = 'usr.example.com';
 const LIB = 'maplegrove.example.org';
 const A = {
-  handler: 'mailgun', fix6054: true, hideDisabled: false, form: null, nextId: 7, flash: null,
+  handler: 'mailgun', fix6054: true, hideDisabled: false, form: null, confirm: null, nextId: 7, flash: null,
   selected: new Set(),
   emails: [
     { id: 1, type: 'PROVIDED', usage: 'SHARED', email: 'eresources@' + LIB, fwd: [], status: 'Active', route: null },
@@ -916,10 +1160,12 @@ function newAliasAddress() {
   while (A.emails.some(e => e.email === a));
   return a;
 }
+const DEFAULT_ID = 1; // the customer's default access email
+// One forward() with every address, comma-separated, then stop(). No forwards: stop() alone.
 function routeParams(e) {
   const p = [['priority', '0'], ['description', 'Route for Online Subscription Email'], ['expression', `match_recipient("${e.email}")`]];
-  if (e.type === 'ALIASED') e.fwd.forEach(f => p.push(['action', `forward("${f}")`]));
-  else p.push(['action', 'stop()']);
+  if (e.type === 'ALIASED' && e.fwd.length) p.push(['action', `forward("${e.fwd.join(', ')}")`]);
+  p.push(['action', 'stop()']);
   return p;
 }
 function callHandler(op, e) {
@@ -949,7 +1195,7 @@ function renderAliases() {
   const head = '<thead><tr><th scope="col"><span class="sr">Select</span></th><th scope="col">Email address</th><th scope="col">Kind</th><th scope="col">Forwards to</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead>';
   const body = rows.map(e => `<tr${A.flash === e.id ? ' class="flash"' : ''}>
     <td data-label="Select"><input type="checkbox" data-act="sel" value="${e.id}" aria-label="Select ${esc(e.email)}"${A.selected.has(e.id) ? ' checked' : ''}${e.status !== 'Active' ? ' disabled' : ''}></td>
-    <td data-label="Email" class="em"><strong>${esc(e.email)}</strong>${e.id === 1 ? ' <span class="tag">default</span>' : ''}</td>
+    <td data-label="Email" class="em"><strong>${esc(e.email)}</strong>${e.id === DEFAULT_ID ? ' <span class="tag">default</span>' : ''}</td>
     <td data-label="Kind" class="kind">${e.type === 'ALIASED' ? 'Alias' : 'Provided'}, ${e.usage === 'SHARED' ? 'shared' : 'private'}</td>
     <td data-label="Forwards to" class="small em">${e.fwd.length ? e.fwd.map(esc).join('<br>') : '<span class="muted">N/A</span>'}</td>
     <td data-label="Status" class="${e.status === 'Active' ? 'ok' : 'err'}">${e.status}</td>
@@ -959,13 +1205,43 @@ function renderAliases() {
   A.flash = null;
   updateBulk();
 }
+const selectable = () => A.emails.filter(e => e.status === 'Active');
 function updateBulk() {
-  const b = $('#bulkBtn'), n = A.selected.size;
+  const b = $('#bulkBtn'), n = A.selected.size, act = selectable();
   b.disabled = n === 0;
   b.textContent = n ? `Disable selected (${n})` : 'Disable selected';
+  const all = act.length > 0 && act.every(e => A.selected.has(e.id));
+  const s = $('#selAllBtn');
+  s.textContent = all ? 'Deselect all' : 'Select all';
+  s.disabled = act.length === 0;
+}
+function toggleSelectAll() {
+  const act = selectable();
+  const all = act.length > 0 && act.every(e => A.selected.has(e.id));
+  act.forEach(e => { if (all) A.selected.delete(e.id); else A.selected.add(e.id); });
+  renderAliases();
+}
+// Disabling asks first in a pop-up window, like the confirmation popup on the real screen.
+const dlg = $('#confirmDlg');
+function askDisable(ids) {
+  ids = ids.filter(id => { const e = byId(id); return e && e.status === 'Active'; });
+  if (!ids.length) return;
+  const n = ids.length;
+  const title = n === 1 ? 'Are you sure you want to disable this email address?' : `Are you sure you want to disable these ${n} email addresses?`;
+  if (!dlg || typeof dlg.showModal !== 'function') { if (window.confirm(title)) disableEmails(ids); return; }
+  A.confirm = ids;
+  $('#cfTitle').textContent = title;
+  $('#cfBody').innerHTML = ids.map(id => `<span class="addr">${esc(byId(id).email)}</span>`).join('') + 'Aliases lose their Mailgun route. Disabled addresses stay on file.';
+  dlg.showModal();
+}
+if (dlg) {
+  dlg.addEventListener('close', () => { A.confirm = null; });
+  // A click on the dimmed backdrop lands on the dialog itself, so it closes like No.
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 }
 function openForm(kind, id) {
   const e = id ? byId(id) : null;
+  A.confirm = null;
   A.form = { kind, id: id || null, address: kind === 'alias' ? newAliasAddress() : null };
   const isAlias = kind === 'alias' || (e && e.type === 'ALIASED');
   const title = kind === 'alias' ? 'New alias' : kind === 'provided' ? 'New customer-provided email' : 'Edit ' + e.email;
@@ -984,7 +1260,7 @@ function openForm(kind, id) {
   const first = $('#afEmail') || $('#afFwd');
   if (first) first.focus();
 }
-function closeForm() { A.form = null; $('#aliasForm').innerHTML = ''; }
+function closeForm() { A.form = null; A.confirm = null; $('#aliasForm').innerHTML = ''; }
 function formError(msg) { $('#afErr').textContent = msg; }
 function saveForm() {
   const f = A.form;
@@ -1038,46 +1314,100 @@ function disableEmails(ids) {
   renderAliases(); renderOrder(); renderCSDetail();
 }
 
-/* shared access-email editor: orders (#6024) and customer service (#6044) */
-function checkEmails(item) {
+/* shared access-email editor: orders and quotes (#6024), customer service (#6044) */
+// tone: ok, err, or muted (nothing to fix yet)
+function checkEmails(item, scope) {
+  if (item.online === false) return { tone: 'muted', msg: 'Print only, so the check skips it.' };
   const n = item.emails.length, q = item.qty;
-  if (n === 0) return { ok: false, msg: q > 1 ? `Needs 1 shared address or ${q}, one per copy.` : 'Needs an address.' };
-  if (n === 1) return { ok: true, msg: q === 1 ? 'One address for one copy.' : q === 2 ? 'One shared address covers both copies.' : `One shared address covers all ${q} copies.` };
-  if (n === q) return { ok: true, msg: 'One address per copy.' };
-  return { ok: false, msg: `Has ${n}. Needs 1 shared address or ${q}, one per copy.` };
+  if (n === 0) return scope === 'order'
+    ? { tone: 'muted', msg: "The customer's default gets linked when the order is finalized." }
+    : { tone: 'err', msg: 'Needs an address.' };
+  if (n === 1) return { tone: 'ok', msg: q === 1 ? 'One address for one copy.' : q === 2 ? 'One shared address covers both copies.' : `One shared address covers all ${q} copies.` };
+  if (n === q) return { tone: 'ok', msg: 'One address per copy.' };
+  return { tone: 'err', msg: `Has ${n}. Needs 1 shared address or ${q}, one per copy.` };
 }
+// [Customer Default] only when the default is the item's one and only address; otherwise the usage.
+const emailLabel = (item, id) => item.emails.length === 1 && id === DEFAULT_ID ? '[Customer Default]' : `[${byId(id).usage}]`;
 function emailEditor(scope, item, editable) {
-  const chk = checkEmails(item);
+  if (item.online === false) return '<p class="small muted ee">Print only, so no access emails.</p>';
+  const chk = checkEmails(item, scope);
   const list = item.emails.map(id => {
     const e = byId(id);
-    return `<li><span class="addr">${esc(e.email)}</span> <span class="small muted">${e.type === 'ALIASED' ? 'alias' : 'provided'}${e.status !== 'Active' ? ', disabled' : ''}</span>${editable ? ` <button type="button" class="linkbtn danger small" data-act="ee-remove" data-scope="${scope}" data-item="${item.id}" value="${id}">Remove</button>` : ''}</li>`;
+    return `<li><span class="addr">${esc(e.email)}</span> <span class="small muted">${emailLabel(item, id)}${e.status !== 'Active' ? ' disabled' : ''}</span>${editable ? ` <button type="button" class="linkbtn danger small" data-act="ee-remove" data-scope="${scope}" data-item="${item.id}" value="${id}">Remove</button>` : ''}</li>`;
   }).join('');
-  const opts = A.emails.filter(e => e.status === 'Active' && !item.emails.includes(e.id)).map(e => `<option value="${e.id}">${esc(e.email)}</option>`).join('');
+  const opts = A.emails.filter(e => e.status === 'Active' && !item.emails.includes(e.id)).map(e => `<option value="${e.id}">${esc(e.email)} [${e.usage}]</option>`).join('');
   const sid = `ee-${scope}-${item.id}`;
   const adder = editable ? `<div class="ee-add"><label class="sr" for="${sid}">Email to add to ${esc(item.title)}</label><select id="${sid}">${opts || '<option value="">No other active emails</option>'}</select><button type="button" class="btn sm ghost" data-act="ee-add" data-scope="${scope}" data-item="${item.id}"${opts ? '' : ' disabled'}>Add email</button></div>` : '';
-  return `<div class="ee"><ul class="ee-list">${list || '<li class="muted">No emails yet</li>'}</ul>${adder}<p class="small ${chk.ok ? 'ok' : 'err'}">${esc(chk.msg)}</p></div>`;
+  const note = item.note ? `<p class="small brassy">${esc(item.note)}</p>` : '';
+  return `<div class="ee"><ul class="ee-list">${list || '<li class="muted">No emails yet</li>'}</ul>${adder}${note}<p class="small ${chk.tone}">${esc(chk.msg)}</p></div>`;
+}
+function removeEmail(item, id) {
+  item.emails = item.emails.filter(x => x !== id);
+  item.note = '';
+  if (item.emails.length || item.online === false) return;
+  // An online item always keeps at least one address: the customer's default comes back.
+  const d = byId(DEFAULT_ID);
+  if (d && d.status === 'Active') {
+    item.emails = [DEFAULT_ID];
+    item.note = id === DEFAULT_ID
+      ? 'An online item needs at least one email, so the customer default stays.'
+      : 'An online item needs at least one email, so the customer default was loaded.';
+  }
 }
 const ORDER = { finalized: false, items: [
-  { id: 880101, title: 'Journal of Coastal Ecology', format: 'Print + online', qty: 3, emails: [2, 3] },
-  { id: 880102, title: 'Applied Linguistics Review', format: 'Online only', qty: 2, emails: [] },
-  { id: 880103, title: 'The Weekly Ledger', format: 'Online only', qty: 1, emails: [1] }
+  { id: 880101, title: 'Journal of Coastal Ecology', format: 'Print + online', online: true, qty: 3, emails: [2, 3] },
+  { id: 880102, title: 'Applied Linguistics Review', format: 'Online only', online: true, qty: 2, emails: [] },
+  { id: 880103, title: 'The Weekly Ledger', format: 'Online only', online: true, qty: 1, emails: [DEFAULT_ID] },
+  { id: 880104, title: 'Harbor Town Gazette', format: 'Print only', online: false, qty: 2, emails: [] }
 ] };
 function renderOrder() {
   $('#orderItems').innerHTML = ORDER.items.map(it => `<div class="oi"><div class="oi-h"><strong>${esc(it.title)}</strong><span class="small muted">Item ${it.id}, ${esc(it.format)}, ${it.qty} ${it.qty > 1 ? 'copies' : 'copy'}</span></div>${emailEditor('order', it, !ORDER.finalized)}</div>`).join('');
 }
 function finalizeOrder() {
-  const bad = ORDER.items.filter(i => !checkEmails(i).ok);
+  const d = byId(DEFAULT_ID);
+  const lines = [H('Order.prepareOrderForClosing()')];
+  ORDER.items.forEach(it => {
+    it.note = '';
+    const name = `${it.id} ${it.title}`;
+    if (!it.online) { lines.push(D(`  ${name}: print only, skipped`)); return; }
+    if (!it.emails.length && d && d.status === 'Active') {
+      it.emails.push(DEFAULT_ID);
+      it.note = 'The customer default was linked when the order was finalized.';
+      lines.push(G(`  ${name}: no emails, linked the customer default ${d.email}`));
+    }
+    const c = checkEmails(it, 'order'), n = it.emails.length;
+    lines.push((c.tone === 'ok' ? D : W)(`  ${name}: ${it.qty} ${it.qty > 1 ? 'copies' : 'copy'}, ${n} ${n === 1 ? 'email' : 'emails'}, ${c.tone === 'ok' ? 'ok' : it.qty > 1 ? `needs 1 or ${it.qty}` : 'needs 1'}`));
+  });
+  const bad = ORDER.items.filter(i => i.online && checkEmails(i, 'order').tone !== 'ok');
   if (bad.length) {
+    renderOrder();
     $('#finalizeStamp').innerHTML = '';
     $('#finalizeMsg').innerHTML = `<span class="err">Can't finalize yet.</span> ${bad.map(b => esc(b.title)).join(' and ')} ${bad.length > 1 ? 'need' : 'needs'} one shared address or one per copy.`;
-    aliasLog.add(W(`Order.prepareOrderForClosing(): ${bad.length} item${bad.length > 1 ? 's' : ''} short on access emails, order stays open`), '');
+    aliasLog.add(...lines, W(`  ${bad.length} item${bad.length > 1 ? 's' : ''} short on access emails, order stays open`), '');
     return;
   }
   ORDER.finalized = true;
   renderOrder();
   $('#finalizeStamp').innerHTML = stamp('Finalized', 'green');
   $('#finalizeMsg').innerHTML = '<span class="ok">Order 48213 is finalized.</span> <button type="button" class="linkbtn" data-act="reopen">Reopen it</button>';
-  aliasLog.add(G('Order.prepareOrderForClosing(): every item has 1 or N access emails, order closed'), '');
+  aliasLog.add(...lines, G('  every online item has 1 or N access emails, order closed'), '');
+}
+// Two early bugs, replayed into the activity log.
+function replayBug(which) {
+  const base = 'https://api.mailgun.net/v3/routes';
+  if (which === 'quote') {
+    aliasLog.add(D('Replay: one of the first routes, before the fix'), H('POST ' + base), D('  priority=0'), D('  description=Route for Online Subscription Email'),
+      W('  expression=match_recipient(u1d7a@' + ALIAS_DOMAIN + ')'), W('  action=forward(eresources@' + LIB + ')'),
+      W('← 400 {"message":"invalid syntax (<unknown>, line 1)"}'),
+      G('Fix: quote the addresses, as in match_recipient("u1d7a@' + ALIAS_DOMAIN + '")'), '');
+  } else {
+    aliasLog.add(D('Replay: saving a provided email, before the fix'), H('PUT ' + base + '/65f0c1a2b3c4d5e6f7a8b904'), D('  priority=0'),
+      D('  expression=match_recipient("sam.reed@' + LIB + '")'), W('  action=N/A'),
+      W('"N/A" is the screen\'s placeholder for no forwards. It was never meant to leave the screen.'),
+      G('Fix: no forwards means action=stop() alone. #6054 later dropped these routes entirely.'), '');
+  }
+  const log = $('#aliasLog');
+  if (log.scrollIntoView) log.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
 }
 
 /* ---------- Pay It Now (#5997, #5998, #6000) ---------- */
@@ -1147,7 +1477,7 @@ function saveUpr() {
 }
 
 /* ---------- Tier info (#6040, #6041) ---------- */
-const T = { fix: { 6040: true, 6041: true }, open: new Set(), last: 4 };
+const T = { fix: { 6040: true, 6041: true }, open: new Set(), last: 4, fmt: 'HTML' };
 const TIERS = {
   publishers: {
     'Wexford Scientific': {
@@ -1161,7 +1491,7 @@ const TIERS = {
     },
     'Orchard University Press': { 2: [['Academic', '', 'two-year and community colleges']] }
   },
-  vendors: { 'Harbor Subscriptions': { 1: [['Academic', 'HS-Basic', "Harbor's own band, under 2,500 FTEs"]] } }
+  vendors: { 'Harbor Subscriptions': { 1: [['Academic', 'HS-Basic', "Harbor's own band, under 2,500 FTEs"], ['Hospital', 'HS-Care', "Harbor's own band, under 200 beds"]] } }
 };
 const RATES = {
   'Journal of Coastal Ecology': { pub: 'Wexford Scientific', rates: [['TIER 1', 1240], ['TIER 2', 1980], ['TIER 3', 2760]] },
@@ -1197,7 +1527,7 @@ function tierLookup(row, rateIdx) {
   }
   if (!entries) return { label: rt, entries: [], trace: trace.concat(`No tier info anywhere, so it stays ${rt}.`) };
   const codes = [...new Set(entries.map(e => e[1]).filter(Boolean))];
-  const label = codes.length ? `${rt} – ${codes.join(' / ')}` : rt;
+  const label = codes.length ? `${rt} - ${codes.join(' / ')}` : rt;
   trace.push(codes.length ? `Shows "${label}", details from the ${source}.` : `No codes, so it shows ${rt} with the ${source}'s details behind the info button.`);
   return { label, entries, source, trace };
 }
@@ -1219,6 +1549,28 @@ function renderTiers() {
 function renderTrace() {
   const r = TROWS.find(x => x.id === T.last), t = RATES[r.title], res = tierLookup(r, r.rate);
   $('#tierTrace').innerHTML = [H(`${r.title}, ${r.vendor}, ${t.rates[r.rate][0]}`)].concat(res.trace.map((s, i, a) => (i === a.length - 1 ? G : D)('  ' + s))).join('\n');
+  renderTierFmt();
+}
+// The SQL details function: rows joined with '|||', then swapped for the destination's separator.
+const TIER_SEP = { HTML: ['<br />', "'<br />' for tooltips on screen"], EXCEL: ['\n', 'CHAR(10), a line break inside one Excel cell'], REPORT: ['\r', 'CHAR(13) for the Jasper reports'], PLAIN: ['; ', "'; ' for plain text"] };
+function renderTierFmt() {
+  const r = TROWS.find(x => x.id === T.last), t = RATES[r.title], res = tierLookup(r, r.rate), rt = t.rates[r.rate][0];
+  const [sep, why] = TIER_SEP[T.fmt];
+  const vr = 61400 + r.id;
+  const out = [H(`SELECT tier_details(${vr}, '${T.fmt}');`)];
+  if (!res.entries.length) {
+    out.push(D(T.fix[6040] ? `  -- vendor rate ${vr} is ${rt}, which has no tier details, so it returns ''` : '  -- Before #6040 there were no tier details to return.'));
+  } else {
+    const rows = res.entries.map(e => `${e[0]}, ${e[1] || 'no code'}: ${e[2]}`);
+    out.push(D(`  -- vendor rate ${vr}: ${rows.length} row${rows.length > 1 ? 's' : ''} from the ${res.source}, joined with ${why}`));
+    const joined = rows.join(sep);
+    // Show the line breaks as breaks, and mark which kind they are.
+    const shown = T.fmt === 'EXCEL' ? joined.split('\n').join(' ↵\n')
+      : T.fmt === 'REPORT' ? joined.split('\r').join(' ␍\n')
+      : joined;
+    out.push(G(shown));
+  }
+  $('#tierFmt').innerHTML = out.join('\n');
 }
 
 /* ---------- Resets (#6015, #6070) ---------- */
@@ -1245,7 +1597,7 @@ function doReset() {
   const restore = ' <button type="button" class="linkbtn" data-act="rs-restore">Restore the demo data</button>';
   if (it.status === 'Awaiting fulfillment') { msg.innerHTML = `<span class="muted">${esc(it.title)} is already awaiting fulfillment.</span>${restore}`; return; }
   if (it.kind === 'Standing order' && R.fix[6015]) {
-    msg.innerHTML = `<span class="ok">Nothing changed.</span> ${esc(it.title)} is a standing order, so OrderItem.resetOrderItem() returns before touching it.`;
+    msg.innerHTML = `<span class="ok">Nothing changed.</span> ${esc(it.title)} is a standing order, so resetOrderItem() returns false before touching it.`;
     return;
   }
   it.status = 'Awaiting fulfillment'; it.pay += ', voided'; it.reason = reason;
@@ -1256,25 +1608,55 @@ function doReset() {
 }
 function runTests() {
   const ok = R.fix[6015];
-  const lines = [H('$ ant test'), D('[testng] Running: OrderItemBoundaryCaseTests'), G('[testng] PASSED: resetSendsSubscriptionBackToAwaitingFulfillment')];
+  const existing = ['cancelBeforeFulfillmentAndInvoicing', 'cancelAfterInvoicingBeforeFulfillment', 'cancelAfterFulfillmentBeforeInvoicing', 'cancelAfterFulfillmentAndInvoicing', 'cancelPaidThroughItem', 'resetWithOpenBalanceDue', 'resetAfterBalanceDue'];
+  const lines = [H('$ ant test'), D('[testng] Running: OrderItemBoundaryCaseTests')].concat(existing.map(n => G('[testng] PASSED: ' + n)));
   if (ok) lines.push(G('[testng] PASSED: resetLeavesStandingOrderUntouched'));
-  else lines.push(W('[testng] FAILED: resetLeavesStandingOrderUntouched'), W('  expected [Fulfilled] but found [Awaiting fulfillment]'));
-  lines.push(D('==============================================='), ok ? G('Tests run: 2, Failures: 0, Skips: 0') : W('Tests run: 2, Failures: 1, Skips: 0'), ok ? G('BUILD SUCCESSFUL') : W('BUILD FAILED'));
-  typeLines($('#rsTests'), lines, 140);
+  else lines.push(W('[testng] FAILED: resetLeavesStandingOrderUntouched'), W('  java.lang.AssertionError: a standing order should not reset expected [false] but found [true]'));
+  const n = existing.length + 1;
+  lines.push(D('==============================================='), ok ? G(`Tests run: ${n}, Failures: 0, Skips: 0`) : W(`Tests run: ${n}, Failures: 1, Skips: 0`), ok ? G('BUILD SUCCESSFUL') : W('BUILD FAILED'));
+  typeLines($('#rsTests'), lines, 110);
 }
 
 /* ---------- Customer service (#6019, #6044, #6059, #6067) ---------- */
 const CLIP = n => `<span class="clip" title="${n} linked document${n > 1 ? 's' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg><span class="sr">${n} linked document${n > 1 ? 's' : ''}</span></span>`;
-const CS = { before: false, sel: 880401, rows: [
-  { id: 880401, title: 'The Weekly Ledger', commodity: 'Newspaper', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 2, qty: 1, emails: [1], claims: [
-    { id: 'C-52012', issue: 'Missing issue', desc: 'Publisher says the March 4 issue was reshipped.', note: 'Called the publisher; reship confirmed and tracking saved on the claim.', date: '03/04/25', status: 'Open' }] },
-  { id: 880402, title: 'Journal of Coastal Ecology', commodity: 'Journal', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 0, qty: 3, emails: [2, 3, 4], claims: [
-    { id: 'C-51830', issue: 'Duplicate issue', desc: 'Library received two copies of the April issue.', note: null, date: '02/18/25', status: 'Open' },
-    { id: 'C-51244', issue: 'Online access', desc: 'Access restored after the IP update.', note: 'Sent the new IP ranges to the publisher.', date: '01/09/25', status: 'Resolved' }] },
-  { id: 880403, title: 'Harbor Town Gazette', commodity: 'Newspaper', status: 'Expired', customer: 'Maple Grove Public Library', neg: true, docs: 1, qty: 1, emails: [1], claims: [] },
-  { id: 880404, title: 'Applied Linguistics Review', commodity: 'Journal', status: 'Active', customer: 'Maple Grove Public Library', neg: true, docs: 3, qty: 2, emails: [1], claims: [
-    { id: 'C-52107', issue: 'Online access', desc: 'Patron gets a login error on the publisher site.', note: 'Asked the publisher to reset the online account.', date: '03/11/25', status: 'Open' }] }
+// The newspaper expiration guarantee lives on the customer's organization, not the item.
+const CS_ORG = { name: 'Maple Grove Library System', neg: true };
+const NOTE = 'Internal note';
+// Each claim keeps a running list of entries: [date, type, text], oldest first.
+const CS = { before: false, sel: 880401, day: 12, flash: null, evClaim: '', evType: NOTE, rows: [
+  { id: 880401, title: 'The Weekly Ledger', commodity: 'Newspaper', status: 'Active', online: true, docs: 2, qty: 1, emails: [DEFAULT_ID], claims: [
+    { id: 'C-52012', issue: 'Missing issue', received: '03/04/25', status: 'Open', events: [
+      ['03/04/25', 'Customer message', 'The March 4 issue never arrived.'],
+      ['03/05/25', NOTE, 'Called the publisher; reship confirmed and tracking saved on the claim.'],
+      ['03/06/25', 'Vendor message', 'Publisher says the March 4 issue was reshipped.']] }] },
+  { id: 880402, title: 'Journal of Coastal Ecology', commodity: 'Journal', status: 'Active', online: true, docs: 0, qty: 3, emails: [2, 3, 4], claims: [
+    { id: 'C-51830', issue: 'Duplicate issue', received: '02/18/25', status: 'Open', events: [
+      ['02/18/25', 'Customer message', 'Library received two copies of the April issue.']] },
+    { id: 'C-51244', issue: 'Online access', received: '01/07/25', status: 'Resolved', events: [
+      ['01/07/25', 'Customer message', "Patrons can't reach the online edition."],
+      ['01/08/25', NOTE, 'Sent the new IP ranges to the publisher.'],
+      ['01/09/25', 'Vendor message', 'Access restored after the IP update.']] }] },
+  { id: 880403, title: 'Harbor Town Gazette', commodity: 'Newspaper', status: 'Expired', online: true, docs: 1, qty: 1, emails: [DEFAULT_ID], claims: [] },
+  { id: 880404, title: 'Applied Linguistics Review', commodity: 'Journal', status: 'Active', online: true, docs: 3, qty: 2, emails: [DEFAULT_ID], claims: [
+    { id: 'C-52107', issue: 'Online access', received: '03/10/25', status: 'Open', events: [
+      ['03/10/25', 'Customer message', 'Patron gets a login error on the publisher site.'],
+      ['03/11/25', NOTE, 'Asked the publisher to reset the online account.']] }] }
 ] };
+// Description: the newest entry of any type. Most recent internal note: the newest entry of that type, or nothing.
+const claimDesc = c => c.events.length ? c.events[c.events.length - 1][2] : '';
+const claimNote = c => { for (let i = c.events.length - 1; i >= 0; i--) if (c.events[i][1] === NOTE) return c.events[i][2]; return null; };
+const EV_HINT = { [NOTE]: 'Left a voicemail for the publisher.', 'Customer message': 'Library asked for an update.', 'Vendor message': 'Publisher is checking stock.' };
+function addClaimEvent(fromKeyboard) {
+  const pick = $('#csEvClaim');
+  const r = CS.rows.find(x => x.id === CS.sel), c = r && pick && r.claims.find(x => x.id === pick.value);
+  if (!c) return;
+  const type = $('#csEvType').value, text = $('#csEvText').value.trim() || EV_HINT[type];
+  const d = new Date(Date.UTC(2025, 2, CS.day++)), p2 = n => String(n).padStart(2, '0');
+  c.events.push([`${p2(d.getUTCMonth() + 1)}/${p2(d.getUTCDate())}/25`, type, text]);
+  CS.evClaim = c.id; CS.evType = type; CS.flash = c.id;
+  renderCSDetail();
+  if (fromKeyboard) { const t = $('#csEvText'); if (t) t.focus(); }
+}
 function renderCSTable() {
   const after = !CS.before;
   $('#csTable').innerHTML = '<thead><tr><th scope="col">Order item</th><th scope="col">Title</th><th scope="col">Commodity</th><th scope="col">Status</th></tr></thead><tbody>'
@@ -1282,10 +1664,22 @@ function renderCSTable() {
 }
 function renderCSDetail() {
   const after = !CS.before, r = CS.rows.find(x => x.id === CS.sel);
-  const neg = after && r.commodity === 'Newspaper' ? `<div><dt>Newspaper expiration guarantee</dt><dd>${r.neg ? 'Yes' : 'No'}</dd></div>` : '';
+  const neg = after && r.commodity === 'Newspaper' ? `<div><dt>Newspaper expiration guarantee</dt><dd>${CS_ORG.neg ? 'Yes' : 'No'} <span class="small muted">(set on ${esc(CS_ORG.name)})</span></dd></div>` : '';
   const claims = r.claims.length
-    ? r.claims.map(c => `<tr><td data-label="Claim">${c.id}</td><td data-label="Issue">${esc(c.issue)}</td><td data-label="Description">${esc(c.desc)}</td>${after ? `<td data-label="Internal note">${c.note ? esc(c.note) : '<span class="muted">None yet</span>'}</td>` : ''}<td data-label="Received">${c.date}</td><td data-label="Status">${c.status}</td></tr>`).join('')
+    ? r.claims.map(c => {
+        const note = claimNote(c);
+        return `<tr${CS.flash === c.id ? ' class="flash"' : ''}><td data-label="Claim" class="id">${c.id}</td><td data-label="Issue">${esc(c.issue)}</td><td data-label="Description">${esc(claimDesc(c))}</td>${after ? `<td data-label="Internal note" class="note-cell">${note ? esc(note) : '<span class="sr">No internal note</span>'}</td>` : ''}<td data-label="Received">${c.received}</td><td data-label="Status">${c.status}</td></tr>`;
+      }).join('')
     : `<tr><td colspan="${after ? 6 : 5}" class="muted">No claims on this item.</td></tr>`;
+  CS.flash = null;
+  if (!r.claims.some(c => c.id === CS.evClaim)) CS.evClaim = r.claims.length ? r.claims[0].id : '';
+  const adder = after && r.claims.length ? `<div class="formgrid" style="margin-top:12px">
+      <label class="f">Claim<select id="csEvClaim" data-act="cs-ev-claim">${r.claims.map(c => `<option${c.id === CS.evClaim ? ' selected' : ''}>${c.id}</option>`).join('')}</select></label>
+      <label class="f">Entry type<select id="csEvType" data-act="cs-ev-type">${[NOTE, 'Customer message', 'Vendor message'].map(t => `<option${t === CS.evType ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label class="f">Text<input type="text" id="csEvText" placeholder="${esc(EV_HINT[CS.evType])}" autocomplete="off"></label>
+      <button class="btn ghost" type="button" data-act="cs-add-event">Add to claim</button>
+    </div>
+    <p class="small muted" style="margin-top:8px">Description shows the newest entry of any type. The note column only changes for internal notes.</p>` : '';
   const emails = after
     ? emailEditor('cs', r, true)
     : `<ul class="ee-list">${r.emails.map(id => `<li class="ee"><span class="addr">${esc(byId(id).email)}</span></li>`).join('')}</ul><p class="small muted">Read-only on this screen. Changing them meant going back to order management.</p>`;
@@ -1293,37 +1687,77 @@ function renderCSDetail() {
     <dl class="facts"><div><dt>Order item</dt><dd>${r.id}</dd></div><div><dt>Commodity</dt><dd>${r.commodity}</dd></div><div><dt>Copies</dt><dd>${r.qty}</dd></div>${neg}</dl>
     <h4>Order item claims</h4>
     <div class="scroll-x"><table class="t stack"><thead><tr><th scope="col">Claim</th><th scope="col">Issue</th><th scope="col">Description</th>${after ? '<th scope="col">Most recent internal note</th>' : ''}<th scope="col">Received</th><th scope="col">Status</th></tr></thead><tbody>${claims}</tbody></table></div>
+    ${adder}
     <h4>Customer access emails</h4>${emails}`;
 }
 function renderCS() { renderCSTable(); renderCSDetail(); }
 
 /* ---------- Quotes (#6011) ---------- */
-const Q = { fix: true, po: '' };
+const Q = { fix: true, po: '', doc: 'proposal', org: 'Lakeside Community College', contract: 'LCC-2025-014',
+  // POs already on file, for the duplicate check
+  onFile: [
+    { po: 'PO-55821', where: 'order 48190', org: 'Lakeside Community College', cancelled: false },
+    { po: 'PO-55900', where: 'quote Q-20877', org: 'Lakeside Community College', cancelled: true },
+    { po: 'PO-60012', where: 'order 48230', org: 'Crestview Health System', cancelled: false }
+  ] };
+// Same rule as orders: a PO can't repeat on a non-cancelled quote or order under the same organization.
+function poCheck() {
+  const p = Q.po.trim().toLowerCase();
+  if (!p) return '';
+  const same = Q.onFile.filter(x => x.po.toLowerCase() === p);
+  const dup = same.find(x => x.org === Q.org && !x.cancelled);
+  if (dup) return `<span class="err">Duplicate PO.</span> ${esc(dup.po)} is already on ${dup.where} for ${esc(Q.org)}.`;
+  const cancelled = same.find(x => x.org === Q.org);
+  if (cancelled) return `<span class="ok">No duplicate.</span> ${esc(cancelled.po)} was on ${cancelled.where}, but that was cancelled.`;
+  if (same.length) return `<span class="ok">No duplicate.</span> ${esc(same[0].po)} belongs to a different organization.`;
+  return `<span class="ok">No duplicate</span> under ${esc(Q.org)}.`;
+}
 function renderQuote() {
   $('#qForm').hidden = !Q.fix;
-  const po = Q.fix ? `<tr class="${Q.po ? 'hilite' : ''}"><th>Purchase order / org contract</th><td>${Q.po ? esc(Q.po) : '<span class="faint">Not provided</span>'}</td></tr>` : '';
-  $('#qPreview').innerHTML = `<div class="doc-h"><strong>Service proposal</strong><span>Q-20931</span></div>
-    <table class="doc-meta"><tbody><tr><th>Prepared for</th><td>Lakeside Community College Library</td></tr><tr><th>Valid through</th><td>June 30</td></tr>${po}</tbody></table>
-    <table class="doc-items"><thead><tr><th>Title</th><th>Term</th><th class="num">Price</th></tr></thead><tbody>
+  if (!Q.fix) Q.doc = 'proposal';
+  $('#qPoMsg').innerHTML = poCheck();
+  $('#qDocs').innerHTML = Q.fix
+    ? `<div class="seg" role="radiogroup" aria-label="Document"><label><input type="radio" name="qdoc" value="proposal" data-act="q-doc"${Q.doc === 'proposal' ? ' checked' : ''}> Service proposal</label><label><input type="radio" name="qdoc" value="summary" data-act="q-doc"${Q.doc === 'summary' ? ' checked' : ''}> Print quote summary</label></div>`
+    : '<p class="small muted" style="margin:0 0 12px">Before #6011: no PO, no contract number, and no quote summary PDF.</p>';
+  // The header block, like the report's header numbers field
+  const nums = ['Quote No: Q-20931'];
+  if (Q.fix && Q.po.trim()) nums.push('PO: ' + Q.po.trim());
+  if (Q.fix) nums.push('Contract No: ' + Q.contract);
+  const summary = Q.doc === 'summary';
+  const rows = summary
+    ? `<thead><tr><th>Title</th><th class="num">Qty</th><th class="num">Price</th></tr></thead><tbody>
+      <tr><td>Studies in Regional History</td><td class="num">1</td><td class="num">$310.00</td></tr>
+      <tr><td>Applied Linguistics Review</td><td class="num">1</td><td class="num">$230.00</td></tr>
+      <tr><td>Service charge</td><td></td><td class="num">$16.20</td></tr></tbody>
+      <tfoot><tr><th colspan="2">Quote total</th><td class="num">$556.20</td></tr></tfoot>`
+    : `<thead><tr><th>Title</th><th>Term</th><th class="num">Price</th></tr></thead><tbody>
       <tr><td>Studies in Regional History</td><td>1 year</td><td class="num">$310.00</td></tr>
       <tr><td>Applied Linguistics Review</td><td>1 year</td><td class="num">$230.00</td></tr>
       <tr><td>Service charge</td><td></td><td class="num">$16.20</td></tr></tbody>
-      <tfoot><tr><th colspan="2">Total</th><td class="num">$556.20</td></tr></tfoot></table>`;
+      <tfoot><tr><th colspan="2">Total</th><td class="num">$556.20</td></tr></tfoot>`;
+  $('#qPreview').innerHTML = `<div class="doc-h"><strong>${summary ? 'Quote summary' : 'Service proposal'}</strong><p class="doc-nums">${nums.map(esc).join('\n')}</p></div>
+    <table class="doc-meta"><tbody><tr><th>Prepared for</th><td>Lakeside Community College Library</td></tr><tr><th>${summary ? 'Quote date' : 'Valid through'}</th><td>${summary ? 'March 3' : 'June 30'}</td></tr></tbody></table>
+    <table class="doc-items">${rows}</table>${summary ? '<p class="doc-file">quote-summary-Q-20931.pdf</p>' : ''}`;
 }
 
 /* ---------- Catalogs (#6030) ---------- */
 const ORGS = { 'Crestview Health System': 'Medical', 'Brookside Clinic Group': 'Medical', 'Lakeside Community College': 'Academic', 'Maple Grove Library System': 'Public library' };
 const FULL = ['Applied Linguistics Review', 'Clinical Pathways Review', 'Coastal Birds Monthly', 'Harbor Town Gazette', 'Hospital Pharmacy Notes', 'Infection Control Brief', 'Journal of Coastal Ecology', 'Pediatric Nursing Today', 'Rural Health Quarterly', 'Studies in Regional History', 'The Weekly Ledger'];
-const CAT = { fix: true, editing: 2, viewAs: 'Crestview Health System', tab: null, catalogs: [
+const NO_ORG = 'No organization (individual subscriber)';
+// Catalog constraints, set on Organization Detail: blank (null, the default) or show only the organization's catalog.
+const CAT = { fix: true, editing: 2, viewAs: 'Crestview Health System', tab: null, constraints: {}, catalogs: [
   { id: 1, name: 'Featured nursing titles', market: 'Medical', org: null, titles: ['Pediatric Nursing Today', 'Rural Health Quarterly', 'Clinical Pathways Review'] },
   { id: 2, name: 'Pre-approved titles', market: 'Medical', org: 'Crestview Health System', titles: ['Clinical Pathways Review', 'Hospital Pharmacy Notes', 'Infection Control Brief', 'The Weekly Ledger'] },
   { id: 3, name: 'New for community colleges', market: 'Academic', org: null, titles: ['Studies in Regional History', 'Applied Linguistics Review'] }
 ] };
 function catTabs() {
-  const org = CAT.viewAs, market = ORGS[org];
-  const tabs = [{ key: 'full', name: 'Full catalog', titles: FULL, mine: false }];
-  if (CAT.fix) CAT.catalogs.filter(c => c.org === org).forEach(c => tabs.push({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: true }));
-  CAT.catalogs.filter(c => (!CAT.fix || !c.org) && c.market === market).forEach(c => tabs.push({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: false }));
+  // No organization means no market and no constraint: just the full catalog.
+  const org = CAT.viewAs === NO_ORG ? null : CAT.viewAs, market = org ? ORGS[org] : null;
+  const own = CAT.fix && org ? CAT.catalogs.filter(c => c.org === org).map(c => ({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: true })) : [];
+  if (CAT.fix && org && CAT.constraints[org]) return own;
+  // Full catalog first, then the organization's own, then the market's.
+  const tabs = [{ key: 'full', name: 'Full catalog', titles: FULL, mine: false }].concat(own);
+  if (market) CAT.catalogs.filter(c => (!CAT.fix || !c.org) && c.market === market).forEach(c => tabs.push({ key: 'c' + c.id, name: c.name, titles: c.titles, mine: false }));
   return tabs;
 }
 function renderCatEditor() {
@@ -1335,35 +1769,52 @@ function renderCatEditor() {
       : '<p class="small muted" style="margin-top:10px">No organization field yet, so every list goes to its whole market. Sign in as Brookside Clinic Group to see Crestview\'s pre-approved list leak.</p>'}`;
 }
 function renderCatPreview() {
-  $('#catViewAs').innerHTML = Object.keys(ORGS).map(o => `<option${o === CAT.viewAs ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  $('#catViewAs').innerHTML = Object.keys(ORGS).concat(NO_ORG).map(o => `<option${o === CAT.viewAs ? ' selected' : ''}>${esc(o)}</option>`).join('');
+  const org = CAT.viewAs === NO_ORG ? null : CAT.viewAs;
+  $('#catConstraint').innerHTML = CAT.fix && org
+    ? `<label class="f" style="margin-top:10px">Catalog constraints (organization detail)<select data-act="cat-constraint"><option value=""${CAT.constraints[org] ? '' : ' selected'}>(blank, the default)</option><option value="SHOW_ONLY"${CAT.constraints[org] ? ' selected' : ''}>Show only organization's catalog</option></select></label>`
+    : '';
   const tabs = catTabs();
+  const where = `<p class="small muted" style="margin:10px 0 0">${org ? esc(ORGS[org]) + ' market' : 'No organization, so no market lists'}</p>`;
+  if (!tabs.length) {
+    $('#catPreview').innerHTML = where + '<p class="small" style="margin-top:12px">No catalogs to show. This organization only sees its own catalog, and it doesn\'t have one yet.</p>';
+    return;
+  }
+  // The organization's catalog is selected by default, unless a specific catalog was picked.
   const sel = tabs.find(t => t.key === CAT.tab) || tabs.find(t => t.mine) || tabs[0];
-  $('#catPreview').innerHTML = `<p class="small muted" style="margin:10px 0 0">${esc(ORGS[CAT.viewAs])} market</p>
+  $('#catPreview').innerHTML = `${where}
     <div class="tabs" role="tablist" aria-label="Catalogs">${tabs.map(t => `<button type="button" role="tab" class="tab${t === sel ? ' on' : ''}" aria-selected="${t === sel}" data-act="cat-tab" value="${t.key}">${esc(t.name)}${t.mine ? ' <span class="tag">your organization</span>' : ''}</button>`).join('')}</div>
     <ul class="titles">${sel.titles.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 function renderCat() { renderCatEditor(); renderCatPreview(); }
 
 /* ---------- Reports and exports (#5982, #5985, #5987, #6071) ---------- */
+// [refund, vendor, received, method, amount, allocated back to orders, hints, status, voided]
 const REFUNDS = [
-  ['RF-1182', 'Maple Grove Public Library', 'Northfield Academic', '2025-01-06', 412.00],
-  ['RF-1187', 'Crestview Health System', 'Harbor Press', '2025-01-13', 318.50],
-  ['RF-1190', 'Lakeside Community College', 'Kestrel Science', '2025-01-21', 96.00],
-  ['RF-1201', 'Brookside Clinic Group', 'Calder & Finch', '2025-01-28', 860.00],
-  ['RF-1204', 'Maple Grove Public Library', 'Ledger Media', '2025-01-31', 58.00]
+  ['RF-1182', 'Northfield Academic', '2025-01-06', 'Check', 412.00, 0, ['Order item: 880210', 'Title: Journal of Coastal Ecology'], 'open', false],
+  ['RF-1185', 'Northfield Academic', '2025-01-08', 'Check', 154.00, 0, ['Order item: 880214'], 'open', true],
+  ['RF-1187', 'Harbor Press', '2025-01-13', 'ACH', 318.50, 200.00, ['Vendor payment: VP-77131'], 'open', false],
+  ['RF-1190', 'Kestrel Science', '2025-01-21', 'Check', 96.00, 0, ['Check number: 20418'], 'open', false],
+  ['RF-1193', 'Harbor Press', '2025-01-24', 'ACH', 230.00, 230.00, ['Order item: 880212'], 'open', false],
+  ['RF-1196', 'Kestrel Science', '2025-01-27', 'Wire', 642.00, 0, ['Title: Materials Letters Digest'], 'closed', false],
+  ['RF-1201', 'Calder & Finch', '2025-01-28', 'Wire', 860.00, 0, ['Title: Clinical Pathways Review', 'Check number: 20433'], 'open', false],
+  ['RF-1204', 'Ledger Media', '2025-01-31', 'Credit card', 58.00, 0, [], 'open', false]
 ];
 function renderRefunds() {
-  const asOf = Date.UTC(2025, 1, 3);
-  const rows = REFUNDS.map(([id, cust, from, rec, amt]) => {
+  const all = REFUNDS.map(([id, vendor, rec, method, amt, alloc, hints, status, voided]) => {
     const [y, m, d] = rec.split('-').map(Number);
-    return { id, cust, from, amt, rec: `${m}/${d}/${String(y).slice(2)}`, days: Math.round((asOf - Date.UTC(y, m - 1, d)) / 864e5) };
+    return { id, vendor, method, amt, alloc, hints, status, voided, left: Math.round((amt - alloc) * 100) / 100, rec: `${m}/${d}/${String(y).slice(2)}` };
   });
-  const total = rows.reduce((s, r) => s + r.amt, 0);
+  // Same filter as the query: open, not voided, and money still unallocated.
+  const rows = all.filter(r => r.status === 'open' && !r.voided && r.left > 0);
+  const out = all.filter(r => !rows.includes(r)).map(r => `${r.id} (${r.voided ? 'voided' : r.status !== 'open' ? r.status : 'fully allocated'})`);
+  const total = rows.reduce((s, r) => s + r.left, 0);
   $('#refunds').innerHTML = `<div class="mail"><div class="mail-h"><span><b>To</b> Customer service managers; Finance</span><span><b>Subject</b> Weekly: unallocated refunds, ${rows.length} open (${money(total)})</span><span><b>Sent</b> Monday, February 3, 7:00 AM</span></div>
-    <div class="mail-b"><p class="small">Refunds received from vendors that aren't matched to a customer order yet, oldest first.</p>
-    <div class="scroll-x"><table class="t stack"><thead><tr><th scope="col">Refund</th><th scope="col">Customer</th><th scope="col">From vendor</th><th scope="col">Received</th><th scope="col" class="num">Days open</th><th scope="col" class="num">Amount</th></tr></thead>
-    <tbody>${rows.map(r => `<tr><td data-label="Refund">${r.id}</td><td data-label="Customer">${esc(r.cust)}</td><td data-label="From vendor">${esc(r.from)}</td><td data-label="Received">${r.rec}</td><td data-label="Days open" class="num">${r.days}</td><td data-label="Amount" class="num">${money(r.amt)}</td></tr>`).join('')}</tbody>
-    <tfoot><tr><th colspan="5">Total open</th><td class="num"><strong>${money(total)}</strong></td></tr></tfoot></table></div></div></div>`;
+    <div class="mail-b"><p class="small">Open vendor refunds with money that isn't allocated back to orders yet, with every hint about where each one belongs.</p>
+    <div class="scroll-x"><table class="t stack"><thead><tr><th scope="col">Refund</th><th scope="col">Vendor</th><th scope="col">Received</th><th scope="col">Method</th><th scope="col" class="num">Refund</th><th scope="col" class="num">Allocated</th><th scope="col" class="num">Unallocated</th><th scope="col">Hints</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td data-label="Refund">${r.id}</td><td data-label="Vendor">${esc(r.vendor)}</td><td data-label="Received">${r.rec}</td><td data-label="Method">${esc(r.method)}</td><td data-label="Refund" class="num">${money(r.amt)}</td><td data-label="Allocated" class="num">${money(r.alloc)}</td><td data-label="Unallocated" class="num"><strong>${money(r.left)}</strong></td><td data-label="Hints" class="small">${r.hints.length ? r.hints.map(h => `[ ${esc(h)} ]`).join('<br>') : '<span class="muted">None</span>'}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><th colspan="6">Total unallocated</th><td class="num"><strong>${money(total)}</strong></td><td></td></tr></tfoot></table></div>
+    <p class="small muted" style="margin-top:10px">Left off the report: ${out.join(', ')}.</p></div></div>`;
 }
 function sheetHTML(headers, rows, numCols) {
   const letters = headers.map((_, i) => String.fromCharCode(65 + i));
@@ -1391,25 +1842,37 @@ function renderXls() {
     + `<div class="sheet-foot"><span class="sheet-tab">${after ? 'Pedidos' : 'Orders'}</span><span class="small muted">transmittal_batch_10422.xls</span></div>`
     + `<ul class="diffs small">${notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>`;
 }
-const IPS = [['192.0.2.0', '192.0.2.255', 'Main campus'], ['198.51.100.14', '198.51.100.14', 'Library proxy server'], ['203.0.113.32', '203.0.113.63', 'North clinic']];
+// A customer's tab lists its own ranges plus its organization's; the organization's tab lists only the organization's.
+const ORG_IPS = [['192.0.2.0', '192.0.2.255', 'Main campus'], ['198.51.100.14', '198.51.100.14', 'Library proxy server']];
+const IPS = { tab: 'customer',
+  customer: { who: 'Customer: Crestview North Clinic, part of Crestview Health System', file: 'crestview-north-clinic-ip-addresses.xls',
+    rows: [['203.0.113.32', '203.0.113.63', 'North clinic', 'Customer']].concat(ORG_IPS.map(r => r.concat('Organization'))) },
+  org: { who: 'Organization: Crestview Health System', file: 'crestview-health-system-ip-addresses.xls',
+    rows: ORG_IPS.map(r => r.concat('Organization')) } };
 function renderIp() {
-  $('#ipTable').innerHTML = '<thead><tr><th scope="col">Start</th><th scope="col">End</th><th scope="col">Description</th></tr></thead><tbody>'
-    + IPS.map(r => `<tr><td data-label="Start">${r[0]}</td><td data-label="End">${r[1]}</td><td data-label="Description">${esc(r[2])}</td></tr>`).join('') + '</tbody>';
+  const t = IPS[IPS.tab];
+  $('#ipWho').textContent = t.who;
+  $('#ipTable').innerHTML = '<thead><tr><th scope="col">Start</th><th scope="col">End</th><th scope="col">Description</th><th scope="col">IP owner</th></tr></thead><tbody>'
+    + t.rows.map(r => `<tr><td data-label="Start">${r[0]}</td><td data-label="End">${r[1]}</td><td data-label="Description">${esc(r[2])}</td><td data-label="IP owner">${r[3]}</td></tr>`).join('') + '</tbody>';
+  $('#ipExport').innerHTML = '';
 }
 function renderIpExport() {
-  $('#ipExport').innerHTML = '<p class="small" style="margin:12px 0 6px"><span class="ok">Exported</span> crestview-health-system-ip-addresses.xls</p>'
-    + sheetHTML(['Organization', 'Start IP', 'End IP', 'Description'], IPS.map(r => ['Crestview Health System', r[0], r[1], r[2]]), [])
+  const t = IPS[IPS.tab];
+  $('#ipExport').innerHTML = `<p class="small" style="margin:12px 0 6px"><span class="ok">Exported</span> ${t.file}</p>`
+    + sheetHTML(['Start IP', 'End IP', 'Description', 'IP Owner'], t.rows, [])
     + '<div class="sheet-foot"><span class="sheet-tab">IP Addresses</span></div>';
 }
 const WID = { on: true, fields: [
   ['Ordering email', 'orders@harborpress.example, subscriptions@harborpress.example'],
   ['Payment email', 'ar@harborpress.example, finance@harborpress.example'],
   ['Request invoice email', 'invoices@harborpress.example, ar@harborpress.example']
-] };
+], instructions: 'Send remittance advice to both payment addresses. Put the invoice number in the subject line.' };
 function renderWiden() {
+  // The three email fields take the size of the existing payment email instructions box.
   $('#widen').innerHTML = WID.fields.map((f, i) => `<label class="widen-row f${WID.on ? '' : ' narrow'}">${esc(f[0])}${WID.on
     ? `<textarea rows="2" data-wid="${i}">${esc(f[1])}</textarea>`
-    : `<input type="text" value="${esc(f[1])}" data-wid="${i}" autocomplete="off">`}</label>`).join('');
+    : `<input type="text" value="${esc(f[1])}" data-wid="${i}" autocomplete="off">`}</label>`).join('')
+    + `<label class="widen-row f">Payment email instructions<textarea rows="2" data-wid="instructions">${esc(WID.instructions)}</textarea></label>`;
 }
 
 /* ---------- Cover Image Miner ---------- */
@@ -1503,16 +1966,16 @@ function mnReset() {
 const TICKETS = [
   [5982, 'Weekly report of open refunds that still need matching to orders', 'Enhancement', 'Accounting', 'closed', 'reports'],
   [5985, "A publisher's order file, rebuilt to their exact format", 'Enhancement', 'Order processing', 'closed', 'reports'],
-  [5987, "Excel export for an organization's IP addresses", 'Enhancement', 'Customer/org maintenance', 'closed', 'reports'],
+  [5987, 'Excel export for customer and organization IP addresses', 'Enhancement', 'Customer/org maintenance', 'closed', 'reports'],
   [5997, 'Pay It Now: include fulfilled items with active urgent requests', 'Enhancement', 'Accounting', 'closed', 'payitnow'],
   [5998, 'Pay It Now: start with the CSR filter blank', 'Defect', 'Accounting', 'closed', 'payitnow'],
   [6000, 'Pay It Now: search by vendor payment ID', 'Defect', 'Accounting', 'closed', 'payitnow'],
   [6002, 'Online subscription emails and generated aliases', 'Enhancement', 'Other', 'closed', 'aliases'],
-  [6011, 'Purchase order / contract field on quotes and proposals', 'Enhancement', 'Pricing/quotes', 'closed', 'quotes'],
+  [6011, 'PO number on quotes, contract number on quote documents, quote summary PDF', 'Enhancement', 'Pricing/quotes', 'closed', 'quotes'],
   [6015, 'Standing orders skip the reset workflow', 'Enhancement', 'Accounting', 'closed', 'resets'],
   [6019, 'Newspaper expiration guarantee indicator', 'Enhancement', 'Customer service', 'closed', 'cs'],
-  [6024, 'Link access emails to order items, 1 or N per item', 'Enhancement', 'Order entry', 'closed', 'aliases'],
-  [6030, 'Organization-specific catalogs', 'Enhancement', 'CoxNet', 'closed', 'quotes'],
+  [6024, 'Link access emails to order and quote items, 1 or N per item', 'Enhancement', 'Order entry', 'closed', 'aliases'],
+  [6030, 'Organization-specific catalogs and catalog constraints', 'Enhancement', 'CoxNet', 'closed', 'quotes'],
   [6040, 'Publisher tier codes on Add Items and Switch Rate', 'Enhancement', 'Order entry', 'closed', 'tiers', true],
   [6041, 'Vendor-level tier info, checked first', 'Enhancement', 'Titles', 'closed', 'tiers'],
   [6044, 'Edit access emails from customer service', 'Enhancement', 'Customer service', 'closed', 'cs'],
@@ -1558,21 +2021,26 @@ document.addEventListener('click', ev => {
     case 'edit': openForm('edit', +v); break;
     case 'form-save': saveForm(); break;
     case 'form-cancel': closeForm(); break;
-    case 'disable': disableEmails([+v]); break;
-    case 'bulk-disable': disableEmails([...A.selected]); break;
+    case 'disable': askDisable([+v]); break;
+    case 'bulk-disable': askDisable([...A.selected]); break;
+    case 'confirm-yes': { const ids = A.confirm || []; dlg.close(); disableEmails(ids); break; }
+    case 'confirm-no': dlg.close(); break;
+    case 'select-all': toggleSelectAll(); break;
+    case 'replay': replayBug(v); break;
     case 'ee-add': {
       const item = scopeItems(el.dataset.scope).find(i => i.id === +el.dataset.item);
       const sel = document.getElementById(`ee-${el.dataset.scope}-${el.dataset.item}`);
-      if (item && sel && sel.value) { item.emails.push(+sel.value); rerenderScope(el.dataset.scope); }
+      if (item && sel && sel.value) { item.emails.push(+sel.value); item.note = ''; rerenderScope(el.dataset.scope); }
       break;
     }
     case 'ee-remove': {
       const item = scopeItems(el.dataset.scope).find(i => i.id === +el.dataset.item);
-      if (item) { item.emails = item.emails.filter(id => id !== +v); rerenderScope(el.dataset.scope); }
+      if (item) { removeEmail(item, +v); rerenderScope(el.dataset.scope); }
       break;
     }
     case 'finalize': finalizeOrder(); break;
-    case 'reopen': ORDER.finalized = false; $('#finalizeStamp').innerHTML = ''; $('#finalizeMsg').innerHTML = ''; renderOrder(); break;
+    case 'reopen': ORDER.finalized = false; ORDER.items.forEach(i => { i.note = ''; }); $('#finalizeStamp').innerHTML = ''; $('#finalizeMsg').innerHTML = ''; renderOrder(); break;
+    case 'cs-add-event': addClaimEvent(); break;
     case 'pin-clear-csr': P.csr = ''; renderPin(); break;
     case 'pin-save-upr': saveUpr(); break;
     case 'tier-info': { const id = +v; if (T.open.has(id)) T.open.delete(id); else T.open.add(id); T.last = id; renderTiers(); renderTrace(); break; }
@@ -1601,21 +2069,30 @@ document.addEventListener('change', ev => {
     case 'pin-fix': P.fix[el.value] = el.checked; if (el.value === '5998') P.csr = el.checked ? '' : ME; renderPin(); break;
     case 'tier-fix': T.fix[el.value] = el.checked; if (el.value === '6040') $('#fix6041').disabled = !el.checked; renderTiers(); renderTrace(); break;
     case 'tier-switch': { const r = TROWS.find(x => x.id === +el.dataset.row); r.rate = +el.value; T.last = r.id; renderTiers(); renderTrace(); break; }
+    case 'tier-fmt': T.fmt = el.value; renderTierFmt(); break;
     case 'rs-fix': R.fix[el.value] = el.checked; renderResets(); break;
     case 'cs-before': CS.before = el.checked; renderCS(); break;
+    case 'cs-ev-claim': CS.evClaim = el.value; break;
+    case 'cs-ev-type': { CS.evType = el.value; const t = $('#csEvText'); if (t) t.placeholder = EV_HINT[el.value]; break; }
     case 'q-fix': Q.fix = el.checked; renderQuote(); break;
+    case 'q-doc': Q.doc = el.value; renderQuote(); break;
     case 'cat-fix': CAT.fix = el.checked; CAT.tab = null; renderCat(); break;
     case 'cat-pick': CAT.editing = +el.value; renderCatEditor(); break;
     case 'cat-org': { const c = CAT.catalogs.find(x => x.id === CAT.editing); c.org = el.value || null; CAT.tab = null; renderCat(); break; }
+    case 'cat-constraint': { const org = CAT.viewAs; if (el.value) CAT.constraints[org] = el.value; else delete CAT.constraints[org]; CAT.tab = null; renderCatPreview(); break; }
     case 'xls-ver': XLS.ver = el.value; renderXls(); break;
+    case 'ip-tab': IPS.tab = el.value; renderIp(); break;
     case 'widen': WID.on = el.checked; renderWiden(); break;
   }
 });
 document.addEventListener('input', ev => {
-  const el = ev.target;
-  if (el.dataset && el.dataset.wid != null) WID.fields[+el.dataset.wid][1] = el.value;
+  const el = ev.target, w = el.dataset ? el.dataset.wid : null;
+  if (w == null) return;
+  if (w === 'instructions') WID.instructions = el.value;
+  else WID.fields[+w][1] = el.value;
 });
 document.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter' && ev.target.id === 'csEvText') { ev.preventDefault(); addClaimEvent(true); return; }
   const tr = ev.target.closest ? ev.target.closest('tr[data-act="cs-pick"]') : null;
   if (!tr || (ev.key !== 'Enter' && ev.key !== ' ')) return;
   ev.preventDefault();
@@ -1630,7 +2107,7 @@ $('#qPo').addEventListener('input', e => { Q.po = e.target.value; renderQuote();
 $('#catViewAs').addEventListener('change', e => { CAT.viewAs = e.target.value; CAT.tab = null; renderCatPreview(); });
 
 /* ---------- first render ---------- */
-aliasLog.add(D('Generate an alias, or disable one, to see the Mailgun call.'), '');
+aliasLog.add(D('Generate an alias, or disable one, to see the Mailgun call. Finalize the order to watch the email check.'), '');
 pinLog.add(D('Press Save request to trigger the refresh.'), '');
 renderAliases(); renderOrder();
 renderPin();
