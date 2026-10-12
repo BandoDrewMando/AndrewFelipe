@@ -416,6 +416,8 @@ dialog.pop[open]{animation:popin .16s ease-out}
 .pop-in{padding:18px 20px}
 .pop-in h4{margin:0 0 10px;font-size:1.1rem;line-height:1.35}
 .pop-in .addr{display:block;font-weight:700;word-break:break-all;padding:2px 0}
+.pop-in .line{display:block}
+.pop-in .addr + .line{margin-top:6px}
 .pop-in .toolbar{margin:14px 0 0}
 .seg{flex-wrap:wrap;max-width:100%}
 .paper .doc-h{align-items:flex-start}
@@ -1231,7 +1233,9 @@ function askDisable(ids) {
   if (!dlg || typeof dlg.showModal !== 'function') { if (window.confirm(title)) disableEmails(ids); return; }
   A.confirm = ids;
   $('#cfTitle').textContent = title;
-  $('#cfBody').innerHTML = ids.map(id => `<span class="addr">${esc(byId(id).email)}</span>`).join('') + 'Aliases lose their Mailgun route. Disabled addresses stay on file.';
+  // One sentence per line
+  $('#cfBody').innerHTML = ids.map(id => `<span class="addr">${esc(byId(id).email)}</span>`).join('')
+    + '<span class="line">Aliases lose their Mailgun route.</span><span class="line">Disabled addresses stay on file.</span>';
   dlg.showModal();
 }
 if (dlg) {
