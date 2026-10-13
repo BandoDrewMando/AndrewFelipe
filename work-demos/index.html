@@ -592,16 +592,11 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 <span class="c">// u1d7a@usr.example.com; u4f32@usr.example.com; u88b9@usr.example.com</span></pre>
       </details>
       <details class="more bugs">
-        <summary>What broke along the way (5)</summary>
+        <summary>What broke along the way (4)</summary>
         <ol class="bugs">
           <li>
             <pre class="bug-err">HTTP 400 {"message":"invalid syntax (&lt;unknown&gt;, line 1)"}</pre>
-            <p>Mailgun reads a route's expression as code, and my first routes passed addresses bare, like <code>match_recipient(u1d7a@…)</code>. Quoting the addresses inside <code>match_recipient()</code> and <code>forward()</code> fixed it.</p>
-            <button type="button" class="linkbtn small" data-act="replay" value="quote">Replay it in the log</button>
-          </li>
-          <li>
-            <pre class="bug-err">action=N/A</pre>
-            <p>Provided emails have nothing to forward to, and the screen shows that as "N/A". That placeholder was going out to Mailgun as a route action. Now an address with no forwards gets <code>stop()</code> alone, and since #6054, provided emails get no route at all.</p>
+            <p>Mailgun reads a route's actions as code, so a bad one is refused before anything is saved. Mine was a placeholder: provided emails have nothing to forward to, the screen shows that as "N/A", and that string was going out as a route action. Now an address with no forwards gets <code>stop()</code> alone, and since #6054, provided emails get no route at all.</p>
             <button type="button" class="linkbtn small" data-act="replay" value="na">Replay it in the log</button>
           </li>
           <li>
@@ -614,7 +609,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
           </li>
           <li>
             <p class="bug-sym">The #6055 unit tests passed without testing anything.</p>
-            <p>The test order items had no IDs, so every lookup came back empty and the checks never ran. Giving the fixtures IDs and emails made the tests real.</p>
+            <p>The test's order items had no IDs, so a validation check sent the code home before it did any work, and the asserts never saw it run. Giving the fixtures IDs made the tests real.</p>
           </li>
         </ol>
       </details>
@@ -780,7 +775,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
       <ol class="bugs">
         <li>
           <pre class="bug-err">java.lang.ClassCastException: java.math.BigInteger cannot be cast to java.lang.Boolean</pre>
-          <p>The paper clip flag comes from native SQL, where MySQL's <code>TRUE</code> is really the number 1, and it came back as a BigInteger. The code cast it straight to Boolean. A small helper now turns 0 and 1 into false and true for every flag the query returns.</p>
+          <p>This screen's flags come from native SQL, where MySQL's <code>TRUE</code> is really the number 1, and one came back as a BigInteger that the code cast straight to Boolean. A small helper now turns 0 and 1 into false and true for every flag the query returns.</p>
         </li>
         <li>
           <p class="bug-sym">The whole internal note column disappeared.</p>
@@ -835,7 +830,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
       <ol class="bugs">
         <li>
           <pre class="bug-err">You have an error in your SQL syntax … near 'AND  AND ( … STATUS != _binary'…QuoteStatus'</pre>
-          <p>The first Print Quote Summary link went through a servlet built for searching quotes by date range and keyword. With one quote and no keywords, it wrote empty conditions and bound the status enum as a serialized Java object. It now loads the one quote by ID, the way the order summary already did.</p>
+          <p>The first Print Quote Summary link went through a servlet built for searching quotes by date range and keyword. With one quote and no keywords, it wrote empty conditions and bound the status enum as a serialized Java object. The quote summary needed its own path that loads one quote by ID, the way the order summary already did.</p>
         </li>
         <li>
           <p class="bug-sym">Contract No. printed on order summaries but not on quote documents.</p>
@@ -843,7 +838,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
         </li>
         <li>
           <pre class="bug-err">java.lang.NullPointerException</pre>
-          <p>The customer catalog page crashed for customers with no organization, and for organizations whose catalog constraint was left blank, which is null in the database. Both now count as no constraint.</p>
+          <p>The customer catalog page crashed while setting up. It assumed two things were always there: the customer's organization, and that organization's catalog constraint, which is null in the database when it's left blank. Both are null-checked now and count as no constraint.</p>
         </li>
         <li>
           <p class="bug-sym">A link to one catalog opened the organization's catalog instead.</p>
@@ -1396,20 +1391,14 @@ function finalizeOrder() {
   $('#finalizeMsg').innerHTML = '<span class="ok">Order 48213 is finalized.</span> <button type="button" class="linkbtn" data-act="reopen">Reopen it</button>';
   aliasLog.add(...lines, G('  every online item has 1 or N access emails, order closed'), '');
 }
-// Two early bugs, replayed into the activity log.
-function replayBug(which) {
+// An early bug, replayed into the activity log.
+function replayBug() {
   const base = 'https://api.mailgun.net/v3/routes';
-  if (which === 'quote') {
-    aliasLog.add(D('Replay: one of the first routes, before the fix'), H('POST ' + base), D('  priority=0'), D('  description=Route for Online Subscription Email'),
-      W('  expression=match_recipient(u1d7a@' + ALIAS_DOMAIN + ')'), W('  action=forward(eresources@' + LIB + ')'),
-      W('← 400 {"message":"invalid syntax (<unknown>, line 1)"}'),
-      G('Fix: quote the addresses, as in match_recipient("u1d7a@' + ALIAS_DOMAIN + '")'), '');
-  } else {
-    aliasLog.add(D('Replay: saving a provided email, before the fix'), H('PUT ' + base + '/65f0c1a2b3c4d5e6f7a8b904'), D('  priority=0'),
-      D('  expression=match_recipient("sam.reed@' + LIB + '")'), W('  action=N/A'),
-      W('"N/A" is the screen\'s placeholder for no forwards. It was never meant to leave the screen.'),
-      G('Fix: no forwards means action=stop() alone. #6054 later dropped these routes entirely.'), '');
-  }
+  aliasLog.add(D('Replay: saving a provided email, before the fix'), H('POST ' + base), D('  priority=0'), D('  description=Route for Online Subscription Email'),
+    D('  expression=match_recipient("sam.reed@' + LIB + '")'), W('  action=N/A'),
+    W('← 400 {"message":"invalid syntax (<unknown>, line 1)"}'),
+    D('"N/A" is the screen\'s placeholder for no forwards. It was never meant to leave the screen.'),
+    G('Fix: no forwards means action=stop() alone. #6054 later dropped these routes entirely.'), '');
   const log = $('#aliasLog');
   if (log.scrollIntoView) log.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
 }
