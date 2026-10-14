@@ -188,6 +188,9 @@ a:hover { text-decoration-thickness: 2px; }
 .window h3 a { color: var(--text); text-decoration: none; }
 .window h3 a:hover { text-decoration: underline; }
 .block .window p { margin-bottom: 1.4rem; }
+.window-actions { display: flex; flex-wrap: wrap; gap: .9rem 1.1rem; }
+.btn.tiaa { border-color: var(--magenta); color: var(--magenta); box-shadow: 4px 4px 0 rgba(255, 63, 164, .3); }
+.btn.tiaa:hover { box-shadow: 6px 6px 0 rgba(255, 63, 164, .42); }
 
 /* Skills */
 .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2.5rem; max-width: 54rem; margin: 0; }

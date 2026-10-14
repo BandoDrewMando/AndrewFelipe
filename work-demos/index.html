@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Andrew Felipe: work demos</title>
-<meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services, plus his work history.">
+<meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services and the reporting job he built at TIAA, plus his work history.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
@@ -428,6 +428,58 @@ dialog.pop[open]{animation:popin .16s ease-out}
 .linkbtn.small{font-size:.9rem}
 .t td.id{white-space:nowrap}
 @media (max-width:360px){.tcard .stamp{font-size:1rem;padding:1px 6px}}
+
+/* ===== Two employers: cards in the hero, a banner before each group, a kicker on each demo ===== */
+.emp-tiaa{--emp:var(--magenta);--emp-shadow:rgba(255,63,164,.32);--emp-tint:rgba(255,63,164,.09)}
+.emp-index{position:relative;z-index:1;list-style:none;margin:1.75rem 0 1.25rem;padding:0;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));max-width:58rem}
+.hero .emp-index{transition:opacity .35s ease}
+.booting .hero .emp-index{opacity:0}
+.emp-card{display:grid;gap:4px;height:100%;padding:14px 16px 16px;border:2px solid var(--emp,var(--cyan));background:rgba(20,15,46,.78);color:var(--ink);text-decoration:none;box-shadow:5px 5px 0 var(--emp-shadow,rgba(69,243,255,.3));transition:transform .12s ease,box-shadow .12s ease}
+.emp-card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--emp-shadow,rgba(69,243,255,.42))}
+.emp-card .k{font:1.15rem/1 var(--font-slab);letter-spacing:.04em;color:var(--emp,var(--cyan))}
+.emp-card .n{font:clamp(1.7rem,4.6vw,2.1rem)/1.05 var(--font-slab);color:var(--ink)}
+.emp-card .d{font-size:.95rem;color:var(--ink-soft)}
+.emp-card .go{margin-top:6px;font-weight:700;font-size:.95rem;color:var(--emp,var(--cyan))}
+.emp-banner{margin-top:84px;padding:30px 0 32px;border-top:2px solid var(--emp,var(--cyan));border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--emp-tint,rgba(69,243,255,.08)),transparent 90%)}
+.emp-banner .cmdline{margin:0 0 12px;font:1.3rem/1.2 var(--font-slab);color:var(--amber);overflow-wrap:anywhere}
+.emp-banner h2{margin:0;font:400 clamp(2.6rem,9vw,4.6rem)/.95 var(--font-slab);color:var(--ink);text-shadow:-.03em 0 rgba(69,243,255,.7),.03em 0 rgba(255,63,164,.7)}
+.emp-banner .role{margin:12px 0 6px;font-weight:700;color:var(--emp,var(--cyan))}
+.emp-banner .about{max-width:58rem;margin:0;color:var(--ink-soft)}
+.emp-chip{flex-basis:100%;margin:0 0 -4px;font:1.15rem/1 var(--font-slab);letter-spacing:.06em;color:var(--emp,var(--cyan))}
+.emp-chip::before{content:"// "}
+.emp-chip.both{color:var(--amber)}
+#training .panel-head{margin-bottom:4px}
+.skills.ccna{margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px 24px}
+.drawer.after-groups{margin-top:84px;border-top:1px solid var(--line)}
+.toc ul li.grp{display:flex;align-items:center}
+.toc ul li.grp:not(:first-child){margin-left:6px;padding-left:8px;border-left:1px solid var(--line-strong)}
+.toc ul a.grp-link{font:1.2rem/1 var(--font-slab);letter-spacing:.05em;color:var(--emp,var(--cyan));padding:6px 4px}
+/* Two groups make the nav longer: tighter links, and a fade on the right whenever it scrolls */
+.toc-inner{gap:1.1rem}
+.toc ul{gap:1px}
+.toc ul a{padding:6px 4px;font-size:.88rem}
+.toc ul.more{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}
+.toc ul.more.at-end{-webkit-mask-image:none;mask-image:none}
+
+/* ===== TIAA: monthly batch metrics report ===== */
+.mx-flow{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.mx-flow li{border:2px solid var(--line);padding:8px 10px 9px;font-size:.88rem;line-height:1.3;color:var(--ink-soft);min-width:0;transition:border-color .2s ease,box-shadow .2s ease}
+.mx-flow li b{display:block;margin-bottom:2px;font:400 1.3rem/1 var(--font-slab);color:var(--ink)}
+.mx-flow li.on{border-color:var(--magenta);color:var(--ink);box-shadow:3px 3px 0 rgba(255,63,164,.4)}
+.mx-flow li.done{border-color:var(--cyan)}
+.mx-flow li.done b::after{content:" ✓";color:var(--ok)}
+.mx-flow li.fail{border-color:var(--red)}
+.mx-flow li.fail b::after{content:" ✕";color:var(--red)}
+.mx-flow li.off{opacity:.5}
+.mx-flow li.off b::after{content:" skipped";font-size:1rem;color:var(--ink-soft)}
+#mxLog{max-height:360px}
+table.mx-table{font-size:.88rem}
+.mx-table td.num,.mx-table th.num{text-align:right}
+.mx-table td:first-child{white-space:nowrap}
+.mx-book .sheet tbody tr:nth-child(2) td{font-weight:700;color:var(--amber)}
+.mail .att{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:5px 10px;border:1px solid var(--line-strong);font-size:.88rem;font-weight:700;overflow-wrap:anywhere}
+.mail .att svg{flex:none;width:18px;height:18px;color:var(--ok)}
+.unsent{border:1.5px dashed var(--line-strong);padding:14px 16px;color:var(--ink-soft)}
 </style>
 <script>
   (function () {
@@ -442,12 +494,13 @@ dialog.pop[open]{animation:popin .16s ease-out}
 </script>
 </head>
 <body>
-<a class="skip" href="#aliases">Skip to the demos</a>
+<a class="skip" href="#wtcox">Skip to the demos</a>
 
 <nav class="toc" aria-label="Sections">
   <div class="toc-inner">
     <a class="mark" href="../" aria-label="Andrew Felipe, home">AF</a>
     <ul>
+    <li class="grp"><a class="grp-link" href="#wtcox" aria-label="WT Cox Information Services demos">WT Cox</a></li>
     <li><a href="#aliases">Aliases</a></li>
     <li><a href="#payitnow">Pay It Now</a></li>
     <li><a href="#tiers">Tiers</a></li>
@@ -457,8 +510,10 @@ dialog.pop[open]{animation:popin .16s ease-out}
     <li><a href="#reports">Reports</a></li>
     <li><a href="#miner">Cover miner</a></li>
     <li><a href="#craft">How I work</a></li>
-    <li><a href="#history">Work history</a></li>
     <li><a href="#tickets">All tickets</a></li>
+    <li class="grp emp-tiaa"><a class="grp-link" href="#tiaa" aria-label="TIAA demo">TIAA</a></li>
+    <li><a href="#metrics">Metrics</a></li>
+    <li class="grp"><a href="#history">Work history</a></li>
   </ul>
   </div>
 </nav>
@@ -467,11 +522,15 @@ dialog.pop[open]{animation:popin .16s ease-out}
   <div class="wrap">
 <pre class="boot" aria-hidden="true">andrew@concord:~$ cd work-demos
 andrew@concord:~/work-demos$ ls
-21 tickets  1 tool  0 real data</pre>
+wt-cox/  tiaa/  0 real data</pre>
     <h1 class="title">Work <span class="nw">demos<span class="cursor" aria-hidden="true"></span></span></h1>
     <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people's plates. Most recently I was a software developer at WT Cox Information Services, a subscription agency where libraries, hospitals, schools, and companies order their journals, magazines, books, and other physical formats. CoxNet2 is the Java system behind it, and I shipped work across order entry, accounting, customer service, and marketing, including a Mailgun integration. Before that I was a software engineer at TIAA, automating reporting on Splunk's REST APIs and shipping through GitLab CI/CD and OpenShift.</p>
+    <ul class="emp-index" aria-label="Demos by employer">
+      <li><a class="emp-card" href="#wtcox"><span class="k">June 2024 – Feb. 2025</span><span class="n">WT Cox Information Services</span><span class="d">Software Developer. 21 tickets and the Cover Image Miner.</span><span class="go">See the WT Cox demos ↓</span></a></li>
+      <li><a class="emp-card emp-tiaa" href="#tiaa"><span class="k">June 2021 – Sept. 2023</span><span class="n">TIAA</span><span class="d">Software Engineer. The monthly metrics report I built on Splunk's REST API.</span><span class="go">See the TIAA demo ↓</span></a></li>
+    </ul>
     <p class="contact"><a href="../">Home</a><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/BandoDrewMando" target="_blank" rel="noopener">Github</a></p>
-    <p class="small muted">Every screen below is rebuilt from scratch with invented customers, emails, IDs, and amounts. Code samples are short rewrites for illustration.</p>
+    <p class="small muted">Every screen below is rebuilt from scratch with invented data: customers, emails, IDs, counts, and amounts. Code samples are short rewrites for illustration.</p>
   </div>
 </header>
 <script>
@@ -511,9 +570,19 @@ andrew@concord:~/work-demos$ ls
 
 <main>
 
+<!-- ================= WT Cox Information Services ================= -->
+<div class="emp-banner" id="wtcox">
+  <div class="wrap">
+    <p class="cmdline" aria-hidden="true">andrew@concord:~/work-demos$ cd wt-cox</p>
+    <h2>WT Cox Information Services</h2>
+    <p class="role">Software Developer · June 2024 – Feb. 2025</p>
+    <p class="about">21 tickets and a side tool in CoxNet2, the Java system that runs a subscription agency. Every one is rebuilt below so you can click through it.</p>
+  </div>
+</div>
+
 <!-- ============ Email aliases ============ -->
 <section id="aliases" class="drawer wrap" aria-labelledby="h-aliases">
-  <div class="drawer-head"><h2 id="h-aliases">Online subscription emails</h2><span class="plate">#6002 #6024 #6054 #6055</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-aliases">Online subscription emails</h2><span class="plate">#6002 #6024 #6054 #6055</span></div>
   <p class="why">Publishers started requiring a separate email address for every copy of an online subscription, so a library with three copies had to come up with three addresses. I built a place on each customer to keep those addresses, plus aliases that forward to the library's real inbox through Mailgun, so WT Cox can supply as many as an order needs. Then I linked the addresses to order and quote items and retired the old one-email-per-customer field.</p>
 
   <div class="panel">
@@ -619,7 +688,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Pay It Now ============ -->
 <section id="payitnow" class="drawer wrap" aria-labelledby="h-pin">
-  <div class="drawer-head"><h2 id="h-pin">Pay It Now</h2><span class="plate">#5997 #5998 #6000</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-pin">Pay It Now</h2><span class="plate">#5997 #5998 #6000</span></div>
   <p class="why">Finance uses this screen to find unpaid order items and pay vendors quickly. Fulfilled items with open urgent payment requests never showed up, anyone outside customer service opened it to an empty list, and there was no way to look an item up by the vendor payment it belonged to. I fixed all three.</p>
   <div class="panel">
     <fieldset class="fixes">
@@ -652,7 +721,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Tier info ============ -->
 <section id="tiers" class="drawer wrap" aria-labelledby="h-tiers">
-  <div class="drawer-head"><h2 id="h-tiers">Tier info on Add Items</h2><span class="plate">#6040 #6041</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-tiers">Tier info on Add Items</h2><span class="plate">#6040 #6041</span></div>
   <p class="why">Publishers price institutions by tier, but order entry only showed WT Cox's internal "TIER 1" or "TIER 2", so the production team kept flipping to the publisher's page to work out the right one. Now each rate shows the publisher's own tier code with the details one tap away, and a vendor's own tiers win when it has them. This one was marked critical.</p>
   <div class="panel">
     <fieldset class="fixes">
@@ -701,7 +770,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Resets ============ -->
 <section id="resets" class="drawer wrap" aria-labelledby="h-resets">
-  <div class="drawer-head"><h2 id="h-resets">Resets and standing orders</h2><span class="plate">#6015 #6070</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-resets">Resets and standing orders</h2><span class="plate">#6015 #6070</span></div>
   <p class="why">A reset sends an item back through fulfillment, usually because a payment failed. Standing orders ship as volumes come out instead of renewing every year, so resetting one breaks it. The reset logic now returns early for them, and a unit test keeps it that way. Finance also got a new reset reason: check not cashed.</p>
   <div class="grid2">
     <div class="panel">
@@ -752,7 +821,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Customer service ============ -->
 <section id="cs" class="drawer wrap" aria-labelledby="h-cs">
-  <div class="drawer-head"><h2 id="h-cs">Customer service: ordered titles</h2><span class="plate">#6019 #6044 #6059 #6067</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-cs">Customer service: ordered titles</h2><span class="plate">#6019 #6044 #6059 #6067</span></div>
   <p class="why">Customer service answers "where's my issue?" all day. I put the things reps kept clicking around for on one screen: a paper clip when documents are attached, the newspaper expiration guarantee on newspaper titles, each claim's most recent internal note, and access emails they can fix in place.</p>
   <div class="panel">
     <fieldset class="fixes">
@@ -789,7 +858,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Quotes and catalogs ============ -->
 <section id="quotes" class="drawer wrap" aria-labelledby="h-quotes">
-  <div class="drawer-head"><h2 id="h-quotes">Quotes and catalogs</h2><span class="plate">#6011 #6030</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-quotes">Quotes and catalogs</h2><span class="plate">#6011 #6030</span></div>
   <p class="why">Two sales-side changes. Quotes got the PO number that orders already had, with the same duplicate check, a Print Quote Summary PDF, and the organization's contract number on their documents. Marketing's featured-title catalogs can now target one organization, which makes pre-approved title lists possible for corporate and hospital customers.</p>
   <div class="grid2">
     <div class="panel">
@@ -851,7 +920,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Reports and exports ============ -->
 <section id="reports" class="drawer wrap" aria-labelledby="h-reports">
-  <div class="drawer-head"><h2 id="h-reports">Reports and exports</h2><span class="plate">#5982 #5985 #5987 #6071</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-reports">Reports and exports</h2><span class="plate">#5982 #5985 #5987 #6071</span></div>
   <p class="why">The paperwork side: a weekly report that helps finance trace vendor refunds back to orders, a publisher's order file rebuilt to their exact spec, Excel exports for customer and organization IP addresses, and email fields wide enough for more than one address.</p>
   <div class="panel">
     <h3>Weekly: unallocated refunds (#5982)</h3>
@@ -892,7 +961,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ Cover Image Miner ============ -->
 <section id="miner" class="drawer wrap" aria-labelledby="h-miner">
-  <div class="drawer-head"><h2 id="h-miner">Cover Image Miner</h2><span class="plate">Side tool, January 2025</span></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-miner">Cover Image Miner</h2><span class="plate">Side tool, January 2025</span></div>
   <p class="why">CoxNet needed cover thumbnails for thousands of journals. I wrote a command-line tool that opens each title's page on the vendor's site, finds the cover, shrinks it to 200 by 267, and saves it under the title's ID, logging every miss with a link to check by hand. Over three days of runs it collected 3,772 of 4,070 ScienceDirect covers.</p>
   <div class="grid2">
     <div class="panel">
@@ -936,7 +1005,7 @@ actions.add(<span class="s">"stop()"</span>);</pre>
 
 <!-- ============ How I work ============ -->
 <section id="craft" class="drawer wrap" aria-labelledby="h-craft">
-  <div class="drawer-head"><h2 id="h-craft">How I work</h2></div>
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-craft">How I work</h2></div>
   <div class="grid2">
     <div class="panel">
       <h3>From ticket to staging</h3>
@@ -1037,18 +1106,144 @@ field.set(bean, entityManager);</pre>
   </div>
 </section>
 
+<!-- ============ All tickets ============ -->
+<section id="tickets" class="drawer wrap" aria-labelledby="h-tickets">
+  <div class="drawer-head"><p class="emp-chip">WT Cox</p><h2 id="h-tickets">All tickets</h2><span class="plate">21 tickets, 1 tool</span></div>
+  <p class="why">Every WT Cox ticket I worked, by number, with its last status and a link to its demo.</p>
+  <div class="cards" id="ticketCards"></div>
+</section>
+
+<!-- ================= TIAA ================= -->
+<div class="emp-banner emp-tiaa" id="tiaa">
+  <div class="wrap">
+    <p class="cmdline" aria-hidden="true">andrew@concord:~/work-demos/wt-cox$ cd ../tiaa</p>
+    <h2>TIAA</h2>
+    <p class="role">Software Engineer · June 2021 – Sept. 2023</p>
+    <p class="about">I rotated through network and software engineering teams in TIAA's technology rotational program. Rebuilt below is the reporting job I built on Splunk's REST API, with invented numbers. The rest of my TIAA work is in the <a href="#history">work history</a>.</p>
+  </div>
+</div>
+
+<!-- ============ Monthly batch metrics report (TIAA) ============ -->
+<section id="metrics" class="drawer wrap emp-tiaa" aria-labelledby="h-metrics">
+  <div class="drawer-head"><p class="emp-chip">TIAA</p><h2 id="h-metrics">Monthly batch metrics report</h2><span class="plate">Scheduled Java job</span></div>
+  <p class="why">The batch jobs behind retirement plan processing log every calculation they run for a participant: eligibility, vesting, contributions, and more. Counting them meant running Splunk searches by hand. I built a scheduled Java job that runs those searches through Splunk's REST API, saves each run's counts to an Oracle table, builds an Excel workbook with year-to-date and month-by-month totals, and emails it out.</p>
+
+  <div class="panel">
+    <ol class="mx-flow" id="mxFlow" aria-label="What one run does">
+      <li data-step="sched"><b>Schedule</b>Quartz starts the job</li>
+      <li data-step="splunk"><b>Splunk</b>One search per metric</li>
+      <li data-step="db"><b>Oracle</b>Save the run's counts</li>
+      <li data-step="xlsx"><b>Excel</b>YTD and monthly totals</li>
+      <li data-step="mail"><b>Email</b>Send the workbook</li>
+    </ol>
+    <fieldset class="fixes">
+      <legend>Job settings</legend>
+      <label class="check"><input type="checkbox" checked data-act="mx-mail"> Email the report (a switch in the properties file)</label>
+    </fieldset>
+    <fieldset class="fixes">
+      <legend>Turn the fix off to see the old behavior</legend>
+      <label class="check"><input type="checkbox" checked data-act="mx-rex"> <span>Encode only the <code>rex</code> regex, not the whole search</span></label>
+    </fieldset>
+    <div class="toolbar">
+      <button class="btn" type="button" data-act="mx-run" id="mxRun">Run the job</button>
+      <button class="btn ghost" type="button" data-act="mx-reset">Start over</button>
+      <span id="mxStamp"></span>
+    </div>
+    <p class="small" id="mxStatus" role="status"></p>
+    <p class="small muted" id="mxNext" style="margin:0"></p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Job log</h3>
+      <p class="small muted">The Splunk host, index, log lines, and counts are invented.</p>
+      <pre class="console" id="mxLog"></pre>
+    </div>
+    <div class="panel">
+      <h3>The email</h3>
+      <div id="mxMail" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>BATCH_METRICS</h3><p class="small muted">One row per run: the run date and each metric's count. Newest first.</p></div>
+    <div class="scroll-x"><table class="t mx-table" id="mxTable"></table></div>
+    <p class="small muted" id="mxOlder" style="margin:8px 0 0"></p>
+  </div>
+
+  <div class="panel mx-book">
+    <div class="panel-head"><h3>The workbook</h3><p class="small muted">Built with Apache POI: a header row, year-to-date totals, then one row per month.</p></div>
+    <div id="mxBook"></div>
+  </div>
+
+  <div class="panel">
+    <h3>How it's built</h3>
+    <ul class="plain small">
+      <li>It runs as a Quartz job on an existing scheduler framework, and each run counts the month before it.</li>
+      <li>Each metric is one Splunk search over the batch logs, sent as a POST to Splunk's REST API with the results asked for as JSON. Jackson reads the count out of the response.</li>
+      <li>Where a log line reports a number instead of one event, the search pulls the number out with <code>rex</code> and adds them up.</li>
+      <li>The search window starts at the last run in the table, so a missed month isn't lost. On an empty table it reaches back to January 1.</li>
+      <li>Each run's counts go into an Oracle table with the run date.</li>
+      <li>Two queries feed the workbook: year-to-date totals, and the latest run in each month. A run counts the month before it, so January's run is December's numbers.</li>
+      <li>Apache POI builds the workbook, and the job emails it as an attachment. The Splunk hosts, the recipients, the subject and message, and an on/off switch for email all live in the scheduler's properties file.</li>
+      <li>An ignored JUnit test calls the Splunk method directly, so I could try one search at a time while tuning queries.</li>
+    </ul>
+    <h4>Tools</h4>
+    <ul class="chips">
+      <li>Java</li><li>Quartz</li><li>Splunk REST API</li><li>Oracle SQL</li><li>JDBC</li><li>Apache POI</li><li>Jackson</li><li>JUnit</li><li>Eclipse</li><li>Git</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>The two tricky parts</h3>
+    <p class="small muted">Short rewrites for this page, with invented names.</p>
+<pre class="code"><span class="c">// Searches with a rex regex: only the regex is URL-encoded. The rest goes as is.</span>
+String search = <span class="s">"search=search index=plan_batch \"Deferral changes to activate\" | rex \""</span>
+        + URLEncoder.encode(<span class="s">"activate: (?&lt;count&gt;\\d+)"</span>, <span class="s">"UTF-8"</span>)
+        + <span class="s">"\" | stats sum(count) as Total"</span>;
+
+<span class="c">// Every search is a POST to Splunk's REST API, asking for JSON back.</span>
+HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+conn.setRequestMethod(<span class="s">"POST"</span>);
+conn.setDoOutput(<span class="k">true</span>);
+<span class="k">try</span> (Writer out = <span class="k">new</span> OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8)) {
+    out.write(search + <span class="s">"&amp;output_mode=json&amp;earliest_time=-"</span> + months + <span class="s">"mon"</span>);
+}</pre>
+<pre class="code"><span class="c">-- One row per month: the latest run, labeled with the month it counted.</span>
+<span class="c">-- Measured from last month, so a January run still lands in the year before.</span>
+<span class="k">SELECT</span> TO_CHAR(ADD_MONTHS(TRUNC(run_date, <span class="s">'MM'</span>), -<span class="k">1</span>), <span class="s">'YYYY-MM'</span>) <span class="k">AS</span> data_month,
+       eligibility, vesting, contributions, service_hours, deferral_changes, compliance_tests
+  <span class="k">FROM</span> (<span class="k">SELECT</span> m.*, ROW_NUMBER() <span class="k">OVER</span> (<span class="k">PARTITION BY</span> TRUNC(run_date, <span class="s">'MM'</span>)
+                                       <span class="k">ORDER BY</span> run_date <span class="k">DESC</span>) <span class="k">AS</span> rn
+          <span class="k">FROM</span> batch_metrics m
+         <span class="k">WHERE</span> run_date &gt;= ADD_MONTHS(TRUNC(ADD_MONTHS(SYSDATE, -<span class="k">1</span>), <span class="s">'YYYY'</span>), <span class="k">1</span>)
+           <span class="k">AND</span> run_date &lt;  ADD_MONTHS(TRUNC(ADD_MONTHS(SYSDATE, -<span class="k">1</span>), <span class="s">'YYYY'</span>), <span class="k">13</span>))
+ <span class="k">WHERE</span> rn = <span class="k">1</span>
+ <span class="k">ORDER BY</span> data_month;</pre>
+    <details class="more bugs">
+      <summary>What broke along the way (1)</summary>
+      <ol class="bugs">
+        <li>
+          <p class="bug-sym">Splunk's API wouldn't take the rex searches.</p>
+          <p>Two of the searches pull a number out of the log line with <code>rex</code>. Sent as one URL-encoded string, they came back as errors. Splitting each search into three strings and encoding only the regex was the one way I found to get the API to accept them. Turn the fix off above and run the job to see it.</p>
+        </li>
+      </ol>
+    </details>
+  </div>
+</section>
+
 <!-- ============ Work history ============ -->
-<section id="history" class="drawer wrap" aria-labelledby="h-history">
-  <div class="drawer-head"><h2 id="h-history">Work history</h2></div>
+<section id="history" class="drawer wrap after-groups" aria-labelledby="h-history">
+  <div class="drawer-head"><p class="emp-chip both">Résumé</p><h2 id="h-history">Work history</h2></div>
   <ol class="jobs">
     <li class="job">
       <div class="job-h"><h3>Software Developer, WT Cox Information Services</h3><span class="plate">June 2024 – Feb. 2025</span></div>
-      <p>Built and fixed features in CoxNet2, the Java system (EJB and JPA on JBoss, JSF, MySQL) that runs the agency: 21 tickets across finance, customer service, order entry, and marketing, an email alias system on the Mailgun API, and the Cover Image Miner. <a href="#aliases">Every one is rebuilt above.</a></p>
+      <p>Built and fixed features in CoxNet2, the Java system (EJB and JPA on JBoss, JSF, MySQL) that runs the agency: 21 tickets across finance, customer service, order entry, and marketing, an email alias system on the Mailgun API, and the Cover Image Miner. <a href="#wtcox">Every one is rebuilt above.</a></p>
     </li>
     <li class="job">
       <div class="job-h"><h3>Software Engineer, TIAA</h3><span class="plate">June 2021 – Sept. 2023</span></div>
       <ul class="plain">
-        <li>Built automated reporting on Splunk's REST APIs, cutting manual reporting work and making delivery consistent.</li>
+        <li>Built automated reporting on Splunk's REST APIs, cutting manual reporting work and making delivery consistent. <a href="#metrics">Rebuilt above.</a></li>
         <li>Found and fixed 50+ application defects through debugging and L2 testing.</li>
         <li>Shipped code through GitLab CI/CD pipelines and deployed containerized apps on OpenShift, from builds to routing.</li>
         <li>Decommissioned inactive F5 applications to trim infrastructure.</li>
@@ -1076,20 +1271,25 @@ field.set(bean, entityManager);</pre>
       <p>University of North Carolina at Charlotte<br>B.A. in Computer Science, cum laude</p>
     </div>
   </div>
-</section>
-
-<!-- ============ All tickets ============ -->
-<section id="tickets" class="drawer wrap" aria-labelledby="h-tickets">
-  <div class="drawer-head"><h2 id="h-tickets">All tickets</h2><span class="plate">21 tickets, 1 tool</span></div>
-  <p class="why">Every ticket I worked, by number, with its last status and a link to its demo.</p>
-  <div class="cards" id="ticketCards"></div>
+  <div class="panel" id="training">
+    <div class="panel-head"><h3>Training: Cisco CCNA v1.0 course</h3><span class="plate">July 25–29, 2022</span></div>
+    <p class="small muted">Five days, instructor-led and virtual, through Sunset Learning Institute.</p>
+    <dl class="skills ccna">
+      <div><dt>Network basics</dt><dd>OSI and TCP/IP models, encapsulation, TCP, ARP, DNS</dd></div>
+      <div><dt>Addressing</dt><dd>IPv4 in binary, subnet masks and subnetting, IPv6 connectivity checks</dd></div>
+      <div><dt>Switching</dt><dd>MAC address tables, VLANs, 802.1Q trunks, EtherChannel with LACP</dd></div>
+      <div><dt>Routing</dt><dd>Static routes, dynamic routing protocols, dynamic inside NAT</dd></div>
+      <div><dt>Security</dt><dd>IPv4 ACLs, locking down remote access, console passwords, login banners, SSH</dd></div>
+      <div><dt>Operations</dt><dd>ping, traceroute, logging, the device clock, config backups over TFTP, network automation</dd></div>
+    </dl>
+  </div>
 </section>
 
 </main>
 
 <footer class="foot wrap">
   <p class="contact"><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a><a href="https://www.linkedin.com/in/andrewfelipe/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/BandoDrewMando" target="_blank" rel="noopener">Github</a></p>
-  <p>Rebuilt for this portfolio. Customers, emails, IDs, and amounts are invented, and none of WT Cox's code, data, or internal systems are included.</p>
+  <p>Rebuilt for this portfolio. Customers, emails, IDs, counts, and amounts are invented, and none of WT Cox's or TIAA's code, data, or internal systems are included.</p>
 </footer>
 <script>
 (() => {
@@ -1955,6 +2155,188 @@ function mnReset() {
   const b = $('#mnRun'); b.disabled = false; b.textContent = 'Run the miner';
 }
 
+/* ---------- TIAA: monthly batch metrics report ---------- */
+// Six invented metrics. Four count log lines; two pull a number out of the line with rex and add those up.
+const MX_METRICS = [
+  { col: 'ELIGIBILITY', label: 'Eligibility', base: 182000, find: 'Ran eligibility calc for participant' },
+  { col: 'VESTING', label: 'Vesting', base: 96500, find: 'Ran vesting calc for participant' },
+  { col: 'CONTRIBUTIONS', label: 'Contributions', base: 412000, find: 'Ran contribution calc for participant' },
+  { col: 'SERVICE_HOURS', label: 'Service hours', base: 268000, find: 'Updated service hours for participant' },
+  { col: 'DEFERRAL_CHANGES', label: 'Deferral changes', base: 30400, find: 'Deferral changes to activate', rex: 'activate: (?<count>\\d+)' },
+  { col: 'COMPLIANCE_TESTS', label: 'Compliance tests', base: 4200, find: 'Compliance tests run', rex: 'run: (?<count>\\d+) plans' }
+];
+const MX_STEPS = ['sched', 'splunk', 'db', 'xlsx', 'mail'];
+const MX_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MX_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MX_TO = 'plan-ops-reporting@example.com', MX_FROM = 'batch-metrics@example.com';
+const MX_SPLUNK = 'https://splunk.example.com:8089/services/search/jobs/export';
+const XLSX_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h8M12 11v8"/></svg>';
+const MX = { mail: true, rex: true, runs: [], shown: null, running: false, token: 0, timer: null, flash: null };
+const mxLog = makeConsole($('#mxLog'));
+const nf = n => Number(n).toLocaleString('en-US');
+const mxMonth = (y, m) => { const d = new Date(Date.UTC(y, m, 1)); return { y: d.getUTCFullYear(), m: d.getUTCMonth() }; };
+const mxIso = r => `${r.y}-${String(r.m + 1).padStart(2, '0')}-01`;
+const mxYm = r => `${r.y}-${String(r.m + 1).padStart(2, '0')}`;
+const mxLong = r => `${MX_MONTHS[r.m]} ${r.y}`;
+const mxWhen = r => `${MX_DAYS[new Date(Date.UTC(r.y, r.m, 1)).getUTCDay()]}, ${MX_MONTHS[r.m]} 1, ${r.y}`;
+const mxFile = r => `batch-metrics-${mxIso(r)}.xlsx`;
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+// Java's URLEncoder: spaces become +, and ( ) ! ' ~ get encoded too.
+const javaEncode = s => encodeURIComponent(s).replace(/%20/g, '+').replace(/[!'()~]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+
+// Invented counts, the same every time for a given month.
+function mxCounts(y, m) {
+  const r = mulberry32(y * 100 + m + 11);
+  const season = 1 + 0.05 * Math.sin((m + 1) / 12 * 2 * Math.PI);
+  return MX_METRICS.map(x => {
+    let f = season * (0.94 + r() * 0.12);
+    if (x.col === 'DEFERRAL_CHANGES') f *= m === 0 ? 1.7 : m === 11 ? 1.25 : 1;
+    if (x.col === 'COMPLIANCE_TESTS') f *= m === 2 || m === 3 ? 1.5 : 1;
+    return Math.round(x.base * f);
+  });
+}
+// A run on the 1st counts the month before it.
+function mxRecord(run) { const data = mxMonth(run.y, run.m - 1); return { run, data, counts: mxCounts(data.y, data.m) }; }
+function mxResetData() {
+  MX.runs = [];
+  for (let m = 0; m < 9; m++) MX.runs.push(mxRecord({ y: 2023, m })); // Jan 1 to Sep 1, 2023: December 2022 to August 2023
+  MX.shown = { rec: MX.runs[MX.runs.length - 1], mailed: true };
+  MX.flash = null;
+}
+// A run's workbook: the months counted so far in its year, plus year-to-date totals.
+// The demo has one run per month; the real query keeps each month's latest run.
+function mxReport(rec) {
+  const year = rec.data.y;
+  const rows = MX.runs.slice(0, MX.runs.indexOf(rec) + 1).filter(x => x.data.y === year);
+  return { year, rows, ytd: MX_METRICS.map((_, i) => rows.reduce((s, x) => s + x.counts[i], 0)) };
+}
+// What gets POSTed for one metric. Plain searches go as they are.
+function mxSearch(x) {
+  const base = `search index=plan_batch "${x.find}"`;
+  if (!x.rex) return { body: `search=${base} | stats count as Total`, ok: true };
+  if (MX.rex) return { body: `search=${base} | rex "${javaEncode(x.rex)}" | stats sum(count) as Total`, ok: true };
+  return { body: javaEncode(`search=${base} | rex "${x.rex}" | stats sum(count) as Total`), ok: false };
+}
+function mxFlow(state) { $$('#mxFlow li').forEach(li => { li.className = state[li.dataset.step] || ''; }); }
+function mxPlay(lines, opts, done) {
+  const tok = ++MX.token;
+  clearTimeout(MX.timer);
+  MX.running = true;
+  $('#mxRun').disabled = true;
+  $('#mxStamp').innerHTML = '';
+  $('#mxStatus').innerHTML = '';
+  mxLog.clear();
+  const state = {};
+  mxFlow(state);
+  let i = 0, cur = null;
+  const finish = () => {
+    if (opts.failStep) {
+      state[opts.failStep] = 'fail';
+      MX_STEPS.slice(MX_STEPS.indexOf(opts.failStep) + 1).forEach(k => { state[k] = 'off'; });
+    } else {
+      if (cur) state[cur] = 'done';
+      if (!opts.mailed) state.mail = 'off';
+    }
+    mxFlow(state);
+    MX.running = false;
+    $('#mxRun').disabled = false;
+    done();
+  };
+  const tick = () => {
+    if (tok !== MX.token) return;
+    if (i >= lines.length) return finish();
+    const [step, line] = lines[i++];
+    if (step !== cur) { if (cur) state[cur] = 'done'; cur = step; state[cur] = 'on'; mxFlow(state); }
+    mxLog.add(line);
+    MX.timer = setTimeout(tick, reduceMotion ? 0 : 55);
+  };
+  tick();
+}
+function mxRun() {
+  if (MX.running) return;
+  const prev = MX.runs[MX.runs.length - 1];
+  const rec = mxRecord(mxMonth(prev.run.y, prev.run.m + 1));
+  const { run, data, counts } = rec, mailed = MX.mail;
+  const lines = [];
+  const add = (step, ...ls) => ls.forEach(l => lines.push([step, l]));
+  add('sched',
+    H(`[Quartz] batchMetricsReport fired: ${mxWhen(run)}, 6:00 AM`),
+    D('Batch metrics report job started'),
+    D(`Last run in BATCH_METRICS: ${mxIso(prev.run)}, so the window is 1 month: earliest_time=-1mon`),
+    D(run.m === 0 ? `A January run counts December, so these numbers belong to ${data.y}.` : `A run on ${MX_MONTHS[run.m]} 1 counts ${MX_MONTHS[data.m]}.`), '');
+  let failed = null;
+  for (let i = 0; i < MX_METRICS.length && !failed; i++) {
+    const x = MX_METRICS[i], s = mxSearch(x);
+    add('splunk', H('POST ' + MX_SPLUNK), D('  ' + s.body), D('  &output_mode=json&earliest_time=-1mon'));
+    if (s.ok) add('splunk', G(`← 200 Total=${counts[i]}`), '');
+    else {
+      failed = x;
+      add('splunk', W('← 400 Splunk did not recognize the search'), W(`The ${x.label.toLowerCase()} search failed. Job stopped: nothing saved, nothing sent.`));
+    }
+  }
+  if (!failed) {
+    const months = MX.runs.concat(rec).filter(x => x.data.y === data.y).length;
+    add('db', H(`INSERT INTO BATCH_METRICS (RUN_DATE, ${MX_METRICS.map(x => x.col).join(', ')})`), D(`  VALUES (DATE '${mxIso(run)}', ${counts.join(', ')})`), G('  1 row inserted'), '');
+    add('xlsx', H(`Year-to-date query: ${data.y}, ${plural(months, 'month')} so far`), H(`Monthly query: latest run in each month, ${plural(months, 'row')}`),
+      G(`Workbook ${mxFile(run)}: sheet Metrics, header, YTD, and ${plural(months, 'month')}`), '');
+    if (mailed) add('mail', H(`SMTP: ${mxFile(run)} to ${MX_TO}`), G('  mail sent successfully'));
+    else add('mail', W('Email is switched off in the properties file, so the workbook is not sent.'));
+    add('mail', D('Batch metrics report job finished'));
+  }
+  mxPlay(lines, { failStep: failed ? 'splunk' : null, mailed }, () => {
+    if (failed) {
+      $('#mxStamp').innerHTML = stamp('Failed');
+      $('#mxStatus').innerHTML = `<span class="err">The ${MX_MONTHS[run.m]} 1 run failed</span> on the ${esc(failed.label.toLowerCase())} search, so nothing was saved or sent. Turn the fix back on and run it again.`;
+      return;
+    }
+    MX.runs.push(rec);
+    MX.shown = { rec, mailed };
+    MX.flash = mxIso(run);
+    renderMx();
+    $('#mxStamp').innerHTML = mailed ? stamp('Sent', 'green') : stamp('Built, not sent', 'brass');
+    $('#mxStatus').innerHTML = `<span class="ok">${MX_MONTHS[run.m]} 1 run saved.</span> ${mailed ? `The ${esc(mxLong(data))} report went to ${MX_TO}.` : 'The workbook was built but not emailed.'}`;
+  });
+}
+function renderMxTable() {
+  const recent = MX.runs.slice(-6).reverse();
+  $('#mxTable').innerHTML = `<thead><tr><th scope="col">Run date</th>${MX_METRICS.map(x => `<th scope="col" class="num">${esc(x.label)}</th>`).join('')}</tr></thead><tbody>`
+    + recent.map(r => `<tr${MX.flash === mxIso(r.run) ? ' class="flash"' : ''}><td>${mxIso(r.run)}</td>${r.counts.map(c => `<td class="num">${nf(c)}</td>`).join('')}</tr>`).join('') + '</tbody>';
+  const older = MX.runs.length - recent.length;
+  $('#mxOlder').textContent = older > 0 ? `Plus ${plural(older, 'earlier run')}.` : '';
+  MX.flash = null;
+}
+function renderMxBook() {
+  const rec = MX.shown.rec, rep = mxReport(rec);
+  const rows = [[`YTD ${rep.year}`].concat(rep.ytd.map(nf))].concat(rep.rows.map(x => [mxYm(x.data)].concat(x.counts.map(nf))));
+  $('#mxBook').innerHTML = sheetHTML(['Month'].concat(MX_METRICS.map(x => x.label)), rows, [1, 2, 3, 4, 5, 6])
+    + `<div class="sheet-foot"><span class="sheet-tab">Metrics</span><span class="small muted">${esc(mxFile(rec.run))}</span></div>`;
+}
+function renderMxMail() {
+  const { rec, mailed } = MX.shown, run = rec.run, data = rec.data;
+  $('#mxMail').innerHTML = mailed
+    ? `<div class="mail"><div class="mail-h"><span><b>From</b> ${MX_FROM}</span><span><b>To</b> ${MX_TO}</span><span><b>Subject</b> Batch metrics report: ${esc(mxLong(data))}</span><span><b>Sent</b> ${esc(mxWhen(run))}, 6:01 AM</span></div>
+      <div class="mail-b"><p class="small">Attached are the batch processing counts for ${esc(mxLong(data))}, with year-to-date totals for ${data.y}.</p><span class="att">${XLSX_ICON}${esc(mxFile(run))}</span></div></div>`
+    : `<div class="unsent"><p class="small" style="margin:0"><strong>Nothing sent for the ${MX_MONTHS[run.m]} 1 run.</strong> Email was switched off in the properties file, so the job built ${esc(mxFile(run))} and stopped there.</p></div>`;
+}
+function renderMxNext() {
+  const prev = MX.runs[MX.runs.length - 1], run = mxMonth(prev.run.y, prev.run.m + 1), data = mxMonth(run.y, run.m - 1);
+  $('#mxNext').textContent = `Next run: ${mxWhen(run)}, counting ${MX_MONTHS[data.m]}${data.y !== run.y ? ' ' + data.y : ''}.`;
+}
+function renderMx() { renderMxTable(); renderMxBook(); renderMxMail(); renderMxNext(); }
+function mxStartOver() {
+  MX.token++;
+  clearTimeout(MX.timer);
+  MX.running = false;
+  $('#mxRun').disabled = false;
+  mxResetData();
+  mxLog.clear();
+  mxLog.add(D('Press Run the job to run the next monthly report.'));
+  $('#mxStamp').innerHTML = '';
+  $('#mxStatus').innerHTML = '';
+  mxFlow({});
+  renderMx();
+}
+
 /* ---------- All tickets ---------- */
 const TICKETS = [
   [5982, 'Weekly report of open refunds that still need matching to orders', 'Enhancement', 'Accounting', 'closed', 'reports'],
@@ -2000,6 +2382,17 @@ if ('IntersectionObserver' in window) {
   const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) setCurrent(en.target.id); }), { rootMargin: '-40% 0px -55% 0px' });
   navLinks.forEach(a => { const s = document.querySelector(a.getAttribute('href')); if (s) io.observe(s); });
 }
+// When the links don't all fit, fade the right edge so it's clear the list scrolls, until it's scrolled to the end.
+const navUl = $('.toc ul');
+const navEnd = () => navUl.classList.toggle('at-end', navUl.scrollLeft + navUl.clientWidth >= navUl.scrollWidth - 4);
+function navFade() {
+  navUl.classList.remove('more', 'at-end');
+  if (navUl.scrollWidth > navUl.clientWidth + 1) { navUl.classList.add('more'); navEnd(); }
+}
+navUl.addEventListener('scroll', () => { if (navUl.classList.contains('more')) navEnd(); }, { passive: true });
+window.addEventListener('resize', navFade);
+navFade();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(navFade);
 
 /* ---------- events ---------- */
 const scopeItems = scope => scope === 'order' ? ORDER.items : CS.rows;
@@ -2046,6 +2439,8 @@ document.addEventListener('click', ev => {
     case 'ip-export': renderIpExport(); break;
     case 'mn-run': mnStart(); break;
     case 'mn-reset': mnReset(); break;
+    case 'mx-run': mxRun(); break;
+    case 'mx-reset': mxStartOver(); break;
   }
 });
 document.addEventListener('change', ev => {
@@ -2076,6 +2471,8 @@ document.addEventListener('change', ev => {
     case 'xls-ver': XLS.ver = el.value; renderXls(); break;
     case 'ip-tab': IPS.tab = el.value; renderIp(); break;
     case 'widen': WID.on = el.checked; renderWiden(); break;
+    case 'mx-mail': MX.mail = el.checked; break;
+    case 'mx-rex': MX.rex = el.checked; break;
   }
 });
 document.addEventListener('input', ev => {
@@ -2110,6 +2507,7 @@ renderCS();
 renderQuote(); renderCat();
 renderRefunds(); renderXls(); renderIp(); renderWiden();
 mnReset();
+mxStartOver();
 renderTickets();
 })();
 </script>
