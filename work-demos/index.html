@@ -448,6 +448,8 @@ dialog.pop[open]{animation:popin .16s ease-out}
 .emp-chip{flex-basis:100%;margin:0 0 -4px;font:1.15rem/1 var(--font-slab);letter-spacing:.06em;color:var(--emp,var(--cyan))}
 .emp-chip::before{content:"// "}
 .emp-chip.both{color:var(--amber)}
+#training .panel-head{margin-bottom:4px}
+.skills.ccna{margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px 24px}
 .drawer.after-groups{margin-top:84px;border-top:1px solid var(--line)}
 .toc ul li.grp{display:flex;align-items:center}
 .toc ul li.grp:not(:first-child){margin-left:6px;padding-left:8px;border-left:1px solid var(--line-strong)}
@@ -1232,7 +1234,7 @@ conn.setDoOutput(<span class="k">true</span>);
 
 <!-- ============ Work history ============ -->
 <section id="history" class="drawer wrap after-groups" aria-labelledby="h-history">
-  <div class="drawer-head"><p class="emp-chip both">Both jobs</p><h2 id="h-history">Work history</h2></div>
+  <div class="drawer-head"><p class="emp-chip both">Résumé</p><h2 id="h-history">Work history</h2></div>
   <ol class="jobs">
     <li class="job">
       <div class="job-h"><h3>Software Developer, WT Cox Information Services</h3><span class="plate">June 2024 – Feb. 2025</span></div>
@@ -1268,6 +1270,18 @@ conn.setDoOutput(<span class="k">true</span>);
       <h3>Education</h3>
       <p>University of North Carolina at Charlotte<br>B.A. in Computer Science, cum laude</p>
     </div>
+  </div>
+  <div class="panel" id="training">
+    <div class="panel-head"><h3>Training: Cisco CCNA v1.0 course</h3><span class="plate">July 25–29, 2022</span></div>
+    <p class="small muted">Five days, instructor-led and virtual, through Sunset Learning Institute.</p>
+    <dl class="skills ccna">
+      <div><dt>Network basics</dt><dd>OSI and TCP/IP models, encapsulation, TCP, ARP, DNS</dd></div>
+      <div><dt>Addressing</dt><dd>IPv4 in binary, subnet masks and subnetting, IPv6 connectivity checks</dd></div>
+      <div><dt>Switching</dt><dd>MAC address tables, VLANs, 802.1Q trunks, EtherChannel with LACP</dd></div>
+      <div><dt>Routing</dt><dd>Static routes, dynamic routing protocols, dynamic inside NAT</dd></div>
+      <div><dt>Security</dt><dd>IPv4 ACLs, locking down remote access, console passwords, login banners, SSH</dd></div>
+      <div><dt>Operations</dt><dd>ping, traceroute, logging, the device clock, config backups over TFTP, network automation</dd></div>
+    </dl>
   </div>
 </section>
 
