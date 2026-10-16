@@ -153,5 +153,12 @@ Loading andrew.profile . 100%</pre>
 <script src="app.js"></script>
 <!-- Page view counts at andrewfelipe.goatcounter.com (no cookies) -->
 <script data-goatcounter="https://andrewfelipe.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Metricool tracker; skips browsers opted out with #toggle-goatcounter -->
+<script>
+  (function () {
+    try { if (localStorage.getItem('skipgc') === 't' || location.hash === '#toggle-goatcounter') return; } catch (e) {}
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5af058e62d5480731baa67cbe3b12c4c"})});
+  })();
+</script>
 </body>
 </html>
