@@ -4,15 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Andrew Felipe: Java backend developer</title>
-<meta name="description" content="Andrew Felipe is a Java backend developer near Charlotte, NC, with experience at TIAA and WT Cox Information Services.">
+<meta name="description" content="Andrew Felipe is a Java backend developer near Charlotte, NC, with experience at TIAA and WT Cox Information Services. Clickable demos of his work, and the self-hosted apps he runs at home.">
 <meta name="theme-color" content="#140F2E">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Andrew Felipe: Java backend developer">
-<meta property="og:description" content="Enterprise Java, API integrations, and automation. Includes clickable demos of my work.">
+<meta property="og:description" content="Enterprise Java, API integrations, and automation. Includes clickable demos of my work and the apps I run at home.">
+<meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/">
+<meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Andrew Felipe, Java backend developer near Charlotte, NC. Projects: Ando, Hearth, Mochi and 21 work demos.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600&family=VT323&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/vt323-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/chakra-petch-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 <script>
   (function () {
@@ -20,7 +25,7 @@
     try {
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('booted')) {
         root.classList.add('booting');
-        setTimeout(function () { root.classList.remove('booting'); }, 4000);
+        setTimeout(function () { root.classList.remove('booting'); }, 2500);
       }
     } catch (e) {}
   })();
@@ -33,9 +38,10 @@
   <nav class="wrap nav" aria-label="Sections">
     <a class="mark" href="#top" aria-label="Andrew Felipe, back to top">AF</a>
     <ul>
-      <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
+      <li><a href="#work-demos">Work demos</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#how-i-build">How I build</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -51,9 +57,11 @@ Memory test ............ 640K OK
 Mounting /home/andrew .. OK
 Loading andrew.profile . 100%</pre>
       <h1 class="name" id="name"><span class="line">Andrew</span> <span class="line">Felipe<span class="cursor" aria-hidden="true"></span></span></h1>
+      <p class="role">Java backend developer near Charlotte, NC. Open to Charlotte-area and remote roles.</p>
       <p class="lede">I build and support enterprise Java systems: backend features, API integrations, and automation that takes manual work off people&rsquo;s plates.</p>
       <p class="actions">
         <a class="btn primary" href="work-demos/">Open my work demos</a>
+        <a class="btn" href="#projects">See what I run at home</a>
         <a class="btn" href="mailto:ando1fe@proton.me">Email me</a>
       </p>
     </div>
@@ -61,15 +69,16 @@ Loading andrew.profile . 100%</pre>
 
   <section class="block" id="about">
     <div class="wrap">
-      <h2 class="cmd"><span class="sr">About</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> whoami</span></h2>
+      <h2 class="cmd"><span class="sr">About</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">whoami</span></span></h2>
       <p>I&rsquo;m a Java backend developer near Charlotte, NC, with 3+ years in financial services at TIAA and subscription services at WT Cox Information Services. My work has centered on backend features, API integrations, reporting, and the tests that keep them working.</p>
       <p>I graduated cum laude from UNC Charlotte with a B.A. in Computer Science, and I&rsquo;m looking for my next backend role.</p>
+      <p>At home I run a small platform of self-hosted apps. They&rsquo;re <a href="#projects">further down this page</a>, each with captures of the real app and a simulation you can click through.</p>
     </div>
   </section>
 
   <section class="block" id="experience">
     <div class="wrap">
-      <h2 class="cmd"><span class="sr">Experience</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> cat experience.log</span></h2>
+      <h2 class="cmd"><span class="sr">Experience</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">cat experience.log</span></span></h2>
       <ol class="log">
         <li class="entry">
           <p class="when">Jun 2024 &ndash; Feb 2025</p>
@@ -108,11 +117,11 @@ Loading andrew.profile . 100%</pre>
     </div>
   </section>
 
-  <section class="block" id="projects">
+  <section class="block" id="work-demos">
     <div class="wrap">
-      <h2 class="cmd"><span class="sr">Projects</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> ls ~/projects</span></h2>
-      <article class="window">
-        <div class="titlebar" aria-hidden="true"><span>~/projects/work-demos</span><span class="ctrl"><span></span><span></span><span></span></span></div>
+      <h2 class="cmd"><span class="sr">Work demos</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">ls ~/work-demos</span></span></h2>
+      <article class="window solo">
+        <div class="titlebar" aria-hidden="true"><span>~/work-demos</span><span class="ctrl"><span></span><span></span><span></span></span></div>
         <div class="window-body">
           <h3><a href="work-demos/">Work demos</a></h3>
           <p>Clickable rebuilds of the 21 tickets I worked at WT Cox and the Cover Image Miner, made with invented data so you can try each feature yourself.</p>
@@ -122,9 +131,101 @@ Loading andrew.profile . 100%</pre>
     </div>
   </section>
 
+  <section class="block" id="projects">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">Projects</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">ls ~/projects</span></span></h2>
+      <p class="intro">Apps I run on my own PC and use myself. The code is private, so each page shows the real app running on test data, the decisions behind it, and a simulation of its rules that runs in your browser.</p>
+
+      <div class="bento">
+
+        <article class="window tile feature">
+          <div class="titlebar" aria-hidden="true"><span>~/projects/ando</span><span class="ctrl"><span></span><span></span><span></span></span></div>
+          <div class="feature-grid">
+            <div class="window-body">
+              <h3><a href="projects/ando/">Ando</a></h3>
+              <p class="what-it-is">A control plane for the apps I self-host</p>
+              <p>One page on my phone starts, stops and watches every app on my PC. Each app sits behind a door that opens only for me, and a feature the agent proposes on its own waits in an inbox until I approve it with a passkey.</p>
+              <ul class="proof">
+                <li>Python standard library, with no framework and no build step</li>
+                <li>Passkey sign-off and push notifications written from the specs</li>
+                <li>About 400 automated tests</li>
+              </ul>
+              <a class="btn primary" href="projects/ando/">Read the Ando case study</a>
+            </div>
+            <div class="pair">
+              <img src="assets/ando/home.webp" width="720" height="1561" alt="Ando's home screen on a phone: a greeting, a card saying two proposals are waiting for approval, and an icon for each app." loading="lazy">
+              <img src="assets/ando/proposal.webp" width="720" height="1561" alt="A proposed feature in Ando: what it does, a picture of it, and a Ship it button that asks for Face ID." loading="lazy">
+            </div>
+          </div>
+        </article>
+
+        <article class="window calm tile">
+          <div class="titlebar" aria-hidden="true"><span>~/projects/hearth</span><span class="ctrl"><span></span><span></span><span></span></span></div>
+          <a class="tile-shot" href="projects/hearth/" tabindex="-1" aria-hidden="true"><img src="assets/hearth/tile.webp" width="880" height="495" alt="" loading="lazy"></a>
+          <div class="window-body">
+            <h3><a href="projects/hearth/">Hearth</a></h3>
+            <p class="what-it-is">A home hub that runs on my own PC</p>
+            <p>Lights, speakers, TVs, cameras and air purifiers, controlled directly over the home network. The cameras record to my own disk, and a local model answers questions about the house.</p>
+            <a class="btn" href="projects/hearth/">Read the Hearth case study</a>
+          </div>
+        </article>
+
+        <article class="window calm tile">
+          <div class="titlebar" aria-hidden="true"><span>~/projects/mochi</span><span class="ctrl"><span></span><span></span><span></span></span></div>
+          <a class="tile-shot" href="projects/mochi/" tabindex="-1" aria-hidden="true"><img src="assets/mochi/tile.webp" width="880" height="495" alt="" loading="lazy"></a>
+          <div class="window-body">
+            <h3><a href="projects/mochi/">Mochi</a></h3>
+            <p class="what-it-is">A 3D island in a browser tab</p>
+            <p>A small life sim drawn with three.js and no build step. Its residents are rigged and animated in the browser, and the island is lit by the real time of day.</p>
+            <a class="btn" href="projects/mochi/">Read the Mochi case study</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="also">
+        <h3>Also running</h3>
+        <dl>
+          <div>
+            <dt>One graphics card, shared</dt>
+            <dd>The apps that use my GPU ask each other before loading a model, fall back to the processor when the card is busy, and let go of it the moment a game starts. <a href="projects/hearth/#gpu">Try the rules</a></dd>
+          </div>
+          <div>
+            <dt>A local model stack</dt>
+            <dd>Text, picture, voice and video models served from one PC, with a job queue and a test suite that runs on every push.</dd>
+          </div>
+          <div>
+            <dt>ScreenNap</dt>
+            <dd>A small Windows utility that turns my monitors off while I&rsquo;m away from the desk.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how-i-build">
+    <div class="wrap">
+      <h2 class="cmd"><span class="sr">How I build</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">cat how-i-build.md</span></span></h2>
+      <div class="build">
+        <div>
+          <p>I build the apps above with Claude Code, Anthropic&rsquo;s coding agent. I write the requirements, set the rules every app has to follow, and decide what ships. Claude writes the code and the tests.</p>
+          <p>Everything goes through git and a test suite. What I ask for is built, tested and deployed. A feature Claude proposes on its own waits in an inbox until I approve it on my phone with a passkey, and the code that enforces that has its own tests and its own security review.</p>
+          <a class="btn" href="how-i-build/">See the whole workflow</a>
+        </div>
+        <ul class="rules" aria-label="Rules every app follows">
+          <li>Use almost nothing when nobody is using you</li>
+          <li>Get off the GPU the moment a game starts</li>
+          <li>Secrets live in Windows Credential Manager, never in files</li>
+          <li>Nothing on the PC can approve a change for me</li>
+          <li>Never touch system security settings</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="block" id="skills">
     <div class="wrap">
-      <h2 class="cmd"><span class="sr">Skills</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> cat skills.txt</span></h2>
+      <h2 class="cmd"><span class="sr">Skills</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">cat skills.txt</span></span></h2>
       <dl class="skills">
         <div><dt>Languages</dt><dd>Java, SQL, Python, JavaScript, TypeScript, Groovy, HTML/CSS</dd></div>
         <div><dt>Frameworks and platforms</dt><dd>Java EE (EJB, JPA, JSF/Seam), Spring, REST APIs, Node.js, React, JBoss, MySQL</dd></div>
@@ -137,7 +238,7 @@ Loading andrew.profile . 100%</pre>
 
   <section class="block" id="contact">
     <div class="wrap">
-      <h2 class="cmd"><span class="sr">Contact</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> mail andrew</span></h2>
+      <h2 class="cmd"><span class="sr">Contact</span><span aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">mail andrew</span></span></h2>
       <ul class="links">
         <li><span class="k">Email</span><a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a></li>
         <li><span class="k">GitHub</span><a href="https://github.com/BandoDrewMando">github.com/BandoDrewMando</a></li>

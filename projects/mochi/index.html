@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mochi, a 3D island in a browser tab: Andrew Felipe</title>
+<meta name="description" content="Mochi is a small life sim drawn with three.js and no build step. Its residents are rigged and animated in the browser and the island is lit by the real time of day. Case study with real captures and a simulation.">
+<meta name="theme-color" content="#140F2E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mochi: a 3D island in a browser tab">
+<meta property="og:description" content="three.js with no build step, rigging and motion capture in the browser, and a sky that follows the clock.">
+<meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/projects/mochi/">
+<meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Andrew Felipe, Java backend developer near Charlotte, NC. Projects: Ando, Hearth, Mochi and 21 work demos.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
+<link rel="preload" href="../../assets/fonts/vt323-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/chakra-petch-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <nav class="wrap nav" aria-label="Site">
+    <a class="mark" href="../../" aria-label="Andrew Felipe, home">AF</a>
+    <span class="crumb" aria-hidden="true">~/projects/mochi</span>
+    <ul>
+      <li><a href="../../#projects">Projects</a></li>
+      <li><a href="../../work-demos/">Work demos</a></li>
+      <li><a href="../../how-i-build/">How I build</a></li>
+      <li><a href="../../#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <header class="doc-head">
+    <div class="wrap">
+      <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~/projects/mochi$</span> <span class="run">cat README.md</span></p>
+      <h1 class="title">Mochi</h1>
+      <p class="sub">A little 3D island that runs in a browser tab. Its residents are rigged and animated in the browser, speak through a local language model, and live under a sky that follows the real time of day.</p>
+      <dl class="facts">
+        <div><dt>What</dt><dd>A small life sim, in the spirit of Tomodachi Life and The Sims</dd></div>
+        <div><dt>Made of</dt><dd>three.js as plain ES modules with no build step, and a Python standard-library server that keeps the world</dd></div>
+        <div><dt>Motion</dt><dd>Motion-capture clips from Quaternius&rsquo; Universal Animation Library (CC0), replayed on each figure&rsquo;s own rig</dd></div>
+        <div><dt>Tests</dt><dd>About 110: pytest, Node for the rigging maths, and a browser with WebGL in software</dd></div>
+        <div><dt>Since</dt><dd>October 2026</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <section class="md" id="see-it">
+    <div class="wrap">
+      <h2>See it through a day</h2>
+      <p>These are captures of the real island on a test save with made-up residents. Drag the dial: the same view at five times of day, lit the way the app lights it.</p>
+      <div class="reel wide">
+        <figure class="window daylight" style="margin:0">
+          <div class="titlebar" aria-hidden="true"><span>island, by the clock</span><span class="badge">real captures</span></div>
+          <div class="frames" id="day-frames">
+            <img class="on" src="../../assets/mochi/island-1231.webp" width="720" height="1561" alt="The island at midday: apartments, a café, a shop, a lighthouse, a beach with a pier, and name tags over four residents in the plaza.">
+            <img src="../../assets/mochi/island-0637.webp" loading="lazy" width="720" height="1561" alt="The island just after sunrise, in soft pink light.">
+            <img src="../../assets/mochi/island-1807.webp" loading="lazy" width="720" height="1561" alt="The island in the golden hour before sunset.">
+            <img src="../../assets/mochi/island-1925.webp" loading="lazy" width="720" height="1561" alt="The island at dusk: red sky, the lighthouse beam on.">
+            <img src="../../assets/mochi/island-2131.webp" loading="lazy" width="720" height="1561" alt="The island at night: dark sea, the plaza lit by lamps, the lighthouse sweeping.">
+          </div>
+          <div class="dial">
+            <output id="day-out" for="day-dial">12:31 PM, midday</output>
+            <label class="sr" for="day-dial">Time of day</label>
+            <input type="range" id="day-dial" min="0" max="4" step="1" value="1">
+            <ul class="ticks" aria-hidden="true"><li>dawn</li><li>noon</li><li>golden</li><li>dusk</li><li>night</li></ul>
+          </div>
+        </figure>
+        <div>
+          <p>The island is life-size and lit by the hour: the sun crosses the sky, evenings glow, and at night there are stars, street lamps and lit windows. From above you drag to look around and tap someone to fly over. On foot you walk it with one thumb.</p>
+          <p>Residents have places to be. They go to the café, the beach, the park or the hill, meet, become friends, fall out and make up. When one of them needs something, a small flag appears over their head.</p>
+          <p class="caption">The page was drawn here by a software renderer for the captures, so there is no recording: it runs far too slowly without a graphics chip to film.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="md" id="problem">
+    <div class="wrap">
+      <h2>What it is for</h2>
+      <p class="lead">I wanted a small world I could look in on from my phone: residents who go about their day, remember what happened and can be talked to, all running on my own PC.</p>
+      <p>It had to cost nothing while I am not looking, stay smooth on a phone, and get off the graphics card the moment a game starts. Most of the interesting work came from those three constraints.</p>
+    </div>
+  </section>
+
+  <section class="md" id="shape">
+    <div class="wrap">
+      <h2>How it fits together</h2>
+      <ol class="flow across wide">
+        <li><strong>A server keeps the world</strong><span>One Python process holds who is where, their needs and moods, and what happened. It moves the world on only while the page is open, then catches up on the time away.</span></li>
+        <li><strong>The page draws it</strong><span>three.js, vendored and loaded as ES modules. There is no bundler and no build step: the repo is the code.</span></li>
+        <li><strong>Figures arrive as meshes</strong><span>Each resident&rsquo;s 3D figure is a single surface. Newer ones bring a skeleton from a rigging model on the PC. For the rest, the page works out how the mesh should bend.</span></li>
+        <li><strong>A local model gives them words</strong><span>When the model server is awake and free, it writes what each resident says. When it is busy, the island falls back on lines of its own.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="decisions">
+    <div class="wrap">
+      <h2>The hard parts</h2>
+      <ol class="decisions">
+        <li>
+          <h3>Rigging a mesh in the browser</h3>
+          <p>A generated figure can be one surface with no skeleton, and no two stand alike. The page finds the hips, splits the legs by walking the surface of the mesh with shortest paths, finds the chin by measuring where the head narrows, and decides how freely each arm may move, in doubtful cases by trying a pose and measuring how far the mesh stretches.</p>
+          <p class="why">Splitting legs down the middle smeared any figure whose feet touched or stood one behind the other. Following the surface does not. Rigging runs in a worker, and the result is kept per figure and per version of the rigging code.</p>
+        </li>
+        <li>
+          <h3>Motion capture that fits any figure</h3>
+          <p>Clips are stored without a skeleton, as each bone&rsquo;s turn from a T-pose, and replayed on whatever rig a figure has. Walking speed comes from the figure&rsquo;s own leg length, and each arm stays inside the range that was measured as safe for it.</p>
+          <p class="why">Borrowed animation usually assumes one skeleton. These figures all differ, so the clip had to be the constant and the rig the variable.</p>
+        </li>
+        <li>
+          <h3>Fast on a phone, measured first</h3>
+          <p>On a processor slowed four times, every visit spent four to five seconds painting textures and about a second rigging each figure, all on the page&rsquo;s own thread.</p>
+          <p class="why">Painted textures are now kept in the browser under a hash of the code that paints them. Rigs come from the worker. The frame rate follows what is happening: up to 60 a second while you steer, a trickle when nothing moves, and none at all after a few minutes untouched. The page tries a lower resolution when frames run late and keeps it only if that helps, and by day the street lamps are left out of the shaders altogether.</p>
+        </li>
+        <li>
+          <h3>Idle means idle</h3>
+          <p>The world advances only while its page is open. It never wakes the model server on its own, and it lets go of the graphics card completely while a game runs.</p>
+          <p class="why">It shares a PC with everything else I run. A toy that keeps a 24 GB card warm is not a toy I would leave on.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="try">
+    <div class="wrap">
+      <h2>Try one of the small ones</h2>
+      <p>Five residents in the plaza used to show one name on top of the next. Now the nearest keeps their name by their head and the others stack above it, every frame, with no layout work in the loop. This is the same routine, ported to plain page elements.</p>
+
+      <article class="window sim wide" id="names" aria-labelledby="names-title">
+        <div class="titlebar"><span id="names-title"><span class="pre">simulation: </span>names that never overlap</span><span class="badge">invented data</span></div>
+        <div class="plaza" id="plaza" role="group" aria-label="Residents in the plaza. Drag one, or focus it and use the arrow keys."></div>
+        <div class="window-body">
+          <ul class="checks" style="margin-bottom:1rem">
+            <li><label><input type="checkbox" id="n-stack" checked> <span>Stack names that would cover a nearer one</span></label></li>
+          </ul>
+          <p class="hashline" id="n-count" role="status" style="margin-bottom:1rem"></p>
+          <div class="actions" style="margin:0">
+            <button type="button" class="btn" id="n-gather">Gather everyone</button>
+            <button type="button" class="btn quiet" id="n-scatter">Scatter</button>
+          </div>
+          <p class="hint" style="margin-top:1rem">Drag a resident, or focus one and use the arrow keys. Lower on the screen is nearer the camera.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="md" id="verified">
+    <div class="wrap">
+      <h2>How it is verified</h2>
+      <ul>
+        <li>The rigging and motion code is tested in Node on made-up figures, by counting the edges a pose stretches too far. Fixes came with a figure that reproduces the tear.</li>
+        <li>The page itself is tested in a real browser, with WebGL drawn in software where the island is needed: who is where, names that never overlap, walking indoors, pulling sheets closed.</li>
+        <li>Every test island gets its own data folder and made-up residents. The captures above were taken the same way.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="maps">
+    <div class="wrap">
+      <h2>Where it meets backend work</h2>
+      <p>Less directly than the other two. It is here because its problems were the least forgiving: a figure either moves right or visibly tears. The habits are the same, though: measure before optimising, cache by a hash of what produced the value, move slow work off the request path, and make the difficult part testable without the expensive part, which here means testing a rig without a graphics card.</p>
+    </div>
+  </section>
+
+  <section class="md" id="built">
+    <div class="wrap">
+      <h2>How it was built</h2>
+      <p>I built Mochi with Claude Code. I describe what I want and what looks wrong when I use it, and I decide what stays. Claude wrote the code and the tests. <a href="../../how-i-build/">The workflow is written up here.</a></p>
+      <h3>Known limits</h3>
+      <ul>
+        <li>It cannot be played from this page. The island needs its server, and the code is private.</li>
+        <li>The 3D figures come from a separate pipeline on my model stack. Until a resident has one, they are a flat standee of their picture.</li>
+        <li>Arms that were generated fused to the body stay where they were made. Moving them tore the mesh, so the rig leaves them alone.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="next">
+    <div class="wrap">
+      <h2>Keep reading</h2>
+      <p class="next wide">
+        <a class="btn" href="../ando/">Ando, the control plane</a>
+        <a class="btn" href="../hearth/">Hearth, the home hub</a>
+        <a class="btn quiet" href="../../how-i-build/">How I build</a>
+        <a class="btn quiet" href="../../#projects">All projects</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>&copy; 2026 Andrew Felipe</p>
+  <p>Captures show the real app on a test save with made-up residents. The simulation uses invented data.</p>
+</footer>
+
+<script src="../../app.js"></script>
+<script src="sim.js"></script>
+<!-- Page view counts at andrewfelipe.goatcounter.com (no cookies) -->
+<script data-goatcounter="https://andrewfelipe.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Metricool tracker; skips browsers opted out with #toggle-goatcounter -->
+<script>
+  (function () {
+    try { if (localStorage.getItem('skipgc') === 't' || location.hash === '#toggle-goatcounter') return; } catch (e) {}
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5af058e62d5480731baa67cbe3b12c4c"})});
+  })();
+</script>
+</body>
+</html>

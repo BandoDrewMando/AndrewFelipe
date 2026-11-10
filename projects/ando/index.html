@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ando, a control plane for self-hosted apps: Andrew Felipe</title>
+<meta name="description" content="Ando is the control plane I run at home: it starts, stops and guards every app on my PC, and a feature the agent proposes ships only after I approve it with a passkey. Case study with recordings and simulations.">
+<meta name="theme-color" content="#140F2E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ando: a control plane for the apps I self-host">
+<meta property="og:description" content="Per-app doors, passkey approval for what the agent proposes, and a sandbox for the agent itself. With simulations you can run.">
+<meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/projects/ando/">
+<meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Andrew Felipe, Java backend developer near Charlotte, NC. Projects: Ando, Hearth, Mochi and 21 work demos.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
+<link rel="preload" href="../../assets/fonts/vt323-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/chakra-petch-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <nav class="wrap nav" aria-label="Site">
+    <a class="mark" href="../../" aria-label="Andrew Felipe, home">AF</a>
+    <span class="crumb" aria-hidden="true">~/projects/ando</span>
+    <ul>
+      <li><a href="../../#projects">Projects</a></li>
+      <li><a href="../../work-demos/">Work demos</a></li>
+      <li><a href="../../how-i-build/">How I build</a></li>
+      <li><a href="../../#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <header class="doc-head">
+    <div class="wrap">
+      <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~/projects/ando$</span> <span class="run">cat README.md</span></p>
+      <h1 class="title">Ando</h1>
+      <p class="sub">One page on my phone that starts, stops and watches every app on my PC, keeps each of them private to me, and makes sure nothing new ships to them without my say-so.</p>
+      <dl class="facts">
+        <div><dt>What</dt><dd>A control plane and phone app for everything I self-host</dd></div>
+        <div><dt>Runs on</dt><dd>A Windows PC at home, reached from my phone over a private Tailscale network</dd></div>
+        <div><dt>Made of</dt><dd>Python standard library on the server, plain JavaScript on the page, no build step</dd></div>
+        <div><dt>Tests</dt><dd>About 400, run with pytest and a real browser</dd></div>
+        <div><dt>Since</dt><dd>October 2026</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <section class="md" id="see-it">
+    <div class="wrap">
+      <h2>See it run</h2>
+      <p>The code is private, so here is the real page running against a test copy with invented apps.</p>
+      <div class="reel wide">
+        <div>
+          <figure class="window player" style="margin:0">
+            <div class="titlebar" aria-hidden="true"><span>approve.mp4</span><span class="badge">13 s, no sound</span></div>
+            <div class="window-body">
+              <video controls muted playsinline preload="none" width="590" height="1278" poster="../../assets/ando/approve-poster.webp" aria-label="Recording: approving a proposal from the phone" aria-describedby="approve-words">
+                <source src="../../assets/ando/approve.mp4" type="video/mp4">
+              </video>
+            </div>
+          </figure>
+          <p class="caption" id="approve-words">Approving a proposal from the phone. The home screen says two things are waiting. Opening one shows what it does, a picture of it and the files it touches. Ship it asks for Face ID, the passkey check runs on the PC, and the page confirms.</p>
+        </div>
+        <ul class="shots" tabindex="0" aria-label="Screenshots of Ando. Scroll sideways for more.">
+          <li><figure class="window calm"><img src="../../assets/ando/home.webp" width="720" height="1561" loading="lazy" alt="Ando's home screen: a greeting, a card saying Claude has two things waiting, and an icon for each app."><figcaption>Home: every app as an icon, and which proposals are waiting for a yes.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/ando/apps.webp" width="720" height="1561" loading="lazy" alt="The Apps tab: each app with a switch, its state, memory, GPU memory, CPU and uptime, and a Restart button."><figcaption>Apps: each one&rsquo;s switch, memory, GPU memory and uptime.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/ando/inbox.webp" width="720" height="1561" loading="lazy" alt="The inbox with two proposals. One is flagged: Changes Ando itself."><figcaption>The inbox. A change to Ando itself is flagged, since it could change how a yes works.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/ando/proposal.webp" width="720" height="1561" loading="lazy" alt="A proposal sheet: what the feature does, a picture, the files, and three buttons: Ship it, Not now, and No, let it go."><figcaption>A proposal. Ship it is the only button that needs Face ID.</figcaption></figure></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="md" id="problem">
+    <div class="wrap">
+      <h2>The problem</h2>
+      <p class="lead">By October 2026 I had a handful of self-hosted apps on one PC. Each had its own port and its own way of starting, several wanted the same graphics card, and I could only reach them from my home Wi-Fi.</p>
+      <p>I wanted three things: one place to run and watch them all, a way to reach them from anywhere without opening anything to the internet, and a hard stop between &ldquo;an AI agent built a feature&rdquo; and &ldquo;that feature is running on my PC.&rdquo;</p>
+      <p>Every app I run also has to follow the same house rules, and Ando is where most of them are enforced:</p>
+      <ul>
+        <li>Use almost nothing when nobody is using you, and get off the GPU the moment a game starts.</li>
+        <li>Secrets live in Windows Credential Manager, never in files or in the repo.</li>
+        <li>Nothing on the PC can say yes for me.</li>
+        <li>Never change Windows system or security settings.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="shape">
+    <div class="wrap">
+      <h2>How it fits together</h2>
+      <p>A request from my phone passes three checks before it reaches an app. Each app listens on the PC only, so the doors are the one way in.</p>
+      <ol class="flow across wide">
+        <li><strong>My phone</strong><span>Ando, added to the home screen. Every request rides Tailscale&rsquo;s encrypted tunnel under my own login.</span></li>
+        <li><strong>The front door</strong><span>Asks who is calling before anything else: this PC, or a request Tailscale forwarded for my login. Anyone else is refused.</span></li>
+        <li><strong>A door per app</strong><span>A small reverse proxy for each app. It turns away requests started by other websites and strips Ando&rsquo;s own cookies before passing one on.</span></li>
+        <li><strong>The app</strong><span>Listens on localhost only. Nothing else on the Wi-Fi can reach it.</span></li>
+      </ol>
+      <p>Two more ways in exist, and both are fenced off from that path. Guests get a separate door on a separate port. Claude&rsquo;s night worker gets an inbox it can only drop proposals into.</p>
+    </div>
+  </section>
+
+  <section class="md" id="decisions">
+    <div class="wrap">
+      <h2>Decisions that shaped it</h2>
+      <ol class="decisions">
+        <li>
+          <h3>A button press needs more than the right headers</h3>
+          <p>Starting or stopping an app takes a custom header, a same-origin fetch, an allowed origin and a key only Ando&rsquo;s own page is handed: an HttpOnly, SameSite=Strict cookie that is new every time Ando starts.</p>
+          <p class="why">Another app&rsquo;s server can be talked into fetching an address with any headers it is given. It cannot send a cookie it was never handed. The <a href="#doors">door simulation</a> lets you try each case.</p>
+        </li>
+        <li>
+          <h3>Build it, then ask</h3>
+          <p>When Claude builds a feature I did not ask for, on a night shift or from my idea shelf, it goes on a branch and a proposal lands in an inbox. I see what it is, why, what it changes and a picture, then say yes with Face ID. Bug fixes, and things I asked for directly, skip the queue.</p>
+          <p class="why">I wanted an agent that can take the initiative, without handing it the keys. A yes is a passkey signature over a hash of exactly what I was shown, so a proposal that changes after I open it is refused. The <a href="#gate">gate simulation</a> runs that check for real.</p>
+        </li>
+        <li>
+          <h3>The passkey check is written out in plain Python</h3>
+          <p>The WebAuthn verifier is a strict CBOR reader, DER parsing and P-256 ECDSA, with no third-party library anywhere in the approval path.</p>
+          <p class="why">Every check is a line that can be read, and there is nothing extra to install or trust on the way to a yes. It is tested against the RFCs&rsquo; own examples and against bytes a real browser produced.</p>
+        </li>
+        <li>
+          <h3>Only my phone can say yes</h3>
+          <p>Adding a passkey, approving a proposal and removing a passkey all have to arrive through Tailscale from a device that is not the PC. The page on the PC says to use the phone.</p>
+          <p class="why">A program on the PC can forge any header, and the agent&rsquo;s worker runs on that PC. If the PC could approve, the gate would be decoration.</p>
+        </li>
+        <li>
+          <h3>The night worker runs in a box</h3>
+          <p>Overnight, Claude Code can work in its own Linux sandbox: a separate WSL install with no route to my network, an allowlist proxy as its only way out, a system-call filter, and a second locked-down user that judges what it produced.</p>
+          <p class="why">It runs unattended on a machine full of my things. It can reach the code host and the few sites it needs, and nothing near home.</p>
+        </li>
+        <li>
+          <h3>Guests get their own door</h3>
+          <p>I can share one app with someone for an hour or a month. A guest link opens one app at one permission level through a separate door, which is the only public thing Ando ever turns on, and only while a link is live. Keys are kept as hashes.</p>
+          <p class="why">Sharing should never touch my own way in. Ending a link cuts off even a tab that is already open.</p>
+        </li>
+        <li>
+          <h3>A notification is never a link</h3>
+          <p>Tapping a push notification opens the right app at the right page, but the notification carries no address.</p>
+          <p class="why">An address would let any web page or message open one of my apps at a page of its choosing, with that app&rsquo;s cookies. A review caught this before it shipped.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="try">
+    <div class="wrap">
+      <h2>Try the rules</h2>
+      <p>Both simulations below run in your browser with invented data. They follow the same rules, in the same order, as the Python they are modelled on. Nothing you do here leaves the page.</p>
+
+      <article class="window sim wide" id="gate" aria-labelledby="gate-title">
+        <div class="titlebar"><span id="gate-title"><span class="pre">simulation: </span>the approval gate</span><span class="badge">invented data</span></div>
+        <div class="sim-body">
+          <div class="pane">
+            <h3>What my phone shows</h3>
+            <div class="ticket" id="g-ticket"></div>
+            <p class="hashline">content hash <b id="g-hash">working it out</b></p>
+            <p class="hint" id="g-note">A passkey for this demo is being made in your browser.</p>
+            <div class="actions">
+              <button type="button" class="btn primary" id="g-approve" disabled>Approve with Face ID</button>
+              <button type="button" class="btn" id="g-swap">Swap the commit behind my back</button>
+              <button type="button" class="btn quiet" id="g-reset">Start over</button>
+            </div>
+            <fieldset class="field" style="margin-top:1.25rem">
+              <legend>Or try to cheat</legend>
+              <ul class="checks">
+                <li><label><input type="checkbox" id="g-origin"> <span>Answer from another website</span></label></li>
+                <li><label><input type="checkbox" id="g-nouv"> <span>Skip Face ID</span></label></li>
+                <li><label><input type="checkbox" id="g-replay"> <span>Send the last answer again</span></label></li>
+              </ul>
+            </fieldset>
+          </div>
+          <div class="pane">
+            <h3>What the gate checks</h3>
+            <ol class="trace" id="g-trace" aria-live="polite"><li><span class="mark-info">idle</span><span>Press Approve to run the checks.</span></li></ol>
+            <p class="verdict" id="g-verdict" role="status"></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="window sim wide" id="doors" aria-labelledby="doors-title">
+        <div class="titlebar"><span id="doors-title"><span class="pre">simulation: </span>who gets through the door</span><span class="badge">invented data</span></div>
+        <div class="sim-body">
+          <div class="pane">
+            <h3>The request</h3>
+            <fieldset class="field">
+              <legend>Who is asking</legend>
+              <div class="choices stack" id="d-who">
+                <label class="choice"><input type="radio" name="d-who" value="page" checked><span>Ando&rsquo;s own page, on my phone</span></label>
+                <label class="choice"><input type="radio" name="d-who" value="other"><span>Another website, open in my phone&rsquo;s browser</span></label>
+                <label class="choice"><input type="radio" name="d-who" value="script"><span>A program on the PC, told to fetch this address</span></label>
+                <label class="choice"><input type="radio" name="d-who" value="tailnet"><span>Someone else on my private network</span></label>
+                <label class="choice"><input type="radio" name="d-who" value="wifi"><span>A device on my home Wi-Fi</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="field">
+              <legend>What they try</legend>
+              <div class="choices" id="d-what">
+                <label class="choice"><input type="radio" name="d-what" value="get" checked><span>Open the page</span></label>
+                <label class="choice"><input type="radio" name="d-what" value="post"><span>Restart an app</span></label>
+              </div>
+            </fieldset>
+          </div>
+          <div class="pane">
+            <h3>What Ando decides</h3>
+            <p class="hint" style="margin-bottom:.4rem">The request, as Ando receives it</p>
+            <pre class="request" id="d-request"></pre>
+            <ol class="trace" id="d-trace" aria-live="polite"></ol>
+            <p class="verdict" id="d-verdict" role="status"></p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="md" id="verified">
+    <div class="wrap">
+      <h2>How it is verified</h2>
+      <ul>
+        <li>The CBOR reader is tested against the examples in RFC 8949, the signature code against the vectors in RFC 6979, and the whole verifier against bytes Chromium&rsquo;s own WebAuthn produced.</li>
+        <li>The gate is tested end to end through the real server with a software authenticator standing in for the phone, and again in a real browser with a virtual one. The recording above was made the same way.</li>
+        <li>The page is tested as a phone: touch targets of at least 44 by 44 points, the keyboard, sheets and swipes.</li>
+        <li>The sandbox is tested by running a whole pretend night inside a simulated WSL, attacks included.</li>
+      </ul>
+      <p class="aside"><strong>A hole the review found.</strong> The first version of the sandbox read a night&rsquo;s verdict from the worker&rsquo;s own run. A fake <code>git</code> planted earlier on the worker&rsquo;s PATH could have slipped a protected file past it. A separate security review caught it. The verdict is now read by a second user with a fixed PATH and nobody&rsquo;s files but its own, and a test plants that fake <code>git</code> on every run.</p>
+    </div>
+  </section>
+
+  <section class="md" id="maps">
+    <div class="wrap">
+      <h2>Where it meets backend work</h2>
+      <p>Ando is Python, and my professional work is Java. The problems are the same ones:</p>
+      <ul>
+        <li>Authentication and authorization at a gateway in front of services, with cross-site request defences. The same shape as Spring Security in front of an API.</li>
+        <li>Permission levels per resource, checked on the server for every request, never trusted to the page.</li>
+        <li>Process supervision, health checks, logs and resource metrics: the concerns behind the OpenShift deployments and Splunk reporting I worked on at TIAA.</li>
+        <li>Building to published standards (WebAuthn, RFC 8291 and RFC 8292 for Web Push) and testing against their reference vectors.</li>
+        <li>An audit trail. Every approval is stored with the proof that it was real, and can be checked again from scratch.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="built">
+    <div class="wrap">
+      <h2>How it was built</h2>
+      <p>I built Ando with Claude Code, Anthropic&rsquo;s coding agent. I set the requirements, the house rules and the priorities, and I approve what ships. Claude wrote the code and the tests. Several Claude sessions work on it, and the git repo is the only way they stay in step: start from the repo, change, test, commit, push, then deploy exactly what was pushed.</p>
+      <p><a href="../../how-i-build/">The whole workflow is written up here.</a></p>
+      <h3>Known limits</h3>
+      <ul>
+        <li>The PC itself is trusted. A program running as me can read the page key the way a browser does, which is exactly why approvals do not rely on it.</li>
+        <li>Shipping an approved proposal is not automatic yet. The trusted deployer is the next piece to build.</li>
+        <li>It is built for one person and one PC.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="next">
+    <div class="wrap">
+      <h2>Keep reading</h2>
+      <p class="next wide">
+        <a class="btn" href="../hearth/">Hearth, the home hub</a>
+        <a class="btn" href="../mochi/">Mochi, the 3D island</a>
+        <a class="btn quiet" href="../../how-i-build/">How I build</a>
+        <a class="btn quiet" href="../../#projects">All projects</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>&copy; 2026 Andrew Felipe</p>
+  <p>Recordings and screenshots show the real app on a test copy. Simulations use invented data.</p>
+</footer>
+
+<script src="../../app.js"></script>
+<script src="sim.js"></script>
+<!-- Page view counts at andrewfelipe.goatcounter.com (no cookies) -->
+<script data-goatcounter="https://andrewfelipe.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Metricool tracker; skips browsers opted out with #toggle-goatcounter -->
+<script>
+  (function () {
+    try { if (localStorage.getItem('skipgc') === 't' || location.hash === '#toggle-goatcounter') return; } catch (e) {}
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5af058e62d5480731baa67cbe3b12c4c"})});
+  })();
+</script>
+</body>
+</html>

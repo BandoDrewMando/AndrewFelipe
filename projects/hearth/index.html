@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hearth, a local-first home hub: Andrew Felipe</title>
+<meta name="description" content="Hearth is the home hub I run on my own PC: lights, speakers, TVs and cameras controlled over the home network, cameras recorded locally, and a local model that answers questions. Case study with a recording and simulations.">
+<meta name="theme-color" content="#140F2E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hearth: a home hub that runs on my own PC">
+<meta property="og:description" content="More than 20 device integrations, local camera recording, guest permissions and a shared GPU. With simulations you can run.">
+<meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/projects/hearth/">
+<meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Andrew Felipe, Java backend developer near Charlotte, NC. Projects: Ando, Hearth, Mochi and 21 work demos.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
+<link rel="preload" href="../../assets/fonts/vt323-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/chakra-petch-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <nav class="wrap nav" aria-label="Site">
+    <a class="mark" href="../../" aria-label="Andrew Felipe, home">AF</a>
+    <span class="crumb" aria-hidden="true">~/projects/hearth</span>
+    <ul>
+      <li><a href="../../#projects">Projects</a></li>
+      <li><a href="../../work-demos/">Work demos</a></li>
+      <li><a href="../../how-i-build/">How I build</a></li>
+      <li><a href="../../#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <header class="doc-head">
+    <div class="wrap">
+      <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~/projects/hearth$</span> <span class="run">cat README.md</span></p>
+      <h1 class="title">Hearth</h1>
+      <p class="sub">A home hub that runs on my own PC. Lights, speakers, TVs, cameras and air purifiers are controlled directly over the home network, and the cameras record to a disk I own.</p>
+      <dl class="facts">
+        <div><dt>What</dt><dd>A local-first smart-home hub with a phone dashboard</dd></div>
+        <div><dt>Talks to</dt><dd>More than 20 kinds of device and service, among them Hue, Sonos, Chromecast and Google TV, Apple TV, Nanoleaf, Nest cameras, Roomba, Dyson and Blueair</dd></div>
+        <div><dt>Made of</dt><dd>Python and FastAPI, a React dashboard, SQLite, and a local language model served by Ollama</dd></div>
+        <div><dt>Tests</dt><dd>About 390, run with pytest and a real browser against a simulated home</dd></div>
+        <div><dt>Since</dt><dd>October 2026</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <section class="md" id="see-it">
+    <div class="wrap">
+      <h2>See it run</h2>
+      <p>This is the real dashboard in its demo mode, which simulates a home and touches nothing real.</p>
+      <div class="reel wide">
+        <div>
+          <figure class="window player" style="margin:0">
+            <div class="titlebar" aria-hidden="true"><span>lights.mp4</span><span class="badge">25 s, no sound</span></div>
+            <div class="window-body">
+              <video controls muted playsinline preload="none" width="590" height="1278" poster="../../assets/hearth/lights-poster.webp" aria-label="Recording: changing a room's lights from the phone" aria-describedby="lights-words">
+                <source src="../../assets/hearth/lights.mp4" type="video/mp4">
+              </video>
+            </div>
+          </figure>
+          <p class="caption" id="lights-words">A room&rsquo;s lights. One slider dims every lamp in the room as it moves. The colour wheel offers only colours all three lamps can make, and each lamp has its own dot to drag.</p>
+        </div>
+        <ul class="shots" tabindex="0" aria-label="Screenshots of Hearth. Scroll sideways for more.">
+          <li><figure class="window calm"><img src="../../assets/hearth/home.webp" width="720" height="1561" loading="lazy" alt="Hearth's home screen: the house drawn as a neon outline with a tile for each room. Lit rooms glow amber."><figcaption>Home: the house as rooms. A lit room glows in its lamps&rsquo; own colour.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/hearth/wheel.webp" width="720" height="1561" loading="lazy" alt="A room's sheet with a brightness slider, preset whites and colours, and a colour wheel with three dots, one per lamp."><figcaption>The wheel is drawn in the lamps&rsquo; own colour range, not the screen&rsquo;s.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/hearth/devices.webp" width="720" height="1561" loading="lazy" alt="The Devices page: everything on the network grouped into kinds, with counts."><figcaption>Devices: everything on the Wi-Fi, by kind.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/hearth/ask.webp" width="720" height="1561" loading="lazy" alt="Ask Hearth: a chat box with suggestions such as Make the living room cozy."><figcaption>Ask Hearth: a local model with tools, and a plain parser when the model is busy.</figcaption></figure></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="md" id="problem">
+    <div class="wrap">
+      <h2>The problem</h2>
+      <p class="lead">I own a lot of smart-home gear and was not getting much out of it. Every brand wants its own app and its own cloud.</p>
+      <p>I wanted one fast dashboard on my phone, automation that does not depend on a maker&rsquo;s cloud wherever the device allows it, and camera recordings that stay on a disk I own. It also had to live politely on a gaming PC: idle when nobody is looking, and off the graphics card the moment a game starts.</p>
+    </div>
+  </section>
+
+  <section class="md" id="cameras">
+    <div class="wrap">
+      <h2>How the cameras work</h2>
+      <p>The camera maker&rsquo;s API hands over a live stream and nothing else. Everything after that happens on the PC.</p>
+      <ol class="flow wide across">
+        <li><strong>Live video in</strong><span>A WebRTC stream per camera. Lost packets and dropped sessions are expected, and the stream is renewed when the picture stays damaged.</span></li>
+        <li><strong>Recorded as it arrives</strong><span>One-minute pieces go straight to disk, the video exactly as the camera sent it.</span></li>
+        <li><strong>Watched on the CPU</strong><span>A small detector, YOLOX-Nano at about 10 ms a frame on one core, spots people, animals and vehicles. The GPU stays free.</span></li>
+        <li><strong>Squeezed later</strong><span>After three hours a background process re-compresses each piece to HEVC at 720p, so a month fits in the space a few days used to take.</span></li>
+        <li><strong>Played on a timeline</strong><span>Live video is decoded in the browser with WebCodecs. Recordings play as HLS, a 15-second fragment at a time.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="decisions">
+    <div class="wrap">
+      <h2>Decisions that shaped it</h2>
+      <ol class="decisions">
+        <li>
+          <h3>Devices are spoken to directly</h3>
+          <p>Hue, Sonos, Chromecast, Nanoleaf and the TVs are driven over the local network with their own protocols. A maker&rsquo;s cloud is used only where the device leaves no choice, and every credential lives in Windows Credential Manager.</p>
+          <p class="why">It is faster, and it keeps working when someone else&rsquo;s service is having a bad day.</p>
+        </li>
+        <li>
+          <h3>A guest&rsquo;s reach is pinned at the moment they press</h3>
+          <p>A guest link opens lights and speakers, plus whatever extras I tick. When a guest runs a scene, each step&rsquo;s target is turned into the exact devices it reaches right then, every one is checked, and that list is what runs.</p>
+          <p class="why">A review found the gap this closes. A selector that was checked once and looked up again as each step ran could reach a device that turned up in between, such as a door lock that an integration added back mid-run. The <a href="#guests">guest simulation</a> shows the rules.</p>
+        </li>
+        <li>
+          <h3>The graphics card is asked for, never assumed</h3>
+          <p>Hearth&rsquo;s models are 16 to 18 GB and share one 24 GB card with my local model stack. Right before every request Hearth asks the other tenant whether to use the card, fall back to a second model server on the processor, or wait.</p>
+          <p class="why">Loaded side by side, both spilled into shared memory and crawled. The <a href="#gpu">placement simulation</a> runs the same rules.</p>
+        </li>
+        <li>
+          <h3>Measure on a slow phone before changing anything</h3>
+          <p>When the dashboard felt laggy, it was measured with my real house&rsquo;s data on a phone slowed six times. The home page sitting still was busy 0.89 seconds of every second. It is now under 0.08.</p>
+          <p class="why">The fixes were specific once the numbers were in: loops that animate only transform and opacity, live updates applied once per frame instead of once per message, and nothing that waits on a slow count.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="bugs">
+    <div class="wrap">
+      <h2>Four bugs worth the story</h2>
+      <ol class="decisions">
+        <li>
+          <h3>The iPhone refused every recording</h3>
+          <p>Re-compressed clips played everywhere except my phone. The hardware encoder was stamping every file as HEVC level 6.2 whatever its size, and an iPhone plays up to 5.1.</p>
+          <p class="why">The encoder is now told the level and its output is checked. Files already on disk were mended in place by rewriting the one level byte in each header, so nothing had to be encoded twice.</p>
+        </li>
+        <li>
+          <h3>The decoder that died after 17 seconds</h3>
+          <p>One camera&rsquo;s live view, snapshots and person spotting all stopped 17 seconds after each start. The stream probes the network with padding-only packets, which arrive as empty pictures, and to FFmpeg an empty packet means the stream has ended.</p>
+          <p class="why">Empty packets are dropped before the decoder sees them, and a decoder that gives no picture for three keyframes is started afresh.</p>
+        </li>
+        <li>
+          <h3>A TV remote that lagged</h3>
+          <p>Button presses took up to a third of a second. Pings showed why: the TV&rsquo;s Wi-Fi dozes between packets, answering in 2 to 354 ms and dropping one in five to ten.</p>
+          <p class="why">While the remote is on screen, Hearth pings the TV every 50 ms to keep its radio awake, which brought the median to 3 ms. Sending small writes at once on every proxy connection removed a wait of up to 200 ms that Windows was adding.</p>
+        </li>
+        <li>
+          <h3>The answer that never arrived</h3>
+          <p>A question to the assistant was answered on the processor because the card was busy. The first word took 70 seconds, and Safari drops a connection that has said nothing for 60.</p>
+          <p class="why">The reply stream now says where the answer is being made before the model starts, and sends a keep-alive every 10 seconds.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="try">
+    <div class="wrap">
+      <h2>Try the rules</h2>
+      <p>Both simulations run in your browser with invented data, and follow the rules of the Python they are modelled on.</p>
+
+      <article class="window sim wide" id="gpu" aria-labelledby="gpu-title">
+        <div class="titlebar"><span id="gpu-title"><span class="pre">simulation: </span>who gets the graphics card</span><span class="badge">invented data</span></div>
+        <div class="sim-body">
+          <div class="pane">
+            <h3>The situation</h3>
+            <fieldset class="field">
+              <legend>Hearth wants to run</legend>
+              <div class="choices stack" id="c-job">
+                <label class="choice"><input type="radio" name="c-job" value="describe" checked><span>A sentence about a camera clip (18 GB, can wait)</span></label>
+                <label class="choice"><input type="radio" name="c-job" value="ask"><span>An answer to a question I just asked (20.8 GB, should not wait)</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="field">
+              <legend>The model stack next door is</legend>
+              <div class="choices" id="c-state">
+                <label class="choice"><input type="radio" name="c-state" value="off"><span>Not running</span></label>
+                <label class="choice"><input type="radio" name="c-state" value="asleep"><span>Asleep</span></label>
+                <label class="choice"><input type="radio" name="c-state" value="awake" checked><span>Awake, idle</span></label>
+                <label class="choice"><input type="radio" name="c-state" value="busy"><span>Busy with a job</span></label>
+                <label class="choice"><input type="radio" name="c-state" value="settling"><span>Reloading its models</span></label>
+              </div>
+            </fieldset>
+            <div class="field">
+              <p class="label"><label for="c-room">Room it says it can spare:</label> <output id="c-room-out" for="c-room">6 GB</output></p>
+              <input type="range" id="c-room" min="0" max="20" step="1" value="6">
+              <p class="hint" id="c-room-hint">Only counts while it is awake and idle.</p>
+            </div>
+            <ul class="checks">
+              <li><label><input type="checkbox" id="c-held"> <span>Hearth&rsquo;s own model is still on the card (16.5 GB)</span></label></li>
+              <li><label><input type="checkbox" id="c-ram" checked> <span>The PC&rsquo;s memory has room for a copy on the processor</span></label></li>
+              <li><label><input type="checkbox" id="c-game"> <span>A game is running</span></label></li>
+            </ul>
+          </div>
+          <div class="pane">
+            <h3>Where it runs</h3>
+            <div class="card-bar" id="c-bar" role="img" aria-label="The 24 GB graphics card"><i class="seg-pc"></i><i class="seg-game"></i><i class="seg-stack"></i><i class="seg-hearth"></i></div>
+            <ul class="legend">
+              <li><i style="background:var(--wire-hi)"></i>Windows</li>
+              <li><i style="background:var(--magenta)"></i>Model stack</li>
+              <li><i style="background:var(--cyan)"></i>Hearth</li>
+              <li><i style="background:var(--amber)"></i>A game</li>
+            </ul>
+            <p class="verdict" id="c-verdict" role="status" style="margin-bottom:1rem"></p>
+            <ol class="trace" id="c-trace" aria-live="polite"></ol>
+          </div>
+        </div>
+      </article>
+
+      <article class="window sim wide" id="guests" aria-labelledby="guests-title">
+        <div class="titlebar"><span id="guests-title"><span class="pre">simulation: </span>what a guest link opens</span><span class="badge">invented data</span></div>
+        <div class="sim-body">
+          <div class="pane">
+            <h3>The link</h3>
+            <fieldset class="field">
+              <legend>Level</legend>
+              <div class="choices" id="u-level">
+                <label class="choice"><input type="radio" name="u-level" value="guest" checked><span>Lights and speakers</span></label>
+                <label class="choice"><input type="radio" name="u-level" value="admin"><span>Admin</span></label>
+              </div>
+            </fieldset>
+            <fieldset class="field" id="u-extras">
+              <legend>It also opens</legend>
+              <ul class="checks">
+                <li><label><input type="checkbox" value="ask"> <span>Ask Hearth</span></label></li>
+                <li><label><input type="checkbox" value="cameras"> <span>Cameras, watching only</span></label></li>
+                <li><label><input type="checkbox" value="remote"> <span>TV remote</span></label></li>
+                <li><label><input type="checkbox" value="devices"> <span>More devices: fans, purifiers, plugs, vacuums, thermostats</span></label></li>
+              </ul>
+            </fieldset>
+            <div class="field">
+              <label class="label" for="u-try">The guest tries to</label>
+              <select id="u-try"></select>
+            </div>
+          </div>
+          <div class="pane">
+            <h3>What the server says</h3>
+            <p class="verdict" id="u-verdict" role="status" style="margin-top:0;margin-bottom:1rem"></p>
+            <ol class="trace" id="u-trace" aria-live="polite"></ol>
+            <p class="hint" style="margin-top:1rem">The dashboard hides what a guest cannot use, but the hiding is only for looks. Every request is checked again on the server.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="md" id="verified">
+    <div class="wrap">
+      <h2>How it is verified</h2>
+      <ul>
+        <li>A demo mode simulates the whole home, so browser tests drive the real dashboard as a phone without touching a real lamp or TV.</li>
+        <li>Cloud services and neighbours are faked for tests: a pretend air-purifier cloud, a pretend model stack and a pretend model server for the card-sharing rules.</li>
+        <li>What made it slow is pinned by tests: a value that only ticks is never redrawn, an endless animation may only move opacity and transform, and the disk is counted at most once a minute.</li>
+        <li>Guest rules have their own suites: what each link level sees, what it may press, and that a scene can never reach past it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="maps">
+    <div class="wrap">
+      <h2>Where it meets backend work</h2>
+      <ul>
+        <li>Integrating other people&rsquo;s APIs and protocols (REST, WebSocket, MQTT, mDNS, WebRTC), including the parts their documentation leaves out.</li>
+        <li>Staying up: reconnects with back-off, rate limits respected, and outages explained. When nothing was recorded, the timeline says why, read from the Windows event log.</li>
+        <li>Storage with a budget: retention rules, background compaction, and a quota that tunes itself so the month always fits.</li>
+        <li>Authorization checked per request on the server, with a permission model that composes.</li>
+        <li>Performance work that starts with a measurement and ends with a test.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="built">
+    <div class="wrap">
+      <h2>How it was built</h2>
+      <p>I built Hearth with Claude Code. I set what it should do, the house rules it has to follow and what counts as done, and I report what I see using it on my phone. Claude wrote the code and the tests. <a href="../../how-i-build/">The workflow is written up here.</a></p>
+      <h3>Known limits</h3>
+      <ul>
+        <li>The dashboard&rsquo;s React source is not in the repo yet. Changes are applied as checked patches to a compiled build, and moving the source in is the top cleanup item.</li>
+        <li>Talking through the cameras is not possible. The maker&rsquo;s API refuses any stream that sends audio.</li>
+        <li>The air purifiers have no local API, so they go through their maker&rsquo;s cloud.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="next">
+    <div class="wrap">
+      <h2>Keep reading</h2>
+      <p class="next wide">
+        <a class="btn" href="../ando/">Ando, the control plane</a>
+        <a class="btn" href="../mochi/">Mochi, the 3D island</a>
+        <a class="btn quiet" href="../../how-i-build/">How I build</a>
+        <a class="btn quiet" href="../../#projects">All projects</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>&copy; 2026 Andrew Felipe</p>
+  <p>The recording and screenshots show the real app in its demo mode. Simulations use invented data.</p>
+</footer>
+
+<script src="../../app.js"></script>
+<script src="sim.js"></script>
+<!-- Page view counts at andrewfelipe.goatcounter.com (no cookies) -->
+<script data-goatcounter="https://andrewfelipe.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Metricool tracker; skips browsers opted out with #toggle-goatcounter -->
+<script>
+  (function () {
+    try { if (localStorage.getItem('skipgc') === 't' || location.hash === '#toggle-goatcounter') return; } catch (e) {}
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5af058e62d5480731baa67cbe3b12c4c"})});
+  })();
+</script>
+</body>
+</html>
