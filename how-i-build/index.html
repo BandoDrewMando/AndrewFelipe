@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I build with an AI coding agent: Andrew Felipe</title>
+<meta name="description" content="How I build my personal apps with Claude Code: who does what, the rules every app follows, and what stands between a change and my PC.">
+<meta name="theme-color" content="#140F2E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How I build with an AI coding agent">
+<meta property="og:description" content="Requirements and approvals are mine, the code and tests are Claude's, and a passkey stands between what the agent proposes and my PC.">
+<meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/how-i-build/">
+<meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Andrew Felipe, Java backend developer near Charlotte, NC. Projects: Ando, Hearth, Mochi and 21 work demos.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23140F2E'/%3E%3Crect x='6' y='7' width='4' height='18' fill='%2345F3FF'/%3E%3Crect x='10' y='7' width='8' height='4' fill='%2345F3FF'/%3E%3Crect x='10' y='14' width='6' height='4' fill='%2345F3FF'/%3E%3Crect x='20' y='7' width='4' height='18' fill='%23FF3FA4'/%3E%3Crect x='24' y='7' width='4' height='4' fill='%23FF3FA4'/%3E%3Crect x='24' y='14' width='3' height='4' fill='%23FF3FA4'/%3E%3C/svg%3E">
+<link rel="preload" href="../assets/fonts/vt323-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/chakra-petch-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <nav class="wrap nav" aria-label="Site">
+    <a class="mark" href="../" aria-label="Andrew Felipe, home">AF</a>
+    <span class="crumb" aria-hidden="true">~/how-i-build</span>
+    <ul>
+      <li><a href="../#projects">Projects</a></li>
+      <li><a href="../work-demos/">Work demos</a></li>
+      <li><a href="../#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <header class="doc-head">
+    <div class="wrap">
+      <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~$</span> <span class="run">cat how-i-build.md</span></p>
+      <h1 class="title long">How I build</h1>
+      <p class="sub">I build my personal apps with Claude Code, Anthropic&rsquo;s coding agent. This page is the whole arrangement: who does what, the rules every app follows, and what stands between the agent and my PC.</p>
+    </div>
+  </header>
+
+  <section class="md" id="who">
+    <div class="wrap">
+      <h2>Who does what</h2>
+      <div class="grid-2 wide">
+        <div>
+          <h3>Me</h3>
+          <ul>
+            <li>Decide what gets built, and why</li>
+            <li>Write the requirements in plain words</li>
+            <li>Set the rules every app has to follow</li>
+            <li>Use the apps and report what is wrong</li>
+            <li>Approve what Claude proposes on its own, on my phone, with a passkey</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Claude Code</h3>
+          <ul>
+            <li>Starts from the repo and its notes, never from a stale copy</li>
+            <li>Writes the code and the tests</li>
+            <li>Runs the tests, and looks at the page in a real browser</li>
+            <li>Writes down what it learned, in the repo, for the next session</li>
+            <li>Proposes features of its own. It never ships one without my yes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="md" id="path">
+    <div class="wrap">
+      <h2>The path of a change</h2>
+      <ol class="flow wide">
+        <li><strong>It starts with a sentence</strong><span>Usually mine, often from my phone: what I want, or what looked wrong. Sometimes Claude&rsquo;s: a bug the nightly checkup found, or a feature idea from a night shift.</span></li>
+        <li><strong>Claude builds from the repo</strong><span>It pulls the latest first. Several sessions work on the same apps and cannot talk to each other, so the repo is how they stay in step.</span></li>
+        <li><strong>Tests, then a second look</strong><span>The suite runs. Riskier changes get a separate review pass that reads the change cold. Several of the problems described on these pages were found that way.</span></li>
+        <li class="gate"><strong>The gate</strong><span>What I asked for, and bug fixes, go ahead once the tests pass. A feature Claude came up with on its own stops here, in an inbox, with what it is, why it exists, what it changes and a picture.</span></li>
+        <li class="mine"><strong>I say yes on my phone</strong><span>For those proposals, Face ID signs a hash of exactly what I was shown. If the proposal changes after I open it, the yes is refused. <a href="../projects/ando/#gate">Try the gate.</a></span></li>
+        <li><strong>Deployed, and written down</strong><span>Exactly the pushed commit goes to the PC, and a line goes in that app&rsquo;s deploy log.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="rules">
+    <div class="wrap">
+      <h2>House rules</h2>
+      <p>These are standing rules. Every session reads them before it writes anything.</p>
+      <ul>
+        <li><strong>All work goes through the repo.</strong> Tested, approved fixes are always committed and pushed, and what is deployed is exactly what was pushed.</li>
+        <li><strong>Idle means idle.</strong> An app uses almost nothing when nobody is using it, and gets off the graphics card the moment a game starts.</li>
+        <li><strong>Secrets stay in Windows Credential Manager.</strong> Never in a file, a log or a commit.</li>
+        <li><strong>Nothing on the PC says yes for me.</strong> A program there can forge any header. It cannot forge my face.</li>
+        <li><strong>Windows security settings are mine.</strong> The firewall and sign-in are never changed for me. I get asked.</li>
+        <li><strong>Tests never touch the real thing.</strong> A simulated home, a test island, a pretend cloud. Never my own data, my real devices or a live API key.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="md" id="notes">
+    <div class="wrap">
+      <h2>The notes are part of the code</h2>
+      <p>Each repo carries a notes file that every session reads first and updates last. It records what was decided, when, why, and what was measured, in enough detail that a fresh session with no memory can pick the work up.</p>
+      <p>One entry, from the home hub&rsquo;s camera notes, word for word:</p>
+      <p class="aside"><strong>Never give a decoder an empty packet:</strong> to FFmpeg that means &ldquo;the stream ended&rdquo;, and the decoder never gives a picture again (that stopped the front door&rsquo;s live view, snapshots and person spotting 17 s after a start).</p>
+      <p>Most of the decisions and bug stories on the project pages come straight from those notes.</p>
+    </div>
+  </section>
+
+  <section class="md" id="unattended">
+    <div class="wrap">
+      <h2>Work that runs without me</h2>
+      <h3>The daily checkup</h3>
+      <p>Every night a scheduled run goes over all the apps, fixes the bugs it finds and ships the fixes. Its instructions live in the repo, so changing what it does is a commit I can read, and the run is not allowed to edit them itself.</p>
+
+      <h3>Night shifts, in a box</h3>
+      <p>A longer session can build feature proposals overnight. It runs in a sandbox, because it works alone on a machine full of my things:</p>
+      <ul>
+        <li>Its own Linux install under WSL, made from an image whose checksum is verified.</li>
+        <li>An unprivileged user with no password and no sudo.</li>
+        <li>A network of its own with no route out. One allowlist proxy is the only exit, and it opens a short list of sites by name and nothing near home.</li>
+        <li>A system-call filter that also closes the side door WSL keeps open to Windows.</li>
+        <li>A read-only token for the code host, held by root. What the worker builds reaches the repo only after my yes.</li>
+        <li>A spending cap per minute and at most three proposals a night.</li>
+        <li>A second locked-down user that judges what was produced. Every wall is checked before every run, and if one is down, nothing starts.</li>
+      </ul>
+
+      <article class="window sim wide" id="night" aria-labelledby="night-title">
+        <div class="titlebar"><span id="night-title"><span class="pre">simulation: </span>does a night shift start?</span><span class="badge">invented data</span></div>
+        <div class="sim-body">
+          <div class="pane">
+            <h3>Tonight</h3>
+            <div class="field">
+              <p class="label"><label for="s-hour">The time is</label> <output id="s-hour-out" for="s-hour">2 AM</output></p>
+              <input type="range" id="s-hour" min="0" max="23" step="1" value="2">
+            </div>
+            <ul class="checks">
+              <li><label><input type="checkbox" id="s-on" checked> <span>Night shifts are switched on</span></label></li>
+              <li><label><input type="checkbox" id="s-passkey" checked> <span>A passkey is set up on my phone</span></label></li>
+              <li><label><input type="checkbox" id="s-plan" checked> <span>The plan is one I approved</span></label></li>
+              <li><label><input type="checkbox" id="s-quiet" checked> <span>The PC has been quiet for half an hour</span></label></li>
+              <li><label><input type="checkbox" id="s-away" checked> <span>I have been away from my apps for half an hour</span></label></li>
+              <li><label><input type="checkbox" id="s-sandbox" checked> <span>The sandbox is installed</span></label></li>
+              <li><label><input type="checkbox" id="s-paused"> <span>Claude is paused</span></label></li>
+              <li><label><input type="checkbox" id="s-game"> <span>A game is running</span></label></li>
+              <li><label><input type="checkbox" id="s-worked"> <span>It already worked tonight</span></label></li>
+              <li><label><input type="checkbox" id="s-current"> <span>A night shift is already running</span></label></li>
+              <li><label><input type="checkbox" id="s-hand"> <span>I pressed &ldquo;Start one now&rdquo;</span></label></li>
+            </ul>
+          </div>
+          <div class="pane">
+            <h3>What Ando decides</h3>
+            <p class="verdict" id="s-verdict" role="status" style="margin-top:0;margin-bottom:1rem"></p>
+            <ol class="trace" id="s-trace" aria-live="polite"></ol>
+            <p class="hint" style="margin-top:1rem">Starting one by hand skips the hour, the once-a-night rule and the quiet. It never skips the rest.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="md" id="numbers">
+    <div class="wrap">
+      <h2>What stands behind a change</h2>
+      <p>Most changes ship without a signature, so the test suites are what stand behind them. These are the counts in November 2026.</p>
+      <table class="tally">
+        <thead><tr><th scope="col">App</th><th scope="col">What it is</th><th scope="col" class="n">Tests</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><a href="../projects/ando/">Ando</a></th><td>Control plane</td><td class="n">401</td></tr>
+          <tr><th scope="row"><a href="../projects/hearth/">Hearth</a></th><td>Home hub</td><td class="n">393</td></tr>
+          <tr><th scope="row"><a href="../projects/mochi/">Mochi</a></th><td>3D island</td><td class="n">113</td></tr>
+        </tbody>
+      </table>
+      <p>The tests lean on stand-ins so they can run anywhere: a simulated home, a pretend phone authenticator, a pretend model server, a pretend WSL. The pages on this site were checked the same way, in a real browser at phone and desktop sizes.</p>
+    </div>
+  </section>
+
+  <section class="md" id="limits">
+    <div class="wrap">
+      <h2>Limits, plainly</h2>
+      <ul>
+        <li>Claude writes the code. My part is the requirements, the rules, using the apps and the yes.</li>
+        <li>The passkey guards what Claude proposes on its own. Fixes, and changes I asked for, go in on the strength of the tests.</li>
+        <li>Shipping an approved proposal is not automatic yet. The trusted deployer is the next piece.</li>
+        <li>All of it is built for one person on one PC.</li>
+      </ul>
+      <p>Questions about any of it are welcome: <a href="mailto:ando1fe@proton.me">ando1fe@proton.me</a>.</p>
+    </div>
+  </section>
+
+  <section class="md" id="next">
+    <div class="wrap">
+      <h2>See what it produced</h2>
+      <p class="next wide">
+        <a class="btn" href="../projects/ando/">Ando, the control plane</a>
+        <a class="btn" href="../projects/hearth/">Hearth, the home hub</a>
+        <a class="btn" href="../projects/mochi/">Mochi, the 3D island</a>
+        <a class="btn quiet" href="../work-demos/">My work demos</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">
+  <p>&copy; 2026 Andrew Felipe</p>
+  <p>The simulation uses invented data.</p>
+</footer>
+
+<script src="../app.js"></script>
+<script src="sim.js"></script>
+<!-- Page view counts at andrewfelipe.goatcounter.com (no cookies) -->
+<script data-goatcounter="https://andrewfelipe.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<!-- Metricool tracker; skips browsers opted out with #toggle-goatcounter -->
+<script>
+  (function () {
+    try { if (localStorage.getItem('skipgc') === 't' || location.hash === '#toggle-goatcounter') return; } catch (e) {}
+    function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5af058e62d5480731baa67cbe3b12c4c"})});
+  })();
+</script>
+</body>
+</html>
