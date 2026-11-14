@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hearth, a local-first home hub: Andrew Felipe</title>
-<meta name="description" content="Hearth is the home hub I run on my own PC: lights, speakers, TVs and cameras controlled over the home network, cameras recorded locally, and a local model that answers questions. Case study with a recording and simulations.">
+<meta name="description" content="Hearth is the home hub I run on my own PC: lights, speakers and TVs controlled over the home network, cameras recorded to a disk I own, and a local model that answers questions. Case study with a recording and simulations.">
 <meta name="theme-color" content="#140F2E">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hearth: a home hub that runs on my own PC">
@@ -42,12 +42,12 @@
     <div class="wrap">
       <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~/projects/hearth$</span> <span class="run">cat README.md</span></p>
       <h1 class="title">Hearth</h1>
-      <p class="sub">A home hub that runs on my own PC. Lights, speakers, TVs, cameras and air purifiers are controlled directly over the home network, and the cameras record to a disk I own.</p>
+      <p class="sub">A home hub that runs on my own PC. Lights, speakers, TVs, cameras and air purifiers in one dashboard, spoken to directly over the home network wherever a device allows it. The cameras record to a disk I own.</p>
       <dl class="facts">
         <div><dt>What</dt><dd>A local-first smart-home hub with a phone dashboard</dd></div>
-        <div><dt>Talks to</dt><dd>More than 20 kinds of device and service, among them Hue, Sonos, Chromecast and Google TV, Apple TV, Nanoleaf, Nest cameras, Roomba, Dyson and Blueair</dd></div>
+        <div><dt>Talks to</dt><dd>More than 20 kinds of device and service, among them Hue, Sonos, Chromecast and Google TV, Apple TV, Nanoleaf, Nest cameras, Roomba and Blueair</dd></div>
         <div><dt>Made of</dt><dd>Python and FastAPI, a React dashboard, SQLite, and a local language model served by Ollama</dd></div>
-        <div><dt>Tests</dt><dd>About 390, run with pytest and a real browser against a simulated home</dd></div>
+        <div><dt>Tests</dt><dd>About 525, run with pytest and a real browser against a simulated home</dd></div>
         <div><dt>Since</dt><dd>October 2026</dd></div>
       </dl>
     </div>
@@ -131,7 +131,7 @@
 
   <section class="md" id="bugs">
     <div class="wrap">
-      <h2>Four bugs worth the story</h2>
+      <h2>Six bugs worth the story</h2>
       <ol class="decisions">
         <li>
           <h3>The iPhone refused every recording</h3>
@@ -152,6 +152,16 @@
           <h3>The answer that never arrived</h3>
           <p>A question to the assistant was answered on the processor because the card was busy. The first word took 70 seconds, and Safari drops a connection that has said nothing for 60.</p>
           <p class="why">The reply stream now says where the answer is being made before the model starts, and sends a keep-alive every 10 seconds.</p>
+        </li>
+        <li>
+          <h3>A correct password, refused</h3>
+          <p>The air purifiers&rsquo; cloud kept turning down a correct login. Accounts live on one of its regional sign-ins, which do not follow where you live, and a region that has never heard of an account answers exactly like a wrong password.</p>
+          <p class="why">When the region it asked says no, Hearth now asks each region whether it knows the email, and sends the password only where one does. The settings page says which it was: no account with that email, a wrong password, or an account locked for a while.</p>
+        </li>
+        <li>
+          <h3>The watch that became the TV</h3>
+          <p>After a restart, the remote said the Apple TV needed pairing again. It was talking to my watch. Phones and watches on my Wi-Fi keep changing addresses, an old announcement of the Apple TV&rsquo;s still named an address the watch had since been given, and Hearth remembers what a device is once it knows.</p>
+          <p class="why">For a phone, a tablet or a watch, the router&rsquo;s word now wins, since it knows a device by its hardware address and not by the address it happens to hold. Of several devices that could be the Apple TV, Hearth picks the one it is paired with, never the first it finds. When Hearth decides a device is another model than it thought, the log now says so.</p>
         </li>
       </ol>
     </div>
@@ -255,6 +265,7 @@
         <li>Cloud services and neighbours are faked for tests: a pretend air-purifier cloud, a pretend model stack and a pretend model server for the card-sharing rules.</li>
         <li>What made it slow is pinned by tests: a value that only ticks is never redrawn, an endless animation may only move opacity and transform, and the disk is counted at most once a minute.</li>
         <li>Guest rules have their own suites: what each link level sees, what it may press, and that a scene can never reach past it.</li>
+        <li>When a bug turned out to be in a library, the test runs the real library. Typing from the TV remote goes through the real remote-control library to a pretend TV, and the test fails on the release that had the bug.</li>
       </ul>
     </div>
   </section>

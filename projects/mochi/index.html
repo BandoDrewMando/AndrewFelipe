@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mochi, a 3D island in a browser tab: Andrew Felipe</title>
-<meta name="description" content="Mochi is a small life sim drawn with three.js and no build step. Its residents are rigged and animated in the browser and the island is lit by the real time of day. Case study with real captures and a simulation.">
+<meta name="description" content="Mochi is a small life sim drawn with three.js and no build step. Its residents are rigged and animated in the browser, its buildings can be walked into, and the island is lit by the real time of day. Case study with real captures and a simulation.">
 <meta name="theme-color" content="#140F2E">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mochi: a 3D island in a browser tab">
-<meta property="og:description" content="three.js with no build step, rigging and motion capture in the browser, and a sky that follows the clock.">
+<meta property="og:description" content="three.js with no build step, rigging and motion capture in the browser, buildings you walk into, and a sky that follows the clock.">
 <meta property="og:url" content="https://bandodrewmando.github.io/AndrewFelipe/projects/mochi/">
 <meta property="og:image" content="https://bandodrewmando.github.io/AndrewFelipe/assets/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -42,12 +42,12 @@
     <div class="wrap">
       <p class="cmd" aria-hidden="true"><span class="ps1">andrew@concord:~/projects/mochi$</span> <span class="run">cat README.md</span></p>
       <h1 class="title">Mochi</h1>
-      <p class="sub">A little 3D island that runs in a browser tab. Its residents are rigged and animated in the browser, speak through a local language model, and live under a sky that follows the real time of day.</p>
+      <p class="sub">A little 3D island that runs in a browser tab. Its residents are rigged and animated in the browser, speak through a local language model, and live under a sky that follows the real time of day. Every building on it can be walked into.</p>
       <dl class="facts">
         <div><dt>What</dt><dd>A small life sim, in the spirit of Tomodachi Life and The Sims</dd></div>
         <div><dt>Made of</dt><dd>three.js as plain ES modules with no build step, and a Python standard-library server that keeps the world</dd></div>
-        <div><dt>Motion</dt><dd>Motion-capture clips from Quaternius&rsquo; Universal Animation Library (CC0), replayed on each figure&rsquo;s own rig</dd></div>
-        <div><dt>Tests</dt><dd>About 110: pytest, Node for the rigging maths, and a browser with WebGL in software</dd></div>
+        <div><dt>Motion</dt><dd>Motion-capture clips from Quaternius&rsquo; Universal Animation Library and a hand from MakeHuman&rsquo;s base mesh, both CC0, fitted to each figure&rsquo;s own rig</dd></div>
+        <div><dt>Tests</dt><dd>About 350: pytest, Node for the rigging, motion and route maths, and a browser with WebGL in software</dd></div>
         <div><dt>Since</dt><dd>October 2026</dd></div>
       </dl>
     </div>
@@ -75,11 +75,25 @@
           </div>
         </figure>
         <div>
-          <p>The island is life-size and lit by the hour: the sun crosses the sky, evenings glow, and at night there are stars, street lamps and lit windows. From above you drag to look around and tap someone to fly over. On foot you walk it with one thumb.</p>
+          <p>The island is life-size and lit by the hour: the sun crosses the sky, evenings glow, and at night there are stars, street lamps and lit windows. From above you drag to look around and tap someone to fly over. On foot you walk it with one thumb, and in through any door.</p>
           <p>Residents have places to be. They go to the café, the beach, the park or the hill, meet, become friends, fall out and make up. When one of them needs something, a small flag appears over their head.</p>
-          <p class="caption">The page was drawn here by a software renderer for the captures, so there is no recording: it runs far too slowly without a graphics chip to film.</p>
+          <p class="caption">The page was drawn here by a software renderer at the app&rsquo;s full graphics setting, so there is no recording: it runs far too slowly without a graphics chip to film.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="md" id="inside">
+    <div class="wrap">
+      <h2>Step inside</h2>
+      <p>Every building has an inside you walk into through its own door: the caf&eacute;, the corner shop, the lighthouse and the apartments. These are captures on foot, on a test save with the same made-up residents.</p>
+      <ul class="shots wide" tabindex="0" aria-label="Captures on foot inside Mochi's buildings. Scroll sideways for more.">
+        <li><figure class="window calm"><img src="../../assets/mochi/cafe.webp" width="720" height="1561" loading="lazy" alt="Inside the caf&eacute;: a green bar with red stools along a brick wall of bottles, a pastry case, lamps hanging from the beams and a window onto the sea."><figcaption>The caf&eacute;: the bar, its stools and the pastry case. Every seat is a button, and one a neighbor is sitting on is not offered.</figcaption></figure></li>
+        <li><figure class="window calm"><img src="../../assets/mochi/cafe-table.webp" width="720" height="1561" loading="lazy" alt="Two test residents at a window table in the caf&eacute;, each a flat picture on a stand with a name tag above it."><figcaption>Two test residents at a window table. Until a resident has a 3D figure, they are a standee of their picture.</figcaption></figure></li>
+        <li><figure class="window calm"><img src="../../assets/mochi/shop.webp" width="720" height="1561" loading="lazy" alt="Inside the corner shop: shelves of colourful goods under a timber roof hung with bunting."><figcaption>The corner shop, open to its roof.</figcaption></figure></li>
+        <li><figure class="window calm"><img src="../../assets/mochi/lighthouse.webp" width="720" height="1561" loading="lazy" alt="Inside the lighthouse: a wooden staircase winding up the round wall above a desk with a lamp."><figcaption>The lighthouse: the keeper&rsquo;s nook, and stairs twice round the wall up to the lamp.</figcaption></figure></li>
+        <li><figure class="window calm"><img src="../../assets/mochi/gallery.webp" width="720" height="1561" loading="lazy" alt="The view from the top of the lighthouse at sunset: a railing in front, then treetops, the plaza and the hill under a pink sky."><figcaption>From the gallery at the top of the lighthouse, as the sun goes down.</figcaption></figure></li>
+      </ul>
     </div>
   </section>
 
@@ -127,6 +141,68 @@
           <p>The world advances only while its page is open. It never wakes the model server on its own, and it lets go of the graphics card completely while a game runs.</p>
           <p class="why">It shares a PC with everything else I run. A toy that keeps a 24 GB card warm is not a toy I would leave on.</p>
         </li>
+        <li>
+          <h3>Buildings you walk into</h3>
+          <p>The caf&eacute;, the corner shop and the lighthouse are each built twice. The outside is part of the island. The inside is a scene of its own at the same spot, drawn after the island into the same picture and the same depth, so each shows wherever the other is not in front. Only the inside of the building you are near is drawn at all.</p>
+          <p class="why">A room needs light the open island does not have: its own lamps, a sun that comes in through the windows, a shadow fitted to that one room. The lighthouse added floors that lie over each other, so the ground became the highest thing you could step onto from where you stand, and its round wall lets you through only down by the door.</p>
+        </li>
+        <li>
+          <h3>A picture in three tiers</h3>
+          <p>The island is drawn into a picture that can hold light brighter than white, then finished in passes written for this page: what is bright glows, corners get a soft shadow worked out from the picture&rsquo;s own depth, and a last pass maps the tones and grades the colour. A graphics card the page recognises gets all of it, a phone gets the glow and the grade, and anything drawn by a processor gets the island as it always was.</p>
+          <p class="why">On my PC&rsquo;s RTX 4090 a whole frame with every pass takes about 4 ms at 1024 by 768. The tests draw in software, which gets the plain tier by itself, so the other two are asked for by hand in tests of their own: every pass compiles and draws, and what each does shows in the picture. A device that cannot draw into the new picture after all falls back to the plain one on a fresh canvas.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="figures">
+    <div class="wrap">
+      <h2>Figures that move like people</h2>
+      <p>A resident&rsquo;s 3D figure is generated from pictures by a separate pipeline. It arrives as one surface with mittens for hands, and motion captured for a game&rsquo;s heroes does not sit right on it. All of it is done by the page itself, and no figure&rsquo;s file is changed.</p>
+      <ol class="decisions">
+        <li>
+          <h3>Hands with fingers</h3>
+          <p>Each rigged figure is given a modelled hand at each wrist. The page reads the skin colour of the arm ring by ring to find where a sleeve ends, draws the new hand&rsquo;s cuff out to the arm&rsquo;s own outline there, and takes the old hand out of what is drawn.</p>
+          <p class="why">A picture-to-3D model makes what it can of a hand a few dozen pixels tall: a few dozen triangles with the fingers run together. A bracelet by the wrist goes with the old hand, a sleeve down over the hand leaves the fingers coming out of it, and an arm made against the body keeps the hand it has.</p>
+        </li>
+        <li>
+          <h3>Joints that keep their shape</h3>
+          <p>The rig has one bone a part, so a point of skin between two bones went halfway between where each would take it, in a straight line. Across an elbow bent at a right angle that line cuts the corner, and a limb&rsquo;s twist lands all at once on the joint above it. The page adds 28 bones between the rig&rsquo;s own: across each elbow and knee, at each shoulder, hip and wrist, and along each limb&rsquo;s twist.</p>
+          <p class="why">Measured on a test arm: a waving elbow kept 0.80 of its thickness before and 0.97 after.</p>
+        </li>
+        <li>
+          <h3>Borrowed motion, carried their own way</h3>
+          <p>The motion library&rsquo;s people stand like a game&rsquo;s heroes: knees bent, arms out, chest forward, and a jog that is a sprint. Each clip is now played as its own movement about a carriage worked out for the figure, so a resident stands the way it was made, lets its arms hang as close as its body allows, and walks over instead of charging.</p>
+          <p class="why">Measured first. In the library&rsquo;s idle the knees are bent 19 and 24 degrees and the chest leans 15, while no bone moves more than 3 over the whole loop. The stance was all there was to it, so it could be replaced without touching the movement.</p>
+        </li>
+        <li>
+          <h3>Eyes that look the way people look</h3>
+          <p>A resident who is listening looks away for about a second in seven, and one who is talking for about two in five, as research on gaze in conversation reports. The eyes go first, the head follows part of the way, and a blink comes with most changes. The drawn eyes move too: the page finds each eye by comparing the figure&rsquo;s open and closed faces, and slides the drawing inside that patch.</p>
+          <p class="why">A figure&rsquo;s face is a sheet of drawn expressions laid over its head, and there was no new art to draw. The looks come from plain numbers and a seed, so the same seed gives the same looks and they can be tested.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="md" id="bugs">
+    <div class="wrap">
+      <h2>Three bugs worth the story</h2>
+      <ol class="decisions">
+        <li>
+          <h3>The trees that lost their leaves</h3>
+          <p>For the first hour the new picture was live, the trees stood bare from above and the lawns had no grass. The way three.js smooths a cut-out&rsquo;s edge by itself starts at the cut-off and takes a whole pixel&rsquo;s change to fill a point, so a leaf a few pixels across was hardly drawn at all: a seventh of what plain cut-outs draw.</p>
+          <p class="why">Every look before it shipped had been at something else in the picture. The edge now sits on the cut-off itself, and a test lights the leaves in a colour of their own and counts them.</p>
+        </li>
+        <li>
+          <h3>The beam that turned to paper</h3>
+          <p>The lighthouse&rsquo;s beam is the one thing on the island that is added to the picture as light. It was a flat cone at one strength, which passed for a beam when it was blended on the screen&rsquo;s own brightness. In the new picture, which adds light up before it maps the tones, the same cone was a rolled-up sheet of paper across the night sky.</p>
+          <p class="why">It is a shaft of light with a small shader of its own now: brightest by the lamp, gone by its far end, soft at its edges. It has a strength for each way of adding light, since in the dark the same number reads about four times as bright on the screen&rsquo;s brightness as it does in light.</p>
+        </li>
+        <li>
+          <h3>The figure that stood in front of itself</h3>
+          <p>One figure&rsquo;s mesh had been generated a fifth of its height in front of its own middle. Everything that takes a figure to be where it is was off by that much: how close it comes for a hug, its shadow, what you bump into, when it is left undrawn.</p>
+          <p class="why">The page now takes that offset out as it rigs a figure, whatever the generator did. A test rigs the same figure made on its middle and off it.</p>
+        </li>
       </ol>
     </div>
   </section>
@@ -161,6 +237,8 @@
         <li>The rigging and motion code is tested in Node on made-up figures, by counting the edges a pose stretches too far. Fixes came with a figure that reproduces the tear.</li>
         <li>The page itself is tested in a real browser, with WebGL drawn in software where the island is needed: who is where, names that never overlap, walking indoors, pulling sheets closed.</li>
         <li>Every test island gets its own data folder and made-up residents. The captures above were taken the same way.</li>
+        <li>Walk routes, the buildings&rsquo; walls and the fitting of hands have Node suites of their own, on made-up obstacles, floor plans and arms.</li>
+        <li>The picture&rsquo;s passes are compiled and drawn in software on the tiers that have them. Visual changes are also looked at on the PC&rsquo;s own graphics card, on a test island that asks nothing of the real one.</li>
       </ul>
     </div>
   </section>
@@ -180,7 +258,9 @@
       <ul>
         <li>It cannot be played from this page. The island needs its server, and the code is private.</li>
         <li>The 3D figures come from a separate pipeline on my model stack. Until a resident has one, they are a flat standee of their picture.</li>
-        <li>Arms that were generated fused to the body stay where they were made. Moving them tore the mesh, so the rig leaves them alone.</li>
+        <li>Arms that were generated fused to the body stay where they were made, and keep the hands they came with. Moving them tore the mesh, so the rig leaves them alone.</li>
+        <li>The new hands are one skin tone, and their fingers move together: open or at rest, with no pointing or gripping yet.</li>
+        <li>Nobody but you climbs the lighthouse yet.</li>
       </ul>
     </div>
   </section>
