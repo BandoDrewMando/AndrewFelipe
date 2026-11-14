@@ -47,7 +47,7 @@
         <div><dt>What</dt><dd>A control plane and phone app for everything I self-host</dd></div>
         <div><dt>Runs on</dt><dd>A Windows PC at home, reached from my phone over a private Tailscale network</dd></div>
         <div><dt>Made of</dt><dd>Python standard library on the server, plain JavaScript on the page, no build step</dd></div>
-        <div><dt>Tests</dt><dd>About 400, run with pytest and a real browser</dd></div>
+        <div><dt>Tests</dt><dd>About 435, run with pytest and real browsers</dd></div>
         <div><dt>Since</dt><dd>October 2026</dd></div>
       </dl>
     </div>
@@ -60,7 +60,7 @@
       <div class="reel wide">
         <div>
           <figure class="window player" style="margin:0">
-            <div class="titlebar" aria-hidden="true"><span>approve.mp4</span><span class="badge">13 s, no sound</span></div>
+            <div class="titlebar" aria-hidden="true"><span>approve.mp4</span><span class="badge">15 s, no sound</span></div>
             <div class="window-body">
               <video controls muted playsinline preload="none" width="590" height="1278" poster="../../assets/ando/approve-poster.webp" aria-label="Recording: approving a proposal from the phone" aria-describedby="approve-words">
                 <source src="../../assets/ando/approve.mp4" type="video/mp4">
@@ -74,6 +74,7 @@
           <li><figure class="window calm"><img src="../../assets/ando/apps.webp" width="720" height="1561" loading="lazy" alt="The Apps tab: each app with a switch, its state, memory, GPU memory, CPU and uptime, and a Restart button."><figcaption>Apps: each one&rsquo;s switch, memory, GPU memory and uptime.</figcaption></figure></li>
           <li><figure class="window calm"><img src="../../assets/ando/inbox.webp" width="720" height="1561" loading="lazy" alt="The inbox with two proposals. One is flagged: Changes Ando itself."><figcaption>The inbox. A change to Ando itself is flagged, since it could change how a yes works.</figcaption></figure></li>
           <li><figure class="window calm"><img src="../../assets/ando/proposal.webp" width="720" height="1561" loading="lazy" alt="A proposal sheet: what the feature does, a picture, the files, and three buttons: Ship it, Not now, and No, let it go."><figcaption>A proposal. Ship it is the only button that needs Face ID.</figcaption></figure></li>
+          <li><figure class="window calm"><img src="../../assets/ando/entrance.webp" width="720" height="1561" loading="lazy" alt="Ando's entrance: a round violet mascot with a face, above the words Hi Andrew, I'm Ando, on a starry violet sky."><figcaption>The entrance. Each step is an animation that is awaited, never a timer: a phone holds timers back in the background and lets them all go at once.</figcaption></figure></li>
         </ul>
       </div>
     </div>
@@ -140,12 +141,18 @@
         <li>
           <h3>Guests get their own door</h3>
           <p>I can share one app with someone for an hour or a month. A guest link opens one app at one permission level through a separate door, which is the only public thing Ando ever turns on, and only while a link is live. Keys are kept as hashes.</p>
+          <p>The door takes off the headers login proxies use to say who someone is, so no app behind it can be told that a guest is someone else. What it writes down about a visitor is the address the tunnel saw, never the one the visitor claimed.</p>
           <p class="why">Sharing should never touch my own way in. Ending a link cuts off even a tab that is already open.</p>
         </li>
         <li>
           <h3>A notification is never a link</h3>
           <p>Tapping a push notification opens the right app at the right page, but the notification carries no address.</p>
           <p class="why">An address would let any web page or message open one of my apps at a page of its choosing, with that app&rsquo;s cookies. A review caught this before it shipped.</p>
+        </li>
+        <li>
+          <h3>Nothing moves while nobody is looking</h3>
+          <p>Ando&rsquo;s page was redrawn in November: a violet night sky, frosted glass for what you steer with, and an entrance with a small mascot. Everything that drifts or twinkles stops the moment the page is hidden or an app is open on top of it, and it moves only by transform and opacity.</p>
+          <p class="why">Those are the two properties a phone&rsquo;s graphics chip can animate by itself. The old entrance blurred its sky again on every frame: 24 frames a second, against 56 for the new one, on a processor slowed four times.</p>
         </li>
       </ol>
     </div>
@@ -227,10 +234,11 @@
       <ul>
         <li>The CBOR reader is tested against the examples in RFC 8949, the signature code against the vectors in RFC 6979, and the whole verifier against bytes Chromium&rsquo;s own WebAuthn produced.</li>
         <li>The gate is tested end to end through the real server with a software authenticator standing in for the phone, and again in a real browser with a virtual one. The recording above was made the same way.</li>
-        <li>The page is tested as a phone: touch targets of at least 44 by 44 points, the keyboard, sheets and swipes.</li>
+        <li>The page is tested as a phone: touch targets of at least 44 by 44 points, the keyboard, sheets and swipes, and text contrast of 4.5 to 1 or better.</li>
         <li>The sandbox is tested by running a whole pretend night inside a simulated WSL, attacks included.</li>
       </ul>
       <p class="aside"><strong>A hole the review found.</strong> The first version of the sandbox read a night&rsquo;s verdict from the worker&rsquo;s own run. A fake <code>git</code> planted earlier on the worker&rsquo;s PATH could have slipped a protected file past it. A separate security review caught it. The verdict is now read by a second user with a fixed PATH and nobody&rsquo;s files but its own, and a test plants that fake <code>git</code> on every run.</p>
+      <p class="aside"><strong>A bug only Safari showed.</strong> On my iPhone the tab bar&rsquo;s highlight lay stretched across the whole bar until a tab was tapped. Safari runs deferred scripts without waiting for a stylesheet that is still on its way, so the page had measured itself before it had any styles. One plain script now sits right after the stylesheet, which every browser holds back until the styles are in, and the highlight is measured again whenever the bar is laid out. The test delays the stylesheet by a second in WebKit.</p>
     </div>
   </section>
 

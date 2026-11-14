@@ -78,7 +78,7 @@
       <h2>The path of a change</h2>
       <ol class="flow wide">
         <li><strong>It starts with a sentence</strong><span>Usually mine, often from my phone: what I want, or what looked wrong. Sometimes Claude&rsquo;s: a bug the nightly checkup found, or a feature idea from a night shift.</span></li>
-        <li><strong>Claude builds from the repo</strong><span>It pulls the latest first. Several sessions work on the same apps and cannot talk to each other, so the repo is how they stay in step.</span></li>
+        <li><strong>Claude builds from the repo</strong><span>It pulls the latest first. Several sessions work on the same apps and cannot talk to each other, so the repo is how they stay in step. When more than one is in the same app, each first pushes a line to its notes saying what it is in the middle of and which files that touches.</span></li>
         <li><strong>Tests, then a second look</strong><span>The suite runs. Riskier changes get a separate review pass that reads the change cold. Several of the problems described on these pages were found that way.</span></li>
         <li class="gate"><strong>The gate</strong><span>What I asked for, and bug fixes, go ahead once the tests pass. A feature Claude came up with on its own stops here, in an inbox, with what it is, why it exists, what it changes and a picture.</span></li>
         <li class="mine"><strong>I say yes on my phone</strong><span>For those proposals, Face ID signs a hash of exactly what I was shown. If the proposal changes after I open it, the yes is refused. <a href="../projects/ando/#gate">Try the gate.</a></span></li>
@@ -167,13 +167,13 @@
   <section class="md" id="numbers">
     <div class="wrap">
       <h2>What stands behind a change</h2>
-      <p>Most changes ship without a signature, so the test suites are what stand behind them. These are the counts in November 2026.</p>
+      <p>Most changes ship without a signature, so the test suites are what stand behind them. These are the counts on November 14, 2026.</p>
       <table class="tally">
         <thead><tr><th scope="col">App</th><th scope="col">What it is</th><th scope="col" class="n">Tests</th></tr></thead>
         <tbody>
-          <tr><th scope="row"><a href="../projects/ando/">Ando</a></th><td>Control plane</td><td class="n">401</td></tr>
-          <tr><th scope="row"><a href="../projects/hearth/">Hearth</a></th><td>Home hub</td><td class="n">393</td></tr>
-          <tr><th scope="row"><a href="../projects/mochi/">Mochi</a></th><td>3D island</td><td class="n">113</td></tr>
+          <tr><th scope="row"><a href="../projects/ando/">Ando</a></th><td>Control plane</td><td class="n">433</td></tr>
+          <tr><th scope="row"><a href="../projects/hearth/">Hearth</a></th><td>Home hub</td><td class="n">537</td></tr>
+          <tr><th scope="row"><a href="../projects/mochi/">Mochi</a></th><td>3D island</td><td class="n">353</td></tr>
         </tbody>
       </table>
       <p>The tests lean on stand-ins so they can run anywhere: a simulated home, a pretend phone authenticator, a pretend model server, a pretend WSL. The pages on this site were checked the same way, in a real browser at phone and desktop sizes.</p>
