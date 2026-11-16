@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Andrew Felipe: work demos</title>
 <meta name="description" content="Andrew Felipe, software engineer: working rebuilds of the features he shipped at WT Cox Information Services and the reporting job he built at TIAA, plus his work history.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,9 +24,9 @@
   --font-code:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   color-scheme:dark;
 }
-:root{box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{box-sizing:border-box}
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);-webkit-text-size-adjust:100%}
+html{scroll-padding-top:64px;-webkit-text-size-adjust:100%}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:17px;line-height:1.55}
 a{color:var(--green);text-underline-offset:3px}
@@ -74,7 +74,7 @@ code{font-family:var(--font-code);font-size:.86em;background:var(--green-tint);p
 }
 
 /* Section nav */
-.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line);margin-top:28px}
+.toc{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);margin-top:28px}
 .toc ul{position:relative;list-style:none;margin:0 auto;padding:10px 20px;display:flex;gap:4px;overflow-x:auto;max-width:1080px;scrollbar-width:none}
 .toc ul::-webkit-scrollbar{display:none}
 @media (min-width:700px){.toc ul{flex-wrap:wrap;overflow-x:visible}}
@@ -305,19 +305,22 @@ h3,h4{font-family:var(--font-ui);font-weight:600}
 .err{color:var(--red)}
 code{background:var(--green-tint);color:var(--ink);border-radius:0}
 
-/* Header bar. It sticks to the very top and takes the top safe area as padding, so its own background
-   reaches the top of the screen. X's in-app browser keeps counting its toolbar in that safe area after the
-   toolbar slides away; this way the space it leaves is the bar's background, not the page scrolling past.
-   The inset shadow paints that strip solid, so nothing ghosts through the glass there. */
-.toc{position:sticky;top:0;padding-top:env(safe-area-inset-top,0px);margin-top:0;background:rgba(20,15,46,.92);box-shadow:inset 0 env(safe-area-inset-top,0px) var(--paper);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.toc-inner{display:flex;align-items:center;gap:1.5rem;min-height:3.5rem;max-width:1080px;margin:0 auto;padding:0 20px}
+/* Header bar: the same bar as the rest of the site (.bar and .nav in ../styles.css), so it sits, sticks,
+   and marks the section you're reading the same way it does on the home and project pages. */
+.toc{position:sticky;top:0;margin-top:0;background:rgba(20,15,46,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+/* X's in-app browser keeps treating its toolbar as covering the page after the toolbar slides away, so the
+   bar sticks a toolbar's height down the screen. This fills the space above the bar so the page never shows
+   through there. In every other browser it sits above the top of the screen, out of sight. */
+.toc::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--paper);pointer-events:none}
+.toc-inner{display:flex;align-items:center;gap:1.25rem;min-height:3.5rem;max-width:1080px;margin:0 auto;padding:0 20px}
 .toc .mark{flex:none;padding:0;font:1.9rem/1 var(--font-slab);color:var(--ink);text-decoration:none;text-shadow:-2px 0 var(--cyan),2px 0 var(--magenta)}
 .toc .mark:hover{background:transparent}
-.toc ul{flex:1;min-width:0;max-width:none;margin:0;padding:0;flex-wrap:nowrap;overflow-x:auto;gap:2px}
-.toc ul a{color:var(--ink-soft);border-radius:0;padding:6px 7px;font-weight:500}
-@media (max-width:1100px){.toc ul{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}}
+.toc .crumb{flex:none;font:1.375rem/1 var(--font-slab);color:var(--amber);white-space:nowrap}
+.toc ul{--gap:1.25rem;flex:1;min-width:0;max-width:none;margin:0;padding:0;flex-wrap:nowrap;overflow-x:auto;gap:var(--gap)}
+.toc ul a{padding:.55rem 0;border-radius:0;color:var(--ink-soft);font-weight:500;font-size:1.0625rem;line-height:1.65;border-bottom:2px solid transparent}
 .toc ul a:hover{background:transparent;color:var(--ink)}
-.toc ul a[aria-current="true"]{background:transparent;color:var(--cyan);box-shadow:inset 0 -2px 0 var(--cyan)}
+.toc ul a[aria-current="true"]{background:transparent;color:var(--ink);border-bottom-color:var(--magenta)}
+@media (max-width:40rem){.toc-inner{gap:.9rem}.toc ul{--gap:.9rem}.toc ul a{font-size:.95rem}.toc .crumb{font-size:1.2rem}}
 
 /* Hero: the CRT screen */
 .hero{position:relative;overflow:hidden;padding:clamp(2.75rem,8vw,6rem) 0 clamp(3rem,8vw,5.5rem);border-bottom:1px solid var(--line);background:radial-gradient(120% 90% at 25% 30%,#251B5E 0%,var(--glass) 72%)}
@@ -454,14 +457,11 @@ dialog.pop[open]{animation:popin .16s ease-out}
 #training .panel-head{margin-bottom:4px}
 .skills.ccna{margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px 24px}
 .drawer.after-groups{margin-top:84px;border-top:1px solid var(--line)}
+/* Each employer's links start after a short divider, spaced like the rest of the nav */
 .toc ul li.grp{display:flex;align-items:center}
-.toc ul li.grp:not(:first-child){margin-left:6px;padding-left:8px;border-left:1px solid var(--line-strong)}
-.toc ul a.grp-link{font:1.2rem/1 var(--font-slab);letter-spacing:.05em;color:var(--emp,var(--cyan));padding:6px 4px}
-/* Two groups make the nav longer: tighter links, and a fade on the right whenever it scrolls */
-.toc-inner{gap:1.1rem}
-.toc ul{gap:1px}
-.toc ul a{padding:6px 4px;font-size:.88rem}
-.toc ul.more{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}
+.toc ul li.grp:not(:first-child)::before{content:"";flex:none;width:1px;height:1.1em;margin-right:var(--gap);background:var(--line-strong)}
+/* When the links don't all fit, the right edge fades the way the site nav's does, until the list is scrolled to the end */
+.toc ul.more{padding-right:2.5rem;-webkit-mask-image:linear-gradient(to right,#000 80%,transparent);mask-image:linear-gradient(to right,#000 80%,transparent)}
 .toc ul.more.at-end{-webkit-mask-image:none;mask-image:none}
 
 /* ===== TIAA: monthly batch metrics report ===== */
@@ -502,6 +502,7 @@ table.mx-table{font-size:.88rem}
 <nav class="toc" aria-label="Sections">
   <div class="toc-inner">
     <a class="mark" href="../" aria-label="Andrew Felipe, home">AF</a>
+    <span class="crumb" aria-hidden="true">~/work-demos</span>
     <ul>
     <li class="grp"><a class="grp-link" href="#wtcox" aria-label="WT Cox Information Services demos">WT Cox</a></li>
     <li><a href="#aliases">Aliases</a></li>
@@ -2377,7 +2378,10 @@ function setCurrent(id) {
     if (a.getAttribute('href') === '#' + id) {
       a.setAttribute('aria-current', 'true');
       const ul = a.closest('ul');
-      if (a.offsetLeft < ul.scrollLeft || a.offsetLeft + a.offsetWidth > ul.scrollLeft + ul.clientWidth) ul.scrollTo({ left: Math.max(0, a.offsetLeft - 20), behavior: reduceMotion ? 'auto' : 'smooth' });
+      // Bring it into view when it's off either edge or in the fade on the right; stop one gap short of it,
+      // so the edge falls in the empty space between links instead of cutting through the previous one.
+      const gap = parseFloat(getComputedStyle(ul).columnGap) || 0;
+      if (a.offsetLeft < ul.scrollLeft || a.offsetLeft + a.offsetWidth > ul.scrollLeft + ul.clientWidth * 0.8) ul.scrollTo({ left: Math.max(0, a.offsetLeft - gap), behavior: reduceMotion ? 'auto' : 'smooth' });
     } else a.removeAttribute('aria-current');
   });
 }
