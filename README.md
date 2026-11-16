@@ -5,7 +5,7 @@ My personal site: https://bandodrewmando.github.io/AndrewFelipe/
 Plain HTML, CSS and JavaScript. There is no build step: what is in this repo is what GitHub Pages serves.
 
 - `index.html`, `styles.css`, `app.js`: the home page, and the styles every page shares
-- `work-demos/`: clickable rebuilds of my work at WT Cox Information Services
+- `work-demos/`: clickable rebuilds of my work at WT Cox Information Services and TIAA, grouped by employer
 - `projects/ando/`, `projects/hearth/`, `projects/mochi/`: a write-up of each app, with a recording or
   screenshots of the real thing and small simulations of its rules (`sim.js` in each folder)
 - `how-i-build/`: how I work with an AI coding agent, and what I keep in my own hands

@@ -248,6 +248,11 @@ code, kbd, samp { font-family: var(--mono); font-size: .88em; }
 .block .window p { margin-bottom: 1.1rem; }
 .block .window p:last-child { margin-bottom: 0; }
 .window .btn { margin-top: .3rem; }
+/* Work demos card: one button per employer */
+.window-actions { display: flex; flex-wrap: wrap; gap: .9rem 1.1rem; }
+.btn.tiaa { border-color: var(--magenta); color: var(--magenta); box-shadow: 4px 4px 0 rgba(255, 63, 164, .3); }
+.btn.tiaa:hover { box-shadow: 6px 6px 0 rgba(255, 63, 164, .42); }
+.btn.tiaa:active { box-shadow: 2px 2px 0 rgba(255, 63, 164, .42); }
 
 /* ---- Projects: one wide window, two smaller ones ---- */
 .bento { display: grid; gap: 2rem 1.75rem; grid-template-columns: minmax(0, 1fr); }
