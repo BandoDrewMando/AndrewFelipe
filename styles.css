@@ -78,6 +78,13 @@ code, kbd, samp { font-family: var(--mono); font-size: .88em; }
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--wire);
 }
+/* X's in-app browser keeps treating its toolbar as covering the page after the toolbar slides away, so the
+   bar sticks a toolbar's height down the screen. This fills the space above the bar so the page never shows
+   through there. In every other browser it sits above the top of the screen, out of sight. */
+.bar::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 100%;
+  height: 100vh; background: var(--glass); pointer-events: none;
+}
 .nav { display: flex; align-items: center; gap: 1.25rem; min-height: 3.5rem; }
 .mark {
   flex: none;
